@@ -1,0 +1,5 @@
+export default {
+  LOGOUT: 'LOGOUT',
+  LOAD_ME: 'LOAD_ME',
+  LOAD_DASHBOARDS: 'LOAD_DASHBOARDS'
+}
