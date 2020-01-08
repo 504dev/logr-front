@@ -1,15 +1,14 @@
 <template>
   <div class="center">
-    <a href="/dashboards">Sign in</a>
+    <a :href="url">Sign in</a>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Login',
   data () {
     return {
-      //
+      url: 'http://localhost:7778/oauth/signin'
     }
   }
 }

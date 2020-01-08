@@ -2,6 +2,7 @@
   <div class="wrapper" v-if="this.user && this.dashboards">
     <div>
       <img class="avatar" :src="`https://avatars0.githubusercontent.com/u/${user.github_id}`">
+      <a href="/login">Sign out</a>
     </div>
     <div>
       <h1>Own</h1>
