@@ -18,7 +18,7 @@ const store = new Vuex.Store({
       location.href = '/logout'
     },
     async [ACTIONS.LOAD_DASHBOARDS] ({ state }) {
-      const { data } = await axios.get('http://localhost:7778/my/dashboards')
+      const { data } = await axios.get('http://localhost:7778/me/dashboards')
       state.dashboards = data
     },
     async [ACTIONS.LOAD_ME] ({ state }) {
