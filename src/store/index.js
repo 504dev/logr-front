@@ -15,14 +15,15 @@ const store = new Vuex.Store({
   },
   actions: {
     [ACTIONS.LOGOUT] () {
-      location.href = '/logout'
+      localStorage.removeItem('jwt')
+      location.href = '/login'
     },
     async [ACTIONS.LOAD_DASHBOARDS] ({ state }) {
-      const { data } = await axios.get('http://localhost:7778/me/dashboards')
+      const { data } = await axios.get('http://api.kidlog.loc:7778/me/dashboards')
       state.dashboards = data
     },
     async [ACTIONS.LOAD_ME] ({ state }) {
-      const { data } = await axios.get('http://localhost:7778/me')
+      const { data } = await axios.get('http://api.kidlog.loc:7778/me')
       state.user = data
     }
   }

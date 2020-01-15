@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import LoginPage from '@/components/LoginPage'
 import DashboardPage from '@/components/DashboardPage'
 import LogsPage from '@/components/LogsPage'
+import JwtPage from '@/components/JwtPage'
 
 Vue.use(Router)
 
@@ -27,6 +28,11 @@ export default new Router({
       path: '/login',
       name: 'login',
       component: LoginPage
+    },
+    {
+      path: '/jwt/:token',
+      name: 'jwt',
+      component: JwtPage
     }
   ]
 })
