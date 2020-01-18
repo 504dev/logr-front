@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper" v-if="this.user && this.dashboards">
     <div>
-      <img class="avatar" :src="`https://avatars0.githubusercontent.com/u/${user.github_id}`">
+      <img class="avatar" :src="`https://avatars0.githubusercontent.com/u/${jwtPayload.github_id}`">
       <a href="#" @click.prevent="$store.dispatch(ACTIONS.LOGOUT)">Sign out</a>
     </div>
     <div>
@@ -27,7 +27,7 @@
 
 <script>
 import ACTIONS from '../store/action-types'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
   created () {
@@ -41,6 +41,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['jwtPayload']),
     ...mapState(['user', 'dashboards']),
     dashgroups () {
       const own = []

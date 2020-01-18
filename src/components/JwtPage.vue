@@ -3,9 +3,11 @@
 </template>
 
 <script>
+import MUTATIONS from '../store/mutations-types'
+
 export default {
   created () {
-    localStorage.setItem('jwt', this.token)
+    this.$store.commit(MUTATIONS.SET_JWT, this.token)
     this.$router.push('/')
   },
   computed: {

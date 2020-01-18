@@ -1,30 +1,60 @@
 import axios from 'axios'
 import Vue from 'vue'
 import Vuex from 'vuex'
+import jwtDecode from 'jwt-decode'
+import router from '../router'
 import ACTIONS from './action-types.js'
+import MUTATIONS from './mutations-types.js'
 
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
     user: null,
-    dashboards: null
+    dashboards: null,
+    jwt: localStorage.getItem('jwt')
   },
   getters: {
-    //
+    jwtPayload (state) {
+      return jwtDecode(state.jwt)
+    }
+  },
+  mutations: {
+    [MUTATIONS.SET_JWT]: (state, token) => {
+      localStorage.setItem('jwt', token)
+      state.jwt = token
+    },
+    [MUTATIONS.UNSET_JWT]: (state, token) => {
+      localStorage.removeItem('jwt', token)
+      state.jwt = null
+    }
   },
   actions: {
-    [ACTIONS.LOGOUT] () {
+    [ACTIONS.LOGOUT] ({ commit }) {
       localStorage.removeItem('jwt')
       location.href = '/login'
     },
     async [ACTIONS.LOAD_DASHBOARDS] ({ state }) {
-      const { data } = await axios.get('http://api.kidlog.loc:7778/me/dashboards')
+      const { data } = await axios({
+        method: 'get',
+        url: 'http://api.kidlog.loc:7778/me/dashboards',
+        params: { token: state.jwt }
+      })
       state.dashboards = data
     },
     async [ACTIONS.LOAD_ME] ({ state }) {
-      const { data } = await axios.get('http://api.kidlog.loc:7778/me')
-      state.user = data
+      try {
+        const { data } = await axios({
+          method: 'get',
+          url: 'http://api.kidlog.loc:7778/me',
+          params: { token: state.jwt }
+        })
+        state.user = data
+      } catch (err) {
+        if (err.response.status) {
+          router.push('/login')
+        }
+      }
     }
   }
 })
