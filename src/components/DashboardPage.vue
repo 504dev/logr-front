@@ -2,7 +2,8 @@
   <div class="wrapper" v-if="this.user && this.dashboards">
     <div>
       <img class="avatar" :src="`https://avatars0.githubusercontent.com/u/${jwtPayload.github_id}`">
-      <a href="#" @click.prevent="$store.dispatch(ACTIONS.LOGOUT)">Sign out</a>
+      <span>{{ jwtPayload.username }}</span>
+      <p><a href="#" @click.prevent="$store.dispatch(ACTIONS.LOGOUT)">Sign out</a></p>
     </div>
     <div>
       <h1>Own</h1>
@@ -33,7 +34,6 @@ export default {
   created () {
     this.$store.dispatch(ACTIONS.LOAD_ME)
     this.$store.dispatch(ACTIONS.LOAD_DASHBOARDS)
-    console.log(document.cookie)
   },
   data () {
     return {

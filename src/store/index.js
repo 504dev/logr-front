@@ -38,7 +38,7 @@ const store = new Vuex.Store({
       const { data } = await axios({
         method: 'get',
         url: 'http://api.kidlog.loc:7778/me/dashboards',
-        params: { token: state.jwt }
+        headers: { Authorization: `Bearer ${state.jwt}` }
       })
       state.dashboards = data
     },
@@ -47,11 +47,11 @@ const store = new Vuex.Store({
         const { data } = await axios({
           method: 'get',
           url: 'http://api.kidlog.loc:7778/me',
-          params: { token: state.jwt }
+          headers: { Authorization: `Bearer ${state.jwt}` }
         })
         state.user = data
       } catch (err) {
-        if (err.response.status) {
+        if (err.response && err.response.status === 401) {
           router.push('/login')
         }
       }
