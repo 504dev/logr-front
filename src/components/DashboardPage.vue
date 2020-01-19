@@ -3,6 +3,7 @@
     <div>
       <img class="avatar" :src="`https://avatars0.githubusercontent.com/u/${jwtPayload.github_id}`">
       <span>{{ jwtPayload.username }}</span>
+      <p>{{ jwtPayload }}</p>
       <p><a href="#" @click.prevent="$store.dispatch(ACTIONS.LOGOUT)">Sign out</a></p>
     </div>
     <div>
@@ -13,6 +14,7 @@
           <span>{{ dash.name }}</span>
         </router-link>
       </template>
+      <span class="dashboard-add" @click="onAddDashboard">+</span>
     </div>
     <div>
       <h1>Shared</h1>
@@ -57,6 +59,12 @@ export default {
       }
       return { own, shared }
     }
+  },
+  methods: {
+    async onAddDashboard () {
+      const name = prompt('Enter dashboard name:')
+      await this.$store.dispatch(ACTIONS.ADD_DASHBOARD, name)
+    }
   }
 }
 </script>
@@ -64,6 +72,14 @@ export default {
 <style scoped>
   .wrapper {
     padding: 20px;
+  }
+  .dashboard-add {
+    color: #ffffff;
+    font-weight: bold;
+    background-color: #9e9;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
   }
   .dashboard {
     display: inline-block;

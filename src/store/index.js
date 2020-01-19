@@ -36,16 +36,25 @@ const store = new Vuex.Store({
     },
     async [ACTIONS.LOAD_DASHBOARDS] ({ state }) {
       const { data } = await axios({
-        method: 'get',
+        method: 'GET',
         url: 'http://api.kidlog.loc:7778/me/dashboards',
         headers: { Authorization: `Bearer ${state.jwt}` }
       })
       state.dashboards = data
     },
+    async [ACTIONS.ADD_DASHBOARD] ({ state }, name) {
+      const { data } = await axios({
+        method: 'POST',
+        url: 'http://api.kidlog.loc:7778/me/dashboard',
+        data: { name },
+        headers: { Authorization: `Bearer ${state.jwt}` }
+      })
+      state.dashboards.push(data)
+    },
     async [ACTIONS.LOAD_ME] ({ state }) {
       try {
         const { data } = await axios({
-          method: 'get',
+          method: 'GET',
           url: 'http://api.kidlog.loc:7778/me',
           headers: { Authorization: `Bearer ${state.jwt}` }
         })
