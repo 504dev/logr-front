@@ -1,59 +1,113 @@
 <template>
-  <div class="wrapper" v-if="this.user && this.dashboards">
+  <div class="wrapper" v-if="this.user && this.dash">
     <div class="lefter">
       <img class="avatar" :src="`https://avatars0.githubusercontent.com/u/${user.github_id}`">
       <h3><router-link to="/dashboards">..</router-link>/{{ dash.name }}</h3>
-      <form class="filters" @change="onChange">
+      <form class="filters" @change="onChange" @submit.prevent>
         <select v-model="filters.hostname">
           <option value="">Hostname</option>
+          <option v-for="{ hostname } in sortedHostnames" :value="hostname" :key="hostname">
+            {{ hostname }}
+          </option>
         </select>
         <select v-model="filters.logname">
           <option value="">Logname</option>
+          <option v-for="{ logname } in sortedLognames" :value="logname" :key="logname">
+            {{ logname }}
+          </option>
         </select>
         <select v-model="filters.level">
-          <option value="0">Level</option>
-          <option value="1">debug</option>
-          <option value="2">info</option>
-          <option value="3">warning</option>
-          <option value="4">error</option>
+          <option value="">Level</option>
+          <option v-for="{ level } in sortedLevels" :value="level" :key="level">
+            {{ level }}
+          </option>
         </select>
         <input type="text" v-model="filters.message" placeholder="Message" />
-        <div>{{ filters }}</div>
+        <div>{{ computedFilters }}</div>
       </form>
     </div>
     <div class="container">
-      logs
+      <span v-if="loading">Loading...</span>
+      <pre v-else>{{ JSON.stringify(logs, null, 4) }}</pre>
     </div>
   </div>
 </template>
 
 <script>
+import _ from 'lodash'
 import ACTIONS from '../store/action-types'
 import { mapState } from 'vuex'
 
 export default {
-  created () {
-    this.$store.dispatch(ACTIONS.LOAD_ME)
-    this.$store.dispatch(ACTIONS.LOAD_DASHBOARDS)
+  async created () {
+    await Promise.all([
+      this.$store.dispatch(ACTIONS.LOAD_ME),
+      this.$store.dispatch(ACTIONS.LOAD_DASHBOARDS)
+    ])
+    this.stats = await this.$store.dispatch(ACTIONS.LOAD_LOGS_STATS, this.dashid)
+    console.log(this.stats)
+    this.updateLogs()
   },
   data () {
     return {
       filters: {
         hostname: '',
         logname: '',
-        level: 0
+        level: ''
+      },
+      logs: [],
+      stats: [],
+      loading: true
+    }
+  },
+  watch: {
+    dash () {
+      //
+    }
+  },
+  computed: {
+    ...mapState(['user', 'dashboards']),
+    dashid () {
+      return +this.$route.params.id
+    },
+    dash () {
+      if (!this.dashboards) {
+        return null
       }
+      return this.dashboards.find(dash => dash.id === this.dashid)
+    },
+    computedFilters () {
+      return _.pickBy({ ...this.filters, dash_id: this.dashid })
+    },
+    sortedHostnames () {
+      return this.groupStatsBy('hostname')
+    },
+    sortedLognames () {
+      return this.groupStatsBy('logname')
+    },
+    sortedLevels () {
+      return this.groupStatsBy('level')
     }
   },
   methods: {
     onChange (e) {
       console.log(e)
-    }
-  },
-  computed: {
-    ...mapState(['user', 'dashboards']),
-    dash () {
-      return this.dashboards.find(dash => dash.id === +this.$route.params.id)
+      this.updateLogs()
+    },
+    async updateLogs () {
+      this.loading = true
+      this.logs = await this.$store.dispatch(ACTIONS.LOAD_LOGS, this.computedFilters)
+      this.loading = false
+    },
+    groupStatsBy (fieldname) {
+      return _.chain(this.stats)
+        .groupBy(fieldname)
+        .map((group, key) => {
+          const cnt = _.sumBy(group, 'cnt')
+          return { [fieldname]: key, cnt }
+        })
+        .sortBy(v => -v.cnt)
+        .value()
     }
   }
 }
@@ -66,14 +120,20 @@ export default {
     border-radius: 32px;
   }
   .lefter {
-    position: absolute;
+    position: fixed;
     padding: 10px;
     height: 100%;
     width: 200px;
-    background-color: rgba(128, 128, 128, 0.2);
+    background-color: rgba(224, 224, 224, 0.9);
+    z-index: 1000;
   }
   .container {
+    position: absolute;
+    height: 100%;
+    width: 100%;
     padding: 10px 0 0 230px;
+    overflow: scroll;
+    z-index: 900;
   }
   .filters {
     margin-top: 20px;

@@ -64,6 +64,24 @@ const store = new Vuex.Store({
           router.push('/login')
         }
       }
+    },
+    async [ACTIONS.LOAD_LOGS] ({ state }, filters) {
+      const { data } = await axios({
+        method: 'GET',
+        url: 'http://api.kidlog.loc:7778/logs',
+        params: filters,
+        headers: { Authorization: `Bearer ${state.jwt}` }
+      })
+      return data
+    },
+    async [ACTIONS.LOAD_LOGS_STATS] ({ state }, dashid) {
+      const { data } = await axios({
+        method: 'GET',
+        url: 'http://api.kidlog.loc:7778/logs/stats',
+        params: { dash_id: dashid },
+        headers: { Authorization: `Bearer ${state.jwt}` }
+      })
+      return data
     }
   }
 })
