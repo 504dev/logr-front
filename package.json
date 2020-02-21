@@ -11,6 +11,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "ansicolor": "^1.1.93",
     "axios": "^0.19.1",
     "jwt-decode": "^2.2.0",
     "vue": "^2.5.2",

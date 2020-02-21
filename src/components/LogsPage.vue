@@ -28,7 +28,14 @@
     </div>
     <div class="container">
       <span v-if="loading">Loading...</span>
-      <pre v-else>{{ JSON.stringify(logs, null, 4) }}</pre>
+      <span v-else>
+        <div class="logs-live">
+          <log-item v-for="(log, key) in logs.live" :value="log" :key="key" />
+        </div>
+        <div class="logs-history">
+          <log-item v-for="(log, key) in logs.history" :value="log" :key="key" />
+        </div>
+      </span>
     </div>
   </div>
 </template>
@@ -36,26 +43,44 @@
 <script>
 import _ from 'lodash'
 import ACTIONS from '../store/action-types'
+import Sock from '../libs/sock'
+import LogItem from './LogItem'
 import { mapState } from 'vuex'
 
 export default {
+  components: {
+    LogItem
+  },
   async created () {
     await Promise.all([
       this.$store.dispatch(ACTIONS.LOAD_ME),
       this.$store.dispatch(ACTIONS.LOAD_DASHBOARDS)
     ])
     this.stats = await this.$store.dispatch(ACTIONS.LOAD_LOGS_STATS, this.dashid)
-    console.log(this.stats)
+
+    this.sock = new Sock('ws://api.kidlog.loc:7778/ws', this.jwt)
+    const event = await this.sock.connect()
+    console.log('ws connected', event)
+    this.sock.on('/log', data => {
+      console.log('/log', data)
+      const log = data.payload
+      this.logs.live.push(log)
+    })
+
     this.updateLogs()
   },
   data () {
     return {
+      sock: null,
       filters: {
         hostname: '',
         logname: '',
         level: ''
       },
-      logs: [],
+      logs: {
+        live: [],
+        history: []
+      },
       stats: [],
       loading: true
     }
@@ -66,7 +91,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['user', 'dashboards']),
+    ...mapState(['user', 'dashboards', 'jwt']),
     dashid () {
       return +this.$route.params.id
     },
@@ -96,7 +121,10 @@ export default {
     },
     async updateLogs () {
       this.loading = true
-      this.logs = await this.$store.dispatch(ACTIONS.LOAD_LOGS, this.computedFilters)
+      this.logs.history = await this.$store.dispatch(ACTIONS.LOAD_LOGS, {
+        ...this.computedFilters,
+        sock_id: this.sock.id
+      })
       this.loading = false
     },
     groupStatsBy (fieldname) {
@@ -128,6 +156,8 @@ export default {
     z-index: 1000;
   }
   .container {
+    font-family: Courier;
+    font-size: 14px;
     position: absolute;
     height: 100%;
     width: 100%;
@@ -143,5 +173,11 @@ export default {
     display: block;
     margin-bottom: 10px;
     width: 100%;
+  }
+  .logs-live {
+    outline: dashed 1px red;
+  }
+  .logs-history {
+    outline: dashed 1px green;
   }
 </style>
