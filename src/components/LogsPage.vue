@@ -4,20 +4,20 @@
       <img class="avatar" :src="`https://avatars0.githubusercontent.com/u/${user.github_id}`">
       <h3><router-link to="/dashboards">..</router-link>/{{ dash.name }}</h3>
       <form class="filters" @change="onChange" @submit.prevent>
-        <select v-model="filters.hostname">
-          <option value="">Hostname</option>
-          <option v-for="{ hostname } in sortedHostnames" :value="hostname" :key="hostname">
-            {{ hostname }}
-          </option>
-        </select>
         <select v-model="filters.logname">
-          <option value="">Logname</option>
+          <option value="">Any logname</option>
           <option v-for="{ logname } in sortedLognames" :value="logname" :key="logname">
             {{ logname }}
           </option>
         </select>
+        <select v-model="filters.hostname">
+          <option value="">Any hostname</option>
+          <option v-for="{ hostname } in sortedHostnames" :value="hostname" :key="hostname">
+            {{ hostname }}
+          </option>
+        </select>
         <select v-model="filters.level">
-          <option value="">Level</option>
+          <option value="">Any level</option>
           <option v-for="{ level } in sortedLevels" :value="level" :key="level">
             {{ level }}
           </option>

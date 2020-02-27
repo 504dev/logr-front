@@ -3,7 +3,7 @@
     <span class="log-logname ellipsis tag">{{ value.logname }}</span>
     <span class="log-hostname ellipsis tag">{{ value.hostname }}</span>
     <span class="log-time">{{ new Date(value.timestamp / 1000000).toISOString() }}</span>
-    <span class="log-level ellipsis">{{ value.level }}</span>
+    <span class="log-level ellipsis" :class="`log-level-${value.level}`">{{ value.level }}</span>
     <span class="log-message">
       <span v-for="(chunk, key) in colorMessage" :key="key" :style="chunk.css"><span
         v-for="(item, key) in chunk.json" :key="key" :class="{ json: !!item.json }"
@@ -102,6 +102,18 @@ export default {
   .log-level {
     color: green;
     width: 50px;
+  }
+  .log-level-info {
+    color: green;
+  }
+  .log-level-error {
+    color: red;
+  }
+  .log-level-warn {
+    color: orange;
+  }
+  .log-level-debug {
+    color: blue;
   }
   .log-logname {
     width: 60px;
