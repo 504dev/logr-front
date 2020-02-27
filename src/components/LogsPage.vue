@@ -26,10 +26,10 @@
         <div>{{ computedFilters }}</div>
       </form>
     </div>
-    <div class="container">
+    <div class="container" :class="{ 'filter-logname': !!filters.logname, 'filter-hostname': !!filters.hostname }">
       <span v-if="loading">Loading...</span>
       <span v-else>
-        <div class="logs-live">
+        <div class="logs-live column-reverse">
           <log-item v-for="(log, key) in logs.live" :value="log" :key="key" />
         </div>
         <div class="logs-history">
@@ -62,6 +62,9 @@ export default {
     const event = await this.sock.connect()
     console.log('ws connected', event)
     this.sock.on('/log', data => {
+      if (this.loading) {
+        return
+      }
       console.log('/log', data)
       const log = data.payload
       this.logs.live.push(log)
@@ -121,6 +124,7 @@ export default {
     },
     async updateLogs () {
       this.loading = true
+      this.logs.live = []
       this.logs.history = await this.$store.dispatch(ACTIONS.LOAD_LOGS, {
         ...this.computedFilters,
         sock_id: this.sock.id
@@ -140,6 +144,15 @@ export default {
   }
 }
 </script>
+
+<style>
+  .container.filter-logname .log-logname {
+    display: none;
+  }
+  .container.filter-hostname .log-hostname {
+    display: none;
+  }
+</style>
 
 <style scoped>
   .avatar {
@@ -179,5 +192,9 @@ export default {
   }
   .logs-history {
     outline: dashed 1px green;
+  }
+  .column-reverse {
+    display: flex;
+    flex-direction: column-reverse;
   }
 </style>
