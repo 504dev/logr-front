@@ -30,10 +30,10 @@
       <span v-if="loading">Loading...</span>
       <span v-else>
         <div class="logs-live column-reverse">
-          <log-item v-for="(log, key) in logs.live" :value="log" :key="key" />
+          <log-item v-for="(log, key) in logs.live" :value="log" :filters="filters" :key="key" />
         </div>
         <div class="logs-history">
-          <log-item v-for="(log, key) in logs.history" :value="log" :key="key" />
+          <log-item v-for="(log, key) in logs.history" :value="log" :filters="filters" :key="key" />
         </div>
       </span>
     </div>
@@ -188,10 +188,11 @@ export default {
     width: 100%;
   }
   .logs-live {
-    outline: dashed 1px red;
+    border-bottom: dashed 1px red;
   }
   .logs-history {
-    outline: dashed 1px green;
+    /*border-top: dashed 1px green;*/
+    opacity: 0.7;
   }
   .column-reverse {
     display: flex;
