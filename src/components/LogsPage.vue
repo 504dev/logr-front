@@ -22,8 +22,8 @@
             {{ level }}
           </option>
         </select>
-        <input type="text" v-model="filters.message" placeholder="Message" />
-        <div>{{ computedFilters }}</div>
+        <input type="text" v-model="filters.message" placeholder="Message" class="filter-message" />
+        <input type="text" v-model="filters.limit" placeholder="Limit" class="filter-limit" />
       </form>
     </div>
     <div class="container" :class="{ 'filter-logname': !!filters.logname, 'filter-hostname': !!filters.hostname }">
@@ -35,7 +35,14 @@
         <div class="logs-history">
           <log-item v-for="(log, key) in logs.history" :value="log" :filters="filters" :key="key" />
         </div>
+        <div class="logs-deep" v-for="(deep, key) in logs.deep" :key="key">
+          <log-item v-for="(log, key) in deep" :value="log" :filters="filters" :key="key" />
+        </div>
+        <span class="more" @click="onMore">more  ˅</span>
       </span>
+    </div>
+    <div class="pause" :class="{ 'pause-on': paused }" @click="onPause">
+      &nbsp;▌▌
     </div>
   </div>
 </template>
@@ -65,33 +72,36 @@ export default {
       if (this.loading) {
         return
       }
-      console.log('/log', data)
+      // console.log('/log', data)
       const log = data.payload
       this.logs.live.push(log)
     })
 
-    this.updateLogs()
+    await this.updateLogs()
   },
   data () {
+    const { hostname = '', logname = '', level = '', message = '', limit = 100 } = this.$route.query
     return {
       sock: null,
+      paused: false,
       filters: {
-        hostname: '',
-        logname: '',
-        level: ''
+        hostname,
+        logname,
+        level,
+        message,
+        limit
       },
       logs: {
         live: [],
-        history: []
+        history: [],
+        deep: []
       },
       stats: [],
       loading: true
     }
   },
   watch: {
-    dash () {
-      //
-    }
+    //
   },
   computed: {
     ...mapState(['user', 'dashboards', 'jwt']),
@@ -104,9 +114,6 @@ export default {
       }
       return this.dashboards.find(dash => dash.id === this.dashid)
     },
-    computedFilters () {
-      return _.pickBy({ ...this.filters, dash_id: this.dashid })
-    },
     sortedHostnames () {
       return this.groupStatsBy('hostname')
     },
@@ -115,18 +122,43 @@ export default {
     },
     sortedLevels () {
       return this.groupStatsBy('level')
+    },
+    offset () {
+      const list = _.last(this.logs.deep) || this.logs.history
+      return _.chain(list).last().get('timestamp').value()
     }
   },
   methods: {
-    onChange (e) {
-      console.log(e)
-      this.updateLogs()
+    async onMore (e) {
+      console.log('onMore', e)
+      const logs = await this.$store.dispatch(ACTIONS.LOAD_LOGS, {
+        ...this.filters,
+        dash_id: this.dashid,
+        sock_id: this.sock.id,
+        offset: this.offset
+      })
+      this.logs.deep.push(logs)
+    },
+    async onPause (e) {
+      console.log('onPause', e)
+      this.paused = !this.paused
+      await this.$store.dispatch(ACTIONS.PAUSE_LOGS, {
+        sock_id: this.sock.id,
+        state: this.paused
+      })
+    },
+    async onChange (e) {
+      console.log('onChange', e)
+      await this.updateLogs()
+      this.$router.replace({ query: _.pickBy(this.filters) })
     },
     async updateLogs () {
       this.loading = true
       this.logs.live = []
+      this.logs.deep = []
       this.logs.history = await this.$store.dispatch(ACTIONS.LOAD_LOGS, {
-        ...this.computedFilters,
+        ...this.filters,
+        dash_id: this.dashid,
         sock_id: this.sock.id
       })
       this.loading = false
@@ -155,6 +187,19 @@ export default {
 </style>
 
 <style scoped>
+  .more {
+    display: inline-block;
+    margin: 5px 0;
+    padding: 0 5px;
+    background-color: green;
+    color: white;
+    border-radius: 4px;
+    opacity: 0.5;
+    cursor: pointer;
+  }
+  .more:hover {
+    opacity: 0.7;
+  }
   .avatar {
     width: 64px;
     height: 64px;
@@ -167,6 +212,35 @@ export default {
     width: 200px;
     background-color: rgba(224, 224, 224, 0.9);
     z-index: 1000;
+  }
+  .pause {
+    /*zoom: 0.5;*/
+    position: fixed;
+    z-index: 1000;
+    left: 50%;
+    bottom: 0;
+    width: 80px;
+    height: 50px;
+    line-height: 50px;
+    font-size: 20px;
+    color: white;
+    text-align: center;
+    /*border-radius: 10px 10px 0 0;*/
+    overflow: hidden;
+    background-color: rgba(128, 128, 128, .4);
+    cursor: pointer;
+    margin-left: -40px;
+  }
+  .pause:hover {
+    zoom: 1.1;
+    background-color: rgba(128, 128, 128, .5);
+  }
+  .pause-on {
+    zoom: 1.1;
+    background-color: rgba(0, 0, 128, .5);
+  }
+  .pause-on:hover {
+    background-color: rgba(0, 0, 128, .4);
   }
   .container {
     font-family: Courier;
@@ -187,12 +261,22 @@ export default {
     margin-bottom: 10px;
     width: 100%;
   }
+  .filter-message {
+    width: 100%;
+  }
+  .filter-limit {
+    float: right;
+    width: 25%;
+  }
   .logs-live {
     border-bottom: dashed 1px red;
   }
   .logs-history {
     /*border-top: dashed 1px green;*/
     opacity: 0.7;
+  }
+  .logs-deep {
+    border-top: 1px dashed green;
   }
   .column-reverse {
     display: flex;

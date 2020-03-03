@@ -74,6 +74,15 @@ const store = new Vuex.Store({
       })
       return data
     },
+    async [ACTIONS.PAUSE_LOGS] ({ state }, params) {
+      const { data } = await axios({
+        method: 'GET',
+        url: 'http://api.kidlog.loc:7778/logs/pause',
+        params,
+        headers: { Authorization: `Bearer ${state.jwt}` }
+      })
+      return data
+    },
     async [ACTIONS.LOAD_LOGS_STATS] ({ state }, dashid) {
       const { data } = await axios({
         method: 'GET',
