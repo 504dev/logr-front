@@ -24,6 +24,8 @@
         </select>
         <input type="text" v-model="filters.message" placeholder="Message" class="filter-message" />
         <input type="text" v-model="filters.limit" placeholder="Limit" class="filter-limit" />
+        <input type="datetime-local" v-model="filters.timestamp[0]" />
+        <input type="datetime-local" v-model="filters.timestamp[1]" />
       </form>
     </div>
     <div class="container" :class="{ 'filter-logname': !!filters.logname, 'filter-hostname': !!filters.hostname }">
@@ -65,22 +67,21 @@ export default {
     ])
     this.stats = await this.$store.dispatch(ACTIONS.LOAD_LOGS_STATS, this.dashid)
 
-    this.sock = new Sock('ws://api.kidlog.loc:7778/ws', this.jwt)
+    this.sock = new Sock(process.env.VUE_APP_WS, this.jwt)
     const event = await this.sock.connect()
     console.log('ws connected', event)
     this.sock.on('/log', data => {
       if (this.loading) {
         return
       }
-      // console.log('/log', data)
-      const log = data.payload
-      this.logs.live.push(log)
+      this.logs.live.push(data.payload)
     })
+    // this.sock.on('/log', data => console.log('/log', data))
 
     await this.updateLogs()
   },
   data () {
-    const { hostname = '', logname = '', level = '', message = '', limit = 100 } = this.$route.query
+    const { hostname = '', logname = '', level = '', message = '', timestamp = [], limit = 100 } = this.$route.query
     return {
       sock: null,
       paused: false,
@@ -89,7 +90,8 @@ export default {
         logname,
         level,
         message,
-        limit
+        limit,
+        timestamp
       },
       logs: {
         live: [],
@@ -237,10 +239,10 @@ export default {
   }
   .pause-on {
     zoom: 1.1;
-    background-color: rgba(0, 0, 128, .5);
+    background-color: rgba(0, 128, 128, .5);
   }
   .pause-on:hover {
-    background-color: rgba(0, 0, 128, .4);
+    background-color: rgba(0, 128, 128, .4);
   }
   .container {
     font-family: Courier;

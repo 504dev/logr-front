@@ -20,12 +20,26 @@ export default class Sock {
     const data = JSON.parse(event.data)
     _.each(this.handlers[data.path], handler => handler(data))
   }
+  _send (data) {
+    return this.socket.send(JSON.stringify(data))
+  }
+  unsubscribe (path, handler) {
+    const handlers = this.handlers[path] || []
+    const index = handlers.indexOf(handler)
+    if (index !== -1) {
+      handlers.slice(index, 1)
+      this._send({ action: 'unsubscribe', path })
+      return true
+    }
+    return false
+  }
   on (path, handler) {
     this.handlers[path] = this.handlers[path] || []
     this.handlers[path].push(handler)
+    this._send({ action: 'subscribe', path })
+    return this.unsubscribe.bind(this, path, handler)
   }
   emit (path, payload) {
-    const data = { action: 'emit', path, payload }
-    this.socket.send(JSON.stringify(data))
+    return this._send({ action: 'emit', path, payload })
   }
 }

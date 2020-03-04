@@ -8,6 +8,8 @@ import MUTATIONS from './mutations-types.js'
 
 Vue.use(Vuex)
 
+console.log(process.env)
+
 const store = new Vuex.Store({
   state: {
     user: null,
@@ -17,6 +19,14 @@ const store = new Vuex.Store({
   getters: {
     jwtPayload (state) {
       return jwtDecode(state.jwt)
+    },
+    api: state => (path, options = {}) => {
+      return axios({
+        method: 'GET',
+        url: process.env.VUE_APP_REST + path,
+        headers: { Authorization: `Bearer ${state.jwt}` },
+        ...options
+      })
     }
   },
   mutations: {
@@ -34,30 +44,20 @@ const store = new Vuex.Store({
       localStorage.removeItem('jwt')
       location.href = '/login'
     },
-    async [ACTIONS.LOAD_DASHBOARDS] ({ state }) {
-      const { data } = await axios({
-        method: 'GET',
-        url: 'http://api.kidlog.loc:7778/me/dashboards',
-        headers: { Authorization: `Bearer ${state.jwt}` }
-      })
+    async [ACTIONS.LOAD_DASHBOARDS] ({ state, getters }) {
+      const { data } = await getters.api('/me/dashboards')
       state.dashboards = data
     },
-    async [ACTIONS.ADD_DASHBOARD] ({ state }, name) {
-      const { data } = await axios({
+    async [ACTIONS.ADD_DASHBOARD] ({ state, getters }, name) {
+      const { data } = await getters.api('/me/dashboard', {
         method: 'POST',
-        url: 'http://api.kidlog.loc:7778/me/dashboard',
-        data: { name },
-        headers: { Authorization: `Bearer ${state.jwt}` }
+        data: { name }
       })
       state.dashboards.push(data)
     },
-    async [ACTIONS.LOAD_ME] ({ state }) {
+    async [ACTIONS.LOAD_ME] ({ state, getters }) {
       try {
-        const { data } = await axios({
-          method: 'GET',
-          url: 'http://api.kidlog.loc:7778/me',
-          headers: { Authorization: `Bearer ${state.jwt}` }
-        })
+        const { data } = await getters.api('/me')
         state.user = data
       } catch (err) {
         if (err.response && err.response.status === 401) {
@@ -65,31 +65,17 @@ const store = new Vuex.Store({
         }
       }
     },
-    async [ACTIONS.LOAD_LOGS] ({ state }, filters) {
-      const { data } = await axios({
-        method: 'GET',
-        url: 'http://api.kidlog.loc:7778/logs',
-        params: filters,
-        headers: { Authorization: `Bearer ${state.jwt}` }
-      })
+    async [ACTIONS.LOAD_LOGS] ({ state, getters }, params) {
+      const { data } = await getters.api('/logs', { params })
       return data
     },
-    async [ACTIONS.PAUSE_LOGS] ({ state }, params) {
-      const { data } = await axios({
-        method: 'GET',
-        url: 'http://api.kidlog.loc:7778/logs/pause',
-        params,
-        headers: { Authorization: `Bearer ${state.jwt}` }
-      })
+    async [ACTIONS.PAUSE_LOGS] ({ state, getters }, params) {
+      const { data } = await getters.api('/logs/pause', { params })
       return data
     },
-    async [ACTIONS.LOAD_LOGS_STATS] ({ state }, dashid) {
-      const { data } = await axios({
-        method: 'GET',
-        url: 'http://api.kidlog.loc:7778/logs/stats',
-        params: { dash_id: dashid },
-        headers: { Authorization: `Bearer ${state.jwt}` }
-      })
+    async [ACTIONS.LOAD_LOGS_STATS] ({ state, getters }, dashid) {
+      const params = { dash_id: dashid }
+      const { data } = await getters.api('/logs/stats', { params })
       return data
     }
   }
