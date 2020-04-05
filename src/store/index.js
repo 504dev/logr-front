@@ -73,9 +73,8 @@ const store = new Vuex.Store({
       const { data } = await getters.api('/logs/pause', { params })
       return data
     },
-    async [ACTIONS.LOAD_LOGS_STATS] ({ state, getters }, dashid) {
-      const params = { dash_id: dashid }
-      const { data } = await getters.api('/logs/stats', { params })
+    async [ACTIONS.LOAD_LOGS_STATS] ({ getters }) {
+      const { data } = await getters.api('/logs/stats')
       return data
     }
   }

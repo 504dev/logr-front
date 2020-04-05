@@ -8,7 +8,7 @@
 export default {
   data () {
     return {
-      url: 'http://api.kidlog.loc:7778/oauth/authorize'
+      url: 'http://api.logr.loc:7778/oauth/authorize'
     }
   }
 }

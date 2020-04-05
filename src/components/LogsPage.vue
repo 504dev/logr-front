@@ -167,6 +167,7 @@ export default {
     },
     groupStatsBy (fieldname) {
       return _.chain(this.stats)
+        .filter({ dash_id: this.dashid })
         .groupBy(fieldname)
         .map((group, key) => {
           const cnt = _.sumBy(group, 'cnt')
@@ -279,6 +280,8 @@ export default {
   }
   .logs-deep {
     border-top: 1px dashed green;
+    opacity: 0.7;
+    margin-top: 5px;
   }
   .column-reverse {
     display: flex;

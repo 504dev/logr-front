@@ -1,4 +1,4 @@
-# kidlog-front
+# logr-front
 
 > web interface for logger
 
@@ -8,7 +8,7 @@
 # install dependencies
 npm install
 
-# serve with hot reload at kidlog.loc:8080
+# serve with hot reload at logr.loc:8080
 npm run dev
 
 # build for production with minification
