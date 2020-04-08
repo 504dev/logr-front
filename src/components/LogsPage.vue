@@ -24,8 +24,8 @@
         </select>
         <input type="text" v-model="filters.message" placeholder="Message" class="filter-message" />
         <input type="text" v-model="filters.limit" placeholder="Limit" class="filter-limit" />
-        <input type="datetime-local" v-model="filters.timestamp[0]" />
-        <input type="datetime-local" v-model="filters.timestamp[1]" />
+        <range-date-time-picker v-model="filters.timestamp" />
+
       </form>
     </div>
     <div class="container" :class="{ 'filter-logname': !!filters.logname, 'filter-hostname': !!filters.hostname }">
@@ -54,11 +54,13 @@ import _ from 'lodash'
 import ACTIONS from '../store/action-types'
 import Sock from '../libs/sock'
 import LogItem from './LogItem'
+import RangeDateTimePicker from './RangeDateTimePicker'
 import { mapState } from 'vuex'
 
 export default {
   components: {
-    LogItem
+    LogItem,
+    RangeDateTimePicker
   },
   async created () {
     await Promise.all([
@@ -91,7 +93,7 @@ export default {
         level,
         message,
         limit,
-        timestamp
+        timestamp: [].concat(timestamp).map(t => +t || 0).concat([0, 0]).slice(0, 2)
       },
       logs: {
         live: [],
@@ -263,12 +265,13 @@ export default {
     display: block;
     margin-bottom: 10px;
     width: 100%;
+    height: 30px;
   }
   .filter-message {
     width: 100%;
   }
   .filter-limit {
-    float: right;
+    /*float: right;*/
     width: 25%;
   }
   .logs-live {
