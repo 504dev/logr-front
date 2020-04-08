@@ -76,17 +76,20 @@ export default {
   },
   computed: {
     isDateInvalid () {
-      return this.date ? isNaN(this.testDate(this.date)) : false
+      return this.date ? isNaN(this.test(this.date, ZERO_TIME)) : false
     },
     isTimeInvalid () {
-      return this.time ? isNaN(this.testTime(this.time)) : false
+      return this.time ? isNaN(this.test(TODAY, this.time)) : false
     }
   },
   methods: {
     onDatePick (date) {
       if (this.$el) {
         this.date = date.slice(0, 10)
-        const timestamp = this.testDate(this.date, this.time)
+        const timestamp = this.test(this.date, this.time)
+        if (isNaN(timestamp)) {
+          return
+        }
         this.$emit('input', timestamp)
         const target = this.$refs.idate
         target.blur()
@@ -97,7 +100,10 @@ export default {
     onTimePick (time) {
       if (this.$el) {
         this.time = time.slice(11, 16)
-        const timestamp = this.testTime(this.time, this.date)
+        const timestamp = this.test(this.date, this.time)
+        if (isNaN(timestamp)) {
+          return
+        }
         this.$emit('input', timestamp)
         const target = this.$refs.itime
         target.blur()
@@ -106,16 +112,18 @@ export default {
       }
     },
     onDateInput (e) {
-      const timestamp = this.testDate(e.target.value, this.time)
+      const timestamp = this.test(e.target.value, this.time)
       if (isNaN(timestamp)) {
         e.stopPropagation()
+        return
       }
       this.$emit('input', timestamp)
     },
     onTimeInput (e) {
-      const timestamp = this.testTime(e.target.value, this.date)
+      const timestamp = this.test(this.date, e.target.value)
       if (isNaN(timestamp)) {
         e.stopPropagation()
+        return
       }
       this.$emit('input', timestamp)
     },
@@ -125,13 +133,13 @@ export default {
     openTimePicker () {
       this.$refs.stime.$el.firstElementChild.click()
     },
-    testDate (value, time) {
-      time = time || ZERO_TIME
-      return +new Date(`${value}T${time}:00.000Z`)
-    },
-    testTime (value, date) {
+    test (date, time) {
+      if (date === '' && time === '') {
+        return 0
+      }
       date = date || TODAY
-      return +new Date(`${date}T${value}:00.000Z`)
+      time = time || ZERO_TIME
+      return +new Date(`${date}T${time}:00.000Z`)
     }
   }
 }
@@ -161,8 +169,8 @@ export default {
     outline: none;
     border-bottom: solid 2px green;
   }
-  input.invalid,
-  input.invalid:focus {
+  div.container > input.invalid,
+  div.container > input.invalid:focus {
     border-bottom: solid 2px red;
   }
   input.date {
