@@ -25,7 +25,6 @@
         <input type="text" v-model="filters.message" placeholder="Message" class="filter-message" />
         <input type="text" v-model="filters.limit" placeholder="Limit" class="filter-limit" />
         <range-date-time-picker v-model="filters.timestamp" />
-
       </form>
     </div>
     <div class="container" :class="{ 'filter-logname': !!filters.logname, 'filter-hostname': !!filters.hostname }">
@@ -70,30 +69,32 @@ export default {
     this.stats = await this.$store.dispatch(ACTIONS.LOAD_LOGS_STATS, this.dashid)
 
     this.sock = new Sock(process.env.VUE_APP_WS, this.jwt)
-    const event = await this.sock.connect()
+    const event = await this.sock.connect(this.paused)
     console.log('ws connected', event)
     this.sock.on('/log', data => {
-      if (this.loading) {
+      if (this.loading || this.paused) {
         return
       }
       this.logs.live.push(data.payload)
     })
-    // this.sock.on('/log', data => console.log('/log', data))
+    this.sock.on('/log', data => console.log('/log', data))
 
     await this.updateLogs()
   },
   data () {
-    const { hostname = '', logname = '', level = '', message = '', timestamp = [], limit = 100 } = this.$route.query
+    let { hostname = '', logname = '', level = '', message = '', timestamp = [], limit = 100, paused } = this.$route.query
+    timestamp = [].concat(timestamp).map(t => +t || 0).concat([0, 0]).slice(0, 2)
+    paused = parseInt(paused) || 0
     return {
       sock: null,
-      paused: false,
+      paused,
       filters: {
         hostname,
         logname,
         level,
         message,
         limit,
-        timestamp: [].concat(timestamp).map(t => +t || 0).concat([0, 0]).slice(0, 2)
+        timestamp
       },
       logs: {
         live: [],
@@ -145,16 +146,21 @@ export default {
     },
     async onPause (e) {
       console.log('onPause', e)
-      this.paused = !this.paused
+      this.paused = 1 - this.paused
       await this.$store.dispatch(ACTIONS.PAUSE_LOGS, {
         sock_id: this.sock.id,
-        state: this.paused
+        state: !!this.paused
       })
+      this.updateLocation()
     },
     async onChange (e) {
       console.log('onChange', e)
       await this.updateLogs()
-      this.$router.replace({ query: _.pickBy(this.filters) })
+      this.updateLocation()
+    },
+    updateLocation () {
+      const query = _.pickBy({ ...this.filters, paused: this.paused })
+      this.$router.replace({ query })
     },
     async updateLogs () {
       this.loading = true
@@ -216,12 +222,12 @@ export default {
     height: 100%;
     width: 200px;
     background-color: rgba(224, 224, 224, 0.9);
-    z-index: 1000;
+    z-index: 901;
   }
   .pause {
     /*zoom: 0.5;*/
     position: fixed;
-    z-index: 1000;
+    z-index: 900;
     left: 50%;
     bottom: 0;
     width: 80px;
@@ -262,10 +268,19 @@ export default {
     display: block;
   }
   .filters > select, input {
+    box-sizing: border-box;
     display: block;
     margin-bottom: 10px;
     width: 100%;
     height: 30px;
+    padding: 0 10px;
+  }
+  .filters > select, input {
+    border: solid 1px #999;
+  }
+  .filters > input:focus {
+    outline: none;
+    border-bottom: solid 1px green;
   }
   .filter-message {
     width: 100%;

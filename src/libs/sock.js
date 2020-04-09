@@ -8,9 +8,13 @@ export default class Sock {
     this.socket = null
     this.handlers = {}
   }
-  connect () {
+  connect (paused) {
     return new Promise((resolve, reject) => {
-      this.socket = new WebSocket(`${this.url}?token=${this.jwt}&sock_id=${this.id}`)
+      let url = `${this.url}?token=${this.jwt}&sock_id=${this.id}`
+      if (paused) {
+        url += '&paused=true'
+      }
+      this.socket = new WebSocket(url)
       this.socket.onopen = resolve
       this.socket.onerror = reject
       this.socket.onmessage = this._handleMessage.bind(this)

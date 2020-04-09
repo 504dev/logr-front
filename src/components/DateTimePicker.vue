@@ -155,15 +155,17 @@ export default {
     padding: 0;
     margin: 2px 0;
     width: 100%;
-    /*width: 160px;*/
   }
   div.container > input {
     box-sizing: border-box;
     display: inline-block;
     border: none;
     margin: 0;
-    padding: 0 0 0 30px;
+    padding: 0 0 0 10px;
     height: 100%;
+  }
+  div.container > input.time {
+    border-left: dashed 1px #cccccc;
   }
   div.container > input:focus {
     outline: none;
@@ -184,14 +186,14 @@ export default {
     position: absolute;
     display: inline-block;
     margin-top: 2px;
-    margin-left: 5px;
+    margin-left: -25px;
     cursor: pointer;
   }
   span.icon.date {
-    left: 0;
+    left: 60%;
   }
   span.icon.time {
-    left: 60%;
+    left: 100%;
   }
 </style>
 <style>
