@@ -112,7 +112,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .--chunk {
     border-radius: 5px;
     border-style: solid;
@@ -126,9 +126,9 @@ export default {
     border-bottom: 1px dotted purple;
     white-space: normal;
     outline: none;
-  }
-  .json:focus {
-    white-space: pre;
-    border-bottom: none;
+    &:focus {
+      white-space: pre;
+      border-bottom: none;
+    }
   }
 </style>
