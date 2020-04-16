@@ -43,22 +43,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['jwtPayload']),
-    ...mapState(['user', 'dashboards']),
-    dashgroups () {
-      const own = []
-      const shared = []
-      if (this.dashboards) {
-        this.dashboards.forEach(dash => {
-          if (dash.owner_id === this.user.id) {
-            own.push(dash)
-          } else {
-            shared.push(dash)
-          }
-        })
-      }
-      return { own, shared }
-    }
+    ...mapGetters(['jwtPayload', 'dashgroups']),
+    ...mapState(['user', 'dashboards'])
   },
   methods: {
     async onAddDashboard () {

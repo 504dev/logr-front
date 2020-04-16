@@ -14,9 +14,24 @@ const store = new Vuex.Store({
   state: {
     user: null,
     dashboards: null,
+    shared: null,
     jwt: localStorage.getItem('jwt')
   },
   getters: {
+    dashgroups (state) {
+      const own = []
+      const shared = []
+      if (state.dashboards) {
+        state.dashboards.forEach(dash => {
+          if (dash.owner_id === state.user.id) {
+            own.push(dash)
+          } else {
+            shared.push(dash)
+          }
+        })
+      }
+      return { own, shared }
+    },
     jwtPayload (state) {
       return jwtDecode(state.jwt)
     },
@@ -48,12 +63,22 @@ const store = new Vuex.Store({
       const { data } = await getters.api('/me/dashboards')
       state.dashboards = data
     },
+    async [ACTIONS.LOAD_SHARED] ({ state, getters }) {
+      const { data } = await getters.api('/me/dashboards/shared')
+      state.shared = data
+    },
     async [ACTIONS.ADD_DASHBOARD] ({ state, getters }, name) {
       const { data } = await getters.api('/me/dashboard', {
         method: 'POST',
         data: { name }
       })
       state.dashboards.push(data)
+    },
+    async [ACTIONS.SHARE_DASHBOARD] ({ state, getters }, { dashId, username }) {
+      return getters.api('/me/dashboard/share', {
+        method: 'POST',
+        data: { dash_id: dashId, username }
+      })
     },
     async [ACTIONS.LOAD_ME] ({ state, getters }) {
       try {

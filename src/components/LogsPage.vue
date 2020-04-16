@@ -123,10 +123,7 @@ export default {
       return +this.$route.params.id
     },
     dash () {
-      if (!this.dashboards) {
-        return null
-      }
-      return this.dashboards.find(dash => dash.id === this.dashid)
+      return (this.dashboards || []).find(dash => dash.id === this.dashid)
     },
     sortedHostnames () {
       return this.groupStatsBy('hostname')
