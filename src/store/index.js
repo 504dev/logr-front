@@ -74,10 +74,22 @@ const store = new Vuex.Store({
       })
       state.dashboards.push(data)
     },
+    async [ACTIONS.EDIT_DASHBOARD] ({ state, getters }, { id, name }) {
+      const { data } = await getters.api(`/me/dashboard/${id}`, {
+        method: 'PUT',
+        data: { name }
+      })
+      console.log(data)
+    },
+    async [ACTIONS.DELETE_DASHBOARD] ({ state, getters }, id) {
+      const { data } = await getters.api(`/me/dashboard/${id}`, {
+        method: 'DELETE'
+      })
+      console.log(data)
+    },
     async [ACTIONS.SHARE_DASHBOARD] ({ state, getters }, { dashId, username }) {
-      return getters.api('/me/dashboard/share', {
-        method: 'POST',
-        data: { dash_id: dashId, username }
+      return getters.api(`/me/dashboard/share/${dashId}/to/${username}`, {
+        method: 'POST'
       })
     },
     async [ACTIONS.LOAD_ME] ({ state, getters }) {

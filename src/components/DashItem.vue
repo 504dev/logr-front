@@ -4,6 +4,9 @@
       <h3>{{ dash.name }}</h3>
     </router-link>
     <span class="tools">
+      <span @click="onEdit(dash)">
+        <i class="icon fas fa-edit"></i>
+      </span>
       <span @click="onShare(dash)">
         <i class="icon fas fa-share"></i>
       </span>
@@ -38,13 +41,30 @@ export default {
       if (!username) {
         return
       }
-      const resp = await this.$store.dispatch(ACTIONS.SHARE_DASHBOARD, { dashId: dash.id, username })
-      alert('Shared')
+      try {
+        await this.$store.dispatch(ACTIONS.SHARE_DASHBOARD, { dashId: dash.id, username })
+        alert('Shared')
+      } catch (e) {
+        console.error(e.response)
+        switch (e.response.status) {
+          case 404:
+            return alert('User not found')
+          case 505:
+            return alert('Error')
+        }
+      }
     },
-    onDelete (dash) {
+    async onEdit (dash) {
+      const name = prompt('Edit dash name:', dash.name)
+      if (!name) {
+        return
+      }
+      await this.$store.dispatch(ACTIONS.EDIT_DASHBOARD, { id: dash.id, name })
+    },
+    async onDelete (dash) {
       const confirm = prompt('Enter dash name for delete:')
       if (confirm === dash.name) {
-        alert('Deleted')
+        await this.$store.dispatch(ACTIONS.DELETE_DASHBOARD, dash.id)
       }
     },
     onKeys (dash) {
