@@ -3,6 +3,12 @@
     <router-link :to="`/dashboard/${dash.id}/logs`">
       <h3>{{ dash.name }}</h3>
     </router-link>
+    <p class="team">
+      <img :src="`https://avatars0.githubusercontent.com/u/${dash.owner.github_id}`" :title="dash.owner.name" class="owner" />
+      <template v-for="member in dash.members">
+        <img :src="`https://avatars0.githubusercontent.com/u/${member.user.github_id}`" :title="member.user.name" :key="member.user_id" class="member" />
+      </template>
+    </p>
     <span class="tools">
       <span @click="onEdit(dash)">
         <i class="icon fas fa-edit"></i>
@@ -68,7 +74,8 @@ export default {
       }
     },
     onKeys (dash) {
-      alert(`key:\n${dash.public_key}\n\nsecret:\n${dash.private_key}`)
+      let msg = dash.keys.map(key => `name: ${key.name}\npublic: ${key.public_key}\nprivate: ${key.private_key}`)
+      alert(msg.join('\n\n'))
     }
   }
 }
@@ -79,7 +86,7 @@ export default {
     text-decoration: none;
     display: inline-block;
     width: 200px;
-    height: 100px;
+    height: 140px;
     background-color: #cccccc;
     margin: 0 20px 20px 0;
     padding: 10px;
@@ -92,4 +99,23 @@ export default {
     cursor: pointer;
     margin: 5px;
   }
+  .team {
+    img {
+      width: 16px;
+      height: 16px;
+      margin: 0;
+      border-radius: 16px;
+      &.member {
+        margin-left: -8px;
+        border: solid 1px grey;
+      }
+      &.owner {
+        border: solid 2px green;
+        width: 24px;
+        height: 24px;
+        margin-right: -8px;
+      }
+    }
+  }
+
 </style>
