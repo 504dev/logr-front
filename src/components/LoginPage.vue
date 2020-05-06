@@ -8,7 +8,7 @@
 export default {
   data () {
     return {
-      url: 'http://api.logr.loc:7778/oauth/authorize'
+      url: `${process.env.VUE_APP_REST}/oauth/authorize`
     }
   }
 }
