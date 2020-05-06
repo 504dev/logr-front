@@ -2,9 +2,10 @@
   <div class="wrapper" v-if="this.user && this.dashboards">
     <div>
       <img class="avatar" :src="`https://avatars0.githubusercontent.com/u/${jwtPayload.github_id}`">
-      <span>{{ jwtPayload.username }}</span>
-      <p>{{ jwtPayload }}</p>
-      <p><a href="#" @click.prevent="$store.dispatch(ACTIONS.LOGOUT)">Sign out</a></p>
+      <span>
+        <strong>{{ jwtPayload.username }}</strong>
+        |
+        <a href="#" @click.prevent="$store.dispatch(ACTIONS.LOGOUT)">Sign out</a> </span>
     </div>
     <div>
       <h1>Own</h1>

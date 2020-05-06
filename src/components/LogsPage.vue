@@ -46,7 +46,7 @@
         <div class="logs-deep" v-for="(deep, key) in logs.deep" :key="key">
           <log-item v-for="(log, key) in deep" :value="log" :filters="filters" :key="key" />
         </div>
-        <span class="more" @click="onMore">more  ˅</span>
+        <span class="more" @click="onMore" v-if="offset">more  ˅</span>
       </span>
     </div>
     <div class="pause" :class="{ 'pause-on': paused }" @click="onPause">
