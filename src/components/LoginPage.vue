@@ -5,10 +5,13 @@
 </template>
 
 <script>
+const qs = require('querystring')
+
 export default {
   data () {
+    const callback = `${location.origin}/jwt/`
     return {
-      url: `${process.env.VUE_APP_REST}/oauth/authorize`
+      url: `${process.env.VUE_APP_REST}/oauth/authorize?${qs.stringify({ callback })}`
     }
   }
 }
