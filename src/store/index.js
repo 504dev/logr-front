@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import axios from 'axios'
 import Vue from 'vue'
 import Vuex from 'vuex'
@@ -79,12 +80,15 @@ const store = new Vuex.Store({
         method: 'PUT',
         data: { name }
       })
-      console.log(data)
+      const index = _.findIndex(state.dashboards, { id })
+      state.dashboards.splice(index, 1, data)
     },
     async [ACTIONS.DELETE_DASHBOARD] ({ state, getters }, id) {
       const { data } = await getters.api(`/me/dashboard/${id}`, {
         method: 'DELETE'
       })
+      const index = _.findIndex(state.dashboards, { id })
+      state.dashboards.splice(index, 1)
       console.log(data)
     },
     async [ACTIONS.SHARE_DASHBOARD] ({ state, getters }, { dashId, username }) {

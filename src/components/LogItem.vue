@@ -58,10 +58,10 @@ export default {
     color: blue;
   }
   .log-logname {
-    width: 60px;
+    width: 80px;
   }
   .log-hostname {
-    width: 60px;
+    width: 80px;
   }
   .log-message {
     white-space: pre;
