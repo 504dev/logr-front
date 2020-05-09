@@ -58,7 +58,6 @@
 <script>
 import _ from 'lodash'
 import ACTIONS from '../store/action-types'
-import Sock from '../libs/sock'
 import LogItem from './LogItem'
 import RangeDateTimePicker from './RangeDateTimePicker'
 import { mapState } from 'vuex'
@@ -70,30 +69,26 @@ export default {
   },
   async created () {
     await Promise.all([
+      this.$store.dispatch(ACTIONS.WS_CONNECT),
       this.$store.dispatch(ACTIONS.LOAD_ME),
       this.$store.dispatch(ACTIONS.LOAD_DASHBOARDS)
     ])
     this.stats = await this.$store.dispatch(ACTIONS.LOAD_LOGS_STATS, this.dashid)
 
-    this.sock = new Sock(process.env.VUE_APP_WS, this.jwt)
-    const event = await this.sock.connect(this.paused)
-    console.log('ws connected', event)
-    this.sock.on('/log', data => {
-      if (this.loading || this.paused) {
-        return
-      }
-      this.logs.live.push(data.payload)
-    })
-    this.sock.on('/log', data => console.log('/log', data))
+    console.log(this.sock)
+    await this.$store.dispatch(ACTIONS.PAUSE_LOGS, this.paused)
+    this.sock.on('/log', this.logHandler)
 
     await this.updateLogs()
+  },
+  destroyed () {
+    this.sock.unsubscribe('/log', this.logHandler)
   },
   data () {
     let { hostname = '', logname = '', level = '', pid = '', version = '', message = '', timestamp = [], limit = 100, paused } = this.$route.query
     timestamp = [].concat(timestamp).map(t => +t || 0).concat([0, 0]).slice(0, 2)
     paused = parseInt(paused) || 0
     return {
-      sock: null,
       paused,
       filters: {
         hostname,
@@ -118,7 +113,7 @@ export default {
     //
   },
   computed: {
-    ...mapState(['user', 'dashboards', 'jwt']),
+    ...mapState(['user', 'dashboards', 'sock']),
     dashid () {
       return +this.$route.params.id
     },
@@ -143,6 +138,13 @@ export default {
     }
   },
   methods: {
+    logHandler (data) {
+      console.log('/log', data)
+      if (this.loading || this.paused) {
+        return
+      }
+      this.logs.live.push(data.payload)
+    },
     async onMore (e) {
       console.log('onMore', e)
       const logs = await this.$store.dispatch(ACTIONS.LOAD_LOGS, {
@@ -156,10 +158,7 @@ export default {
     async onPause (e) {
       console.log('onPause', e)
       this.paused = 1 - this.paused
-      await this.$store.dispatch(ACTIONS.PAUSE_LOGS, {
-        sock_id: this.sock.id,
-        state: !!this.paused
-      })
+      await this.$store.dispatch(ACTIONS.PAUSE_LOGS, this.paused)
       this.updateLocation()
     },
     async onChange (e) {

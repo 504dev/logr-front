@@ -28,6 +28,8 @@ export default {
     overflow: hidden;
   }
   .tag {
+    font-size: 10px;
+    line-height: 16px;
     display: inline-block;
     /*margin: 0 5px;*/
     padding: 0 5px;

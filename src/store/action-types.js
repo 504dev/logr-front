@@ -1,4 +1,5 @@
 export default {
+  WS_CONNECT: 'WS_CONNECT',
   LOGOUT: 'LOGOUT',
   LOAD_ME: 'LOAD_ME',
   LOAD_LOGS: 'LOAD_LOGS',

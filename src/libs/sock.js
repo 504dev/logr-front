@@ -43,6 +43,9 @@ export default class Sock {
     this._send({ action: 'subscribe', path })
     return this.unsubscribe.bind(this, path, handler)
   }
+  pause (state) {
+    return this._send({ action: 'pause', payload: state })
+  }
   emit (path, payload) {
     return this._send({ action: 'emit', path, payload })
   }
