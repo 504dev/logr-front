@@ -3,7 +3,7 @@
     <div class="lefter">
       <img class="avatar" :src="`https://avatars0.githubusercontent.com/u/${user.github_id}`">
       <h3><router-link to="/dashboards">..</router-link>/{{ dash.name }}</h3>
-      <form class="filters" @change="onChange" @submit.prevent>
+      <form class="filters" @change="onChangeFilters" @submit.prevent>
         <select v-model="filters.logname">
           <option value="">Any logname</option>
           <option v-for="{ logname } in sortedLognames" :value="logname" :key="logname">
@@ -57,10 +57,13 @@
 
 <script>
 import _ from 'lodash'
+import store from 'store2'
 import ACTIONS from '../store/action-types'
 import LogItem from './LogItem'
 import RangeDateTimePicker from './RangeDateTimePicker'
 import { mapState } from 'vuex'
+
+const ls = store.namespace('logs')
 
 export default {
   components: {
@@ -74,6 +77,7 @@ export default {
       this.$store.dispatch(ACTIONS.LOAD_DASHBOARDS)
     ])
     this.stats = await this.$store.dispatch(ACTIONS.LOAD_LOGS_STATS, this.dashid)
+    this.init()
 
     console.log(this.sock)
     await this.$store.dispatch(ACTIONS.PAUSE_LOGS, this.paused)
@@ -85,20 +89,17 @@ export default {
     this.sock.unsubscribe('/log', this.logHandler)
   },
   data () {
-    let { hostname = '', logname = '', level = '', pid = '', version = '', message = '', timestamp = [], limit = 100, paused } = this.$route.query
-    timestamp = [].concat(timestamp).map(t => +t || 0).concat([0, 0]).slice(0, 2)
-    paused = parseInt(paused) || 0
     return {
-      paused,
+      paused: false,
       filters: {
-        hostname,
-        logname,
-        level,
-        pid,
-        version,
-        message,
-        limit,
-        timestamp
+        hostname: '',
+        logname: '',
+        level: '',
+        pid: '',
+        version: '',
+        message: '',
+        limit: 100,
+        timestamp: []
       },
       logs: {
         live: [],
@@ -130,7 +131,7 @@ export default {
       return this.groupStatsBy('level')
     },
     sortedVersions () {
-      return this.groupStatsBy('version')
+      return this.groupStatsBy('version', 'updated')
     },
     offset () {
       const list = _.last(this.logs.deep) || this.logs.history
@@ -138,6 +139,35 @@ export default {
     }
   },
   methods: {
+    init () {
+      let {
+        hostname = '',
+        logname = '',
+        level = '',
+        pid = '',
+        version = '',
+        message = '',
+        timestamp = [],
+        limit = 100,
+        paused
+      } = this.$route.query
+      if (logname === '') {
+        logname = ls.get(`dash${this.dashid}.filters.logname`) || ''
+      }
+      timestamp = [].concat(timestamp).map(t => +t || 0).concat([0, 0]).slice(0, 2)
+      this.paused = parseInt(paused) || 0
+      this.filters = {
+        hostname,
+        logname,
+        level,
+        pid,
+        version,
+        message,
+        limit,
+        timestamp
+      }
+      this.updateLocation()
+    },
     logHandler (data) {
       console.log('/log', data)
       if (this.loading || this.paused) {
@@ -161,8 +191,10 @@ export default {
       await this.$store.dispatch(ACTIONS.PAUSE_LOGS, this.paused)
       this.updateLocation()
     },
-    async onChange (e) {
-      console.log('onChange', e)
+    async onChangeFilters (e) {
+      console.log('onChangeFilters', e)
+      ls.set(`dash${this.dashid}.filters.logname`, this.filters.logname)
+
       await this.updateLogs()
       this.updateLocation()
     },
@@ -185,15 +217,16 @@ export default {
       })
       this.loading = false
     },
-    groupStatsBy (fieldname) {
+    groupStatsBy (fieldname, sort = 'cnt') {
       return _.chain(this.stats)
         .filter({ dash_id: this.dashid })
         .groupBy(fieldname)
         .map((group, key) => {
           const cnt = _.sumBy(group, 'cnt')
-          return { [fieldname]: key, cnt }
+          const updated = _.chain(group).map(v => new Date(v.updated)).max().value()
+          return { [fieldname]: key, cnt, updated }
         })
-        .sortBy(v => -v.cnt)
+        .sortBy(v => -v[sort])
         .value()
     }
   }
