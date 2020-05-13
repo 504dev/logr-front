@@ -223,7 +223,7 @@ export default {
         .groupBy(fieldname)
         .map((group, key) => {
           const cnt = _.sumBy(group, 'cnt')
-          const updated = _.chain(group).map(v => new Date(v.updated)).max().value()
+          const updated = _.chain(group).map('updated').max().value()
           return { [fieldname]: key, cnt, updated }
         })
         .sortBy(v => -v[sort])
