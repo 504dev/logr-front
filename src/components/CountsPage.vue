@@ -82,7 +82,7 @@ export default {
       },
       counts: null,
       stats: [],
-      loading: false
+      loading: true
     }
   },
   computed: {
@@ -163,6 +163,10 @@ export default {
     },
     async updateCounts () {
       this.loading = true
+      if (this.nodata) {
+        this.loading = false
+        return
+      }
       this.counts = await this.$store.dispatch(ACTIONS.LOAD_COUNTS, {
         ...this.filters,
         dash_id: this.dashid
