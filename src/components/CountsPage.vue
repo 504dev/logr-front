@@ -163,7 +163,7 @@ export default {
     },
     async updateCounts () {
       this.loading = true
-      if (this.nodata) {
+      if (!this.filters.logname) {
         this.loading = false
         return
       }
