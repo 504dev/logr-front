@@ -120,11 +120,19 @@ const store = new Vuex.Store({
       const { data } = await getters.api('/logs', { params })
       return data
     },
+    async [ACTIONS.LOAD_COUNTS] ({ state, getters }, params) {
+      const { data } = await getters.api('/counts', { params })
+      return data
+    },
     async [ACTIONS.PAUSE_LOGS] ({ state }, paused) {
       return state.sock.pause(!!paused)
     },
     async [ACTIONS.LOAD_LOGS_STATS] ({ getters }) {
       const { data } = await getters.api('/logs/stats')
+      return data
+    },
+    async [ACTIONS.LOAD_COUNTS_STATS] ({ getters }) {
+      const { data } = await getters.api('/counts/stats')
       return data
     }
   }

@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import LoginPage from '@/components/LoginPage'
 import DashboardPage from '@/components/DashboardPage'
 import LogsPage from '@/components/LogsPage'
+import CountsPage from '@/components/CountsPage'
 import JwtPage from '@/components/JwtPage'
 
 Vue.use(Router)
@@ -23,6 +24,11 @@ export default new Router({
       path: '/dashboard/:id/logs',
       name: 'dashboard-logs',
       component: LogsPage
+    },
+    {
+      path: '/dashboard/:id/counts',
+      name: 'dashboard-counts',
+      component: CountsPage
     },
     {
       path: '/login',
