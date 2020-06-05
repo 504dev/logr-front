@@ -6,7 +6,7 @@
       <form class="filters" @change="onChangeFilters" @submit.prevent>
         <select v-model="filters.logname">
           <option value="">Any logname</option>
-          <option v-for="logname in sortedLognames" :value="logname" :key="logname">
+          <option v-for="{ logname } in sortedLognames" :value="logname" :key="logname">
             {{ logname }}
           </option>
         </select>
@@ -23,12 +23,23 @@
             {{ version }}
           </option>
         </select>
+        <p v-for="(keys, prefix) in keynames" :key="prefix">
+          <strong>{{prefix}}</strong><br>
+          <span  v-for="key in keys" :key="key">
+            <a :href="`#${key}`">{{key}}</a><br>
+          </span>
+        </p>
       </form>
     </div>
     <div class="container">
       <span v-if="loading">Loading...</span>
+      <span v-else-if="nodata">No data</span>
       <div v-else>
-        <counts-chart v-for="(series, keyname) in charts" :title="keyname" :series="series" :key="keyname" />
+        <div v-for="(series, keyname) in charts" :key="keyname">
+          <a :name="keyname">
+            <counts-chart :title="keyname" :series="series" />
+          </a>
+        </div>
       </div>
     </div>
   </div>
@@ -55,8 +66,10 @@ export default {
     this.stats = await this.$store.dispatch(ACTIONS.LOAD_COUNTS_STATS, this.dashid)
     this.init()
 
-    await this.updateCounts()
-    console.log(this.charts)
+    if (this.dashStats.length) {
+      await this.updateCounts()
+      console.log(this.charts)
+    }
   },
   data () {
     return {
@@ -69,7 +82,7 @@ export default {
       },
       counts: null,
       stats: [],
-      loading: true
+      loading: false
     }
   },
   computed: {
@@ -84,7 +97,7 @@ export default {
       return this.groupStatsBy('hostname')
     },
     sortedLognames () {
-      return _.map(this.groupStatsBy('logname'), 'logname')
+      return this.groupStatsBy('logname')
     },
     sortedVersions () {
       return this.groupStatsBy('version', 'updated')
@@ -105,6 +118,16 @@ export default {
             .value()
         })
         .value()
+    },
+    keynames () {
+      const keys = _.keys(this.charts)
+      return _.groupBy(keys, v => v.split(':')[0])
+    },
+    dashStats () {
+      return _.filter(this.stats, { dash_id: this.dashid })
+    },
+    nodata () {
+      return _.size(this.charts) === 0
     }
   },
   methods: {
@@ -116,7 +139,7 @@ export default {
         version = ''
       } = this.$route.query
       if (logname === '') {
-        logname = ls.get(`dash${this.dashid}.filters.logname`) || this.sortedLognames[0] || ''
+        logname = ls.get(`dash${this.dashid}.filters.logname`) || _.get(this.sortedLognames, '0.logname') || ''
       }
       this.filters = {
         logname,
@@ -148,8 +171,7 @@ export default {
       this.loading = false
     },
     groupStatsBy (fieldname, sort = 'cnt') {
-      return _.chain(this.stats)
-        .filter({ dash_id: this.dashid })
+      return _.chain(this.dashStats)
         .groupBy(fieldname)
         .map((group, key) => {
           const cnt = _.sumBy(group, 'cnt')
@@ -211,7 +233,7 @@ export default {
     font-size: 14px;
     position: absolute;
     height: 100%;
-    width: 100%;
+    width: calc(100% - 250px);
     padding: 10px 0 0 230px;
     overflow: scroll;
     z-index: 900;

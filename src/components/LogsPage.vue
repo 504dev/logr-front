@@ -32,6 +32,9 @@
         </select>
         <input type="text" v-model="filters.limit" placeholder="Limit" class="filter-limit" />
         <range-date-time-picker v-model="filters.timestamp" />
+        <p>
+          <router-link :to="`/dashboard/${dash.id}/counts`">switch to metrics</router-link>
+        </p>
       </form>
     </div>
     <div class="container" :class="{ 'filter-logname': !!filters.logname, 'filter-hostname': !!filters.hostname }">

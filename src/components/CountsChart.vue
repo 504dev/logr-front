@@ -60,7 +60,7 @@ export default {
               x: -3
             },
             title: {
-              text: 'Price'
+              text: ''
             },
             height: '75%',
             lineWidth: 2,
