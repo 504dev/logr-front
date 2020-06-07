@@ -111,6 +111,7 @@ const store = new Vuex.Store({
         const { data } = await getters.api('/me')
         state.user = data
       } catch (err) {
+        console.error(err)
         if (err.response && err.response.status === 401) {
           router.push('/login')
         }
