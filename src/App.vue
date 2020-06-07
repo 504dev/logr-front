@@ -19,7 +19,7 @@ export default {
   }
   #app {
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-    position: relative;
+    position: absolute;
     margin: 0;
     padding: 0;
     height: 100%;

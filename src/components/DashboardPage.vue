@@ -1,11 +1,12 @@
 <template>
   <div class="wrapper" v-if="this.user && this.dashboards">
     <div>
-      <img class="avatar" :src="`https://avatars0.githubusercontent.com/u/${jwtPayload.github_id}`">
+      <img class="avatar" :src="`https://avatars0.githubusercontent.com/u/${jwtPayload.github_id}`" />
       <span>
         <strong>{{ jwtPayload.username }}</strong>
         |
-        <a href="#" @click.prevent="$store.dispatch(ACTIONS.LOGOUT)">Sign out</a> </span>
+        <a href="#" @click.prevent="$store.dispatch(ACTIONS.LOGOUT)">Sign out</a>
+      </span>
     </div>
     <div>
       <h1>Own</h1>
@@ -34,11 +35,11 @@ export default {
   components: {
     DashItem
   },
-  created () {
+  created() {
     this.$store.dispatch(ACTIONS.LOAD_ME)
     this.$store.dispatch(ACTIONS.LOAD_DASHBOARDS)
   },
-  data () {
+  data() {
     return {
       ACTIONS
     }
@@ -48,7 +49,7 @@ export default {
     ...mapState(['user', 'dashboards'])
   },
   methods: {
-    async onAddDashboard () {
+    async onAddDashboard() {
       const name = prompt('Enter dashboard name:')
       await this.$store.dispatch(ACTIONS.ADD_DASHBOARD, name)
     }
@@ -57,20 +58,20 @@ export default {
 </script>
 
 <style scoped>
-  .wrapper {
-    padding: 20px;
-  }
-  .dashboard-add {
-    color: #ffffff;
-    font-weight: bold;
-    background-color: #9e9;
-    padding: 8px 16px;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  .avatar {
-    width: 64px;
-    height: 64px;
-    border-radius: 32px;
-  }
+.wrapper {
+  padding: 20px;
+}
+.dashboard-add {
+  color: #ffffff;
+  font-weight: bold;
+  background-color: #9e9;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 32px;
+}
 </style>

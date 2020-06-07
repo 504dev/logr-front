@@ -1,6 +1,9 @@
 <template>
   <wrapper :loading="loading">
     <template v-slot:filters>
+      <p>
+        <router-link :to="`/dashboard/${dash.id}/counts`">switch to metrics</router-link>
+      </p>
       <form @change="onChangeFilters" @submit.prevent>
         <select v-model="filters.logname">
           <option value="">Any logname</option>
@@ -31,9 +34,6 @@
         <input type="text" v-model="filters.limit" placeholder="Limit" class="filter-limit" />
         <range-date-time-picker v-model="filters.timestamp" />
       </form>
-      <p>
-        <router-link :to="`/dashboard/${dash.id}/counts`">switch to metrics</router-link>
-      </p>
     </template>
     <template v-slot:content>
       <div class="logs-live column-reverse">
@@ -314,9 +314,9 @@ input.filter-limit {
 }
 .pause-on {
   zoom: 1.1;
-  background-color: rgba(0, 128, 128, 0.5);
+  background-color: rgba(0, 128, 128, 0.7);
   &:hover {
-    background-color: rgba(0, 128, 128, 0.4);
+    background-color: rgba(0, 128, 128, 0.6);
   }
 }
 </style>

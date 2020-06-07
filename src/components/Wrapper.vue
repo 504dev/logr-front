@@ -6,9 +6,11 @@
       <div class="filters">
         <slot name="filters"></slot>
       </div>
-      <i class="icon fas fa-moon"></i>
+      <div class="bottom">
+        <a href="#" @click="switchMode"><i class="icon fas fa-moon"></i></a>
+      </div>
     </div>
-    <div class="container">
+    <div class="container" :class="{ night: mode === 0 }">
       <span v-if="loading">Loading...</span>
       <slot v-else name="content"></slot>
     </div>
@@ -16,16 +18,30 @@
 </template>
 
 <script>
+import store from 'store2'
 import { mapState } from 'vuex'
 
 export default {
   props: {
     loading: Boolean
   },
+  data() {
+    const mode = store.get('mode', 0)
+    console.log({ mode })
+    return {
+      mode
+    }
+  },
   computed: {
     ...mapState(['user', 'dashboards']),
     dash() {
       return (this.dashboards || []).find(dash => dash.id === +this.$route.params.id)
+    }
+  },
+  methods: {
+    switchMode() {
+      this.mode = 1 - this.mode
+      store.set('mode', this.mode)
     }
   }
 }
@@ -64,6 +80,15 @@ export default {
       border-bottom: solid 1px green;
     }
   }
+
+  .bottom {
+    text-align: right;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 20px;
+    padding: 10px;
+  }
 }
 
 .container {
@@ -75,5 +100,9 @@ export default {
   padding: 10px 0 0 230px;
   overflow: scroll;
   z-index: 900;
+  &.night {
+    background-color: #000;
+    color: white;
+  }
 }
 </style>

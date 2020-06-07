@@ -1,6 +1,9 @@
 <template>
   <wrapper :loading="loading">
     <template v-slot:filters>
+      <p>
+        <router-link :to="`/dashboard/${dash.id}/logs`">switch to logs</router-link>
+      </p>
       <form @change="onChangeFilters" @submit.prevent>
         <select v-model="filters.logname">
           <option value="">Any logname</option>

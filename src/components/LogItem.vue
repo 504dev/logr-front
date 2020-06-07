@@ -30,12 +30,13 @@ export default {
   overflow: hidden;
 }
 .tag {
+  color: #fff;
   font-size: 10px;
   line-height: 16px;
   display: inline-block;
   /*margin: 0 5px;*/
   padding: 0 5px;
-  background-color: #eeeeee;
+  background-color: rgba(128, 128, 128, 0.5);
   border-radius: 4px;
 }
 .log-item {
