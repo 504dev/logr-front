@@ -1,10 +1,15 @@
 <template>
   <span class="log-item">
-    <span class="log-logname ellipsis tag" :title="value.logname" v-show="!$attrs.filters.logname">{{ value.logname }}</span>
+    <span class="log-logname ellipsis tag" :title="value.logname" v-show="!$attrs.filters.logname">{{
+      value.logname
+    }}</span>
     <span class="log-hostname ellipsis tag" :title="value.hostname" v-show="!$attrs.filters.hostname">{{
       value.hostname
     }}</span>
-    <span class="log-time">{{ new Date(value.timestamp / 1000000).toISOString() }}</span>
+    <span class="log-time"
+      ><span>{{ formatted[0] }}</span> <span>{{ formatted[1] }}</span
+      ><small>.{{ formatted[2] }}</small></span
+    >
     <span class="log-level ellipsis" :class="`log-level-${value.level}`">{{ value.level }}</span>
     <log-item-msg :value="value.message" :filter="$attrs.filters.message" class="log-message" />
   </span>
@@ -19,11 +24,17 @@ export default {
   },
   props: {
     value: Object
+  },
+  computed: {
+    formatted() {
+      const iso = new Date(this.value.timestamp / 1000000).toISOString()
+      return [iso.slice(0, 10), iso.slice(11, 19), iso.slice(20, 23)]
+    }
   }
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .ellipsis {
   display: inline-block;
   text-overflow: ellipsis;
@@ -34,17 +45,19 @@ export default {
   font-size: 10px;
   line-height: 16px;
   display: inline-block;
-  /*margin: 0 5px;*/
   padding: 0 5px;
   background-color: rgba(128, 128, 128, 0.5);
-  border-radius: 4px;
+  border-radius: 2px;
+  text-align: center;
 }
 .log-item {
   display: block;
   white-space: nowrap;
 }
 .log-time {
-  color: #bbbbbb;
+  small {
+    color: #888;
+  }
 }
 .log-level {
   color: green;

@@ -97,7 +97,8 @@ export default {
   position: absolute;
   height: 100%;
   width: 100%;
-  padding: 10px 0 0 230px;
+  padding: 10px 0 10px 230px;
+  box-sizing: border-box;
   overflow: scroll;
   z-index: 900;
   &.night {

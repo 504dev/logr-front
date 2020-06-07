@@ -37,7 +37,12 @@
     </template>
     <template v-slot:content>
       <div class="logs-live column-reverse">
-        <log-item v-for="(log, key) in logs.live" :value="log" :filters="filters" :key="key" />
+        <template v-for="(log, key) in logs.live">
+          <div v-if="log.hr" :key="key" class="pause-line">
+            <span><i class="icon fas fa-pause"></i> {{ log.text }}</span>
+          </div>
+          <log-item v-else :value="log" :filters="filters" :key="key" />
+        </template>
       </div>
       <div class="logs-history">
         <log-item v-for="(log, key) in logs.history" :value="log" :filters="filters" :key="key" />
@@ -46,7 +51,7 @@
         <log-item v-for="(log, key) in deep" :value="log" :filters="filters" :key="key" />
       </div>
       <span class="more" @click="onMore" v-if="offset">more ˅</span>
-      <div class="pause" :class="{ 'pause-on': paused }" @click="onPause">&nbsp;▌▌</div>
+      <div class="pause" :class="{ 'pause-on': paused }" @click="onPause"><i class="icon fas fa-pause"></i></div>
     </template>
   </wrapper>
 </template>
@@ -90,6 +95,7 @@ export default {
   data() {
     return {
       paused: false,
+      pausedTimer: null,
       filters: {
         hostname: '',
         logname: '',
@@ -195,6 +201,20 @@ export default {
       this.paused = 1 - this.paused
       await this.$store.dispatch(ACTIONS.PAUSE_LOGS, this.paused)
       this.updateLocation()
+      if (this.pausedTimer) {
+        clearInterval(this.pausedTimer)
+      }
+      if (this.paused) {
+        const hr = {
+          hr: true,
+          timestamp: Date.now(),
+          text: ''
+        }
+        this.pausedTimer = setInterval(() => {
+          hr.text = new Date(Date.now() - hr.timestamp).toISOString().slice(11, 19)
+        }, 1000)
+        this.logs.live.push(hr)
+      }
     },
     async onChangeFilters(e) {
       console.log('onChangeFilters', e)
@@ -259,7 +279,7 @@ input.filter-limit {
 }
 
 .logs-live {
-  border-bottom: dashed 1px red;
+  border-bottom: dashed 1px #888;
 }
 .logs-history {
   /*border-top: dashed 1px green;*/
@@ -276,16 +296,21 @@ input.filter-limit {
 }
 
 .more {
+  width: calc(100vw - 250px);
+  height: 25px;
+  line-height: 25px;
+  vertical-align: middle;
   display: inline-block;
-  margin: 5px 0;
+  margin: 5px 0 0 0;
+  text-align: center;
   padding: 0 5px;
   background-color: green;
   color: white;
   border-radius: 4px;
-  opacity: 0.5;
+  opacity: 0.8;
   cursor: pointer;
   &:hover {
-    opacity: 0.7;
+    opacity: 1;
   }
 }
 
@@ -314,9 +339,23 @@ input.filter-limit {
 }
 .pause-on {
   zoom: 1.1;
-  background-color: rgba(0, 128, 128, 0.7);
+  background-color: rgba(0, 128, 128, 1);
   &:hover {
-    background-color: rgba(0, 128, 128, 0.6);
+    background-color: rgba(0, 128, 128, 1);
+  }
+}
+.pause-line {
+  border-top: dashed 1px #088;
+  span {
+    color: #fff;
+    font-size: 10px;
+    background-color: #088;
+    padding: 2px 4px;
+    border-radius: 0 0 3px 3px;
+    position: absolute;
+    left: 100vw;
+    margin-left: -120px;
+    margin-top: -1px;
   }
 }
 </style>
