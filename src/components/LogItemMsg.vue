@@ -120,7 +120,7 @@ export default {
     border-color: orange;
   }
   .match {
-    background-color: yellow;
+    background-color: #dd0;
   }
   .json {
     border-bottom: 1px dotted purple;

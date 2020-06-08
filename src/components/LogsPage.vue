@@ -23,16 +23,16 @@
             {{ level }}
           </option>
         </select>
-        <input type="text" v-model="filters.message" placeholder="Message" class="filter-message" />
-        <input type="number" v-model="filters.pid" placeholder="Pid" class="filter-pid" maxlength="6" />
-        <select v-model="filters.version" class="filter-version">
+        <input type="text" v-model="filters.message" placeholder="Message" id="filter-message" />
+        <input type="number" v-model="filters.pid" placeholder="Pid" id="filter-pid" maxlength="6" />
+        <select v-model="filters.version" id="filter-version">
           <option value="">Any version</option>
           <option v-for="version in sortedVersions" :value="version" :key="version" v-if="version">
             {{ version }}
           </option>
         </select>
-        <input type="text" v-model="filters.limit" placeholder="Limit" class="filter-limit" />
         <range-date-time-picker v-model="filters.timestamp" />
+        <input type="text" v-model="filters.limit" placeholder="Limit" id="filter-limit" />
       </form>
       <div class="bottom">
         <a href="#" @click="switchMode"><i class="icon fas fa-moon"></i></a>
@@ -270,19 +270,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-input.filter-message {
+input#filter-message {
   width: 100%;
 }
-input.filter-pid {
+input#filter-pid {
   display: inline-block;
   width: 40%;
 }
-select.filter-version {
+select#filter-version {
   display: inline-block;
+  float: right;
   width: 55%;
 }
-input.filter-limit {
+input#filter-limit {
   width: 25%;
+  float: right;
+  margin-top: 10px;
 }
 
 .logs-live {
@@ -334,7 +337,9 @@ input.filter-limit {
   font-size: 20px;
   color: white;
   text-align: center;
-  /*border-radius: 10px 10px 0 0;*/
+  border-radius: 10px 10px 0 0;
+  border: solid 2px white;
+  border-bottom: none;
   overflow: hidden;
   background-color: rgba(128, 128, 128, 0.4);
   cursor: pointer;
@@ -345,10 +350,11 @@ input.filter-limit {
   }
 }
 .pause-on {
+  border-color: rgb(0, 128, 128);
   zoom: 1.1;
-  background-color: rgba(0, 128, 128, 1);
+  background-color: rgb(0, 128, 128);
   &:hover {
-    background-color: rgba(0, 128, 128, 1);
+    background-color: rgb(0, 128, 128);
   }
 }
 .pause-line {
