@@ -1,5 +1,5 @@
 <template>
-  <wrapper :loading="loading">
+  <wrapper :loading="loading" :class="{ night: mode === 0 }">
     <template v-slot:filters>
       <p style="float: right; margin-top: -35px">
         <router-link :to="`/dashboard/${dash.id}/counts`">switch to metrics</router-link>
@@ -123,7 +123,7 @@ export default {
     //
   },
   computed: {
-    ...mapState(['user', 'dashboards', 'sock']),
+    ...mapState(['user', 'dashboards', 'sock', 'mode']),
     dashid() {
       return +this.$route.params.id
     },

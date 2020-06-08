@@ -40,7 +40,7 @@
       <div v-else>
         <div v-for="(series, keyname) in charts" :key="keyname">
           <a :name="keyname">
-            <counts-chart :title="keyname" :series="series" />
+            <counts-chart :title="keyname" :series="series" class="chart" />
           </a>
         </div>
       </div>
@@ -188,5 +188,8 @@ input#filter-pid {
 select#filter-version {
   display: inline-block;
   width: 55%;
+}
+.chart {
+  /*width: 50%;*/
 }
 </style>

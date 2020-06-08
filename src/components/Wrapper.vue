@@ -9,7 +9,7 @@
         <slot name="filters"></slot>
       </div>
     </div>
-    <div class="container" :class="{ night: mode === 0 }">
+    <div class="container">
       <span v-if="loading">Loading...</span>
       <slot v-else name="content"></slot>
     </div>
@@ -25,7 +25,7 @@ export default {
     loading: Boolean
   },
   computed: {
-    ...mapState(['user', 'dashboards', 'mode']),
+    ...mapState(['user', 'dashboards']),
     dash() {
       return (this.dashboards || []).find(dash => dash.id === +this.$route.params.id)
     }
@@ -34,6 +34,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.wrapper {
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  &.night {
+    background-color: #000;
+    color: white;
+  }
+}
 .lefter {
   position: fixed;
   padding: 10px;
@@ -79,13 +90,9 @@ export default {
   position: absolute;
   height: 100%;
   width: 100%;
-  padding: 10px 0 10px 230px;
+  padding: 10px 10px 10px 230px;
   box-sizing: border-box;
   overflow: scroll;
   z-index: 900;
-  &.night {
-    background-color: #000;
-    color: white;
-  }
 }
 </style>
