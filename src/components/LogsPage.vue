@@ -279,6 +279,9 @@ input#filter-pid {
   display: inline-block;
   width: 40%;
 }
+select#filter-logname{
+  /*font-weight: bold;*/
+}
 select#filter-hostname {
   display: inline-block;
   /*width: 55%;*/
@@ -349,10 +352,10 @@ input#filter-limit {
   color: white;
   text-align: center;
   border-radius: 10px 10px 0 0;
-  border: solid 2px white;
+  border: solid 3px white;
   border-bottom: none;
   overflow: hidden;
-  background-color: rgba(128, 128, 128, 0.4);
+  background-color: rgba(128, 128, 128, 0.5);
   cursor: pointer;
   margin-left: -40px;
   &:hover {

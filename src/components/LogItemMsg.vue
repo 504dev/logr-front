@@ -1,11 +1,13 @@
 <template>
   <span>
-    <span v-for="({ text, css, json, match }, key) in chunks"
+    <span
+      v-for="({ text, css, json, match }, key) in chunks"
       :key="key"
       :tabindex="json && 0"
       :style="css"
       :class="{ chunk: true, json, match }"
-    >{{ json ? JSON.stringify(json, null, 2) : text }}</span>
+      >{{ json ? JSON.stringify(json, null, 2) : text }}</span
+    >
   </span>
 </template>
 
@@ -15,30 +17,27 @@ import ansicolor from 'ansicolor'
 
 export default {
   props: {
-    value: String
+    value: String,
+    filter: String
   },
-  data () {
+  data() {
     return {
-      filter: this.$attrs.filter
+      // filter: this.$attrs.filter
     }
   },
   computed: {
-    chunks () {
+    chunks() {
       const result = []
       let { spans } = ansicolor.parse(this.value)
 
       _.each(spans, span => {
-        if (span.css) {
-          result.push(span)
-          return
-        }
-        const matches = this.search(span.text)
+        const matches = this.search(span.text).map(v => ({ ...span, ...v }))
         _.each(matches, item => {
           if (item.match) {
             result.push(item)
             return
           }
-          const jsons = this.json(item.text)
+          const jsons = this.json(item.text).map(v => ({ ...item, ...v }))
           result.push(...jsons)
         })
       })
@@ -47,7 +46,7 @@ export default {
     }
   },
   methods: {
-    search (text) {
+    search(text) {
       if (!this.filter) {
         return [{ text }]
       }
@@ -67,7 +66,7 @@ export default {
       parts.push({ text: text.slice(lastIndex) })
       return parts
     },
-    json (text) {
+    json(text) {
       const borders = {
         '{': '}',
         '[': ']'
@@ -113,22 +112,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .--chunk {
-    border-radius: 5px;
-    border-style: solid;
-    border-width: 0 2px;
-    border-color: orange;
+.--chunk {
+  border-radius: 5px;
+  border-style: solid;
+  border-width: 0 2px;
+  border-color: orange;
+}
+.match {
+  background-color: #dd0;
+}
+.json {
+  border-bottom: 1px dotted purple;
+  white-space: normal;
+  outline: none;
+  &:focus {
+    white-space: pre;
+    border-bottom: none;
   }
-  .match {
-    background-color: #dd0;
-  }
-  .json {
-    border-bottom: 1px dotted purple;
-    white-space: normal;
-    outline: none;
-    &:focus {
-      white-space: pre;
-      border-bottom: none;
-    }
-  }
+}
 </style>
