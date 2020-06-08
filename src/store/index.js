@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import axios from 'axios'
+import ls from 'store2'
 import Vue from 'vue'
 import Vuex from 'vuex'
 import jwtDecode from 'jwt-decode'
@@ -18,10 +19,11 @@ const store = new Vuex.Store({
     dashboards: null,
     shared: null,
     jwt: localStorage.getItem('jwt'),
-    sock: null
+    sock: null,
+    mode: ls.get('mode', 0)
   },
   getters: {
-    dashgroups (state) {
+    dashgroups(state) {
       const own = []
       const shared = []
       if (state.dashboards) {
@@ -35,7 +37,7 @@ const store = new Vuex.Store({
       }
       return { own, shared }
     },
-    jwtPayload (state) {
+    jwtPayload(state) {
       return jwtDecode(state.jwt)
     },
     api: state => (path, options = {}) => {
@@ -55,14 +57,18 @@ const store = new Vuex.Store({
     [MUTATIONS.UNSET_JWT]: (state, token) => {
       localStorage.removeItem('jwt', token)
       state.jwt = null
+    },
+    [MUTATIONS.SWITCH_MODE]: (state, token) => {
+      state.mode = 1 - state.mode
+      ls.set('mode', state.mode)
     }
   },
   actions: {
-    [ACTIONS.LOGOUT] () {
+    [ACTIONS.LOGOUT]() {
       localStorage.removeItem('jwt')
       location.href = '/login'
     },
-    async [ACTIONS.WS_CONNECT] ({ state }) {
+    async [ACTIONS.WS_CONNECT]({ state }) {
       if (!state.sock) {
         state.sock = new Sock(process.env.VUE_APP_WS, state.jwt)
         const event = await state.sock.connect()
@@ -70,22 +76,22 @@ const store = new Vuex.Store({
       }
       return this.sock
     },
-    async [ACTIONS.LOAD_DASHBOARDS] ({ state, getters }) {
+    async [ACTIONS.LOAD_DASHBOARDS]({ state, getters }) {
       const { data } = await getters.api('/me/dashboards')
       state.dashboards = data
     },
-    async [ACTIONS.LOAD_SHARED] ({ state, getters }) {
+    async [ACTIONS.LOAD_SHARED]({ state, getters }) {
       const { data } = await getters.api('/me/dashboards/shared')
       state.shared = data
     },
-    async [ACTIONS.ADD_DASHBOARD] ({ state, getters }, name) {
+    async [ACTIONS.ADD_DASHBOARD]({ state, getters }, name) {
       const { data } = await getters.api('/me/dashboard', {
         method: 'POST',
         data: { name }
       })
       state.dashboards.push(data)
     },
-    async [ACTIONS.EDIT_DASHBOARD] ({ state, getters }, { id, name }) {
+    async [ACTIONS.EDIT_DASHBOARD]({ state, getters }, { id, name }) {
       const { data } = await getters.api(`/me/dashboard/${id}`, {
         method: 'PUT',
         data: { name }
@@ -93,7 +99,7 @@ const store = new Vuex.Store({
       const index = _.findIndex(state.dashboards, { id })
       state.dashboards.splice(index, 1, data)
     },
-    async [ACTIONS.DELETE_DASHBOARD] ({ state, getters }, id) {
+    async [ACTIONS.DELETE_DASHBOARD]({ state, getters }, id) {
       const { data } = await getters.api(`/me/dashboard/${id}`, {
         method: 'DELETE'
       })
@@ -101,12 +107,12 @@ const store = new Vuex.Store({
       state.dashboards.splice(index, 1)
       console.log(data)
     },
-    async [ACTIONS.SHARE_DASHBOARD] ({ state, getters }, { dashId, username }) {
+    async [ACTIONS.SHARE_DASHBOARD]({ state, getters }, { dashId, username }) {
       return getters.api(`/me/dashboard/share/${dashId}/to/${username}`, {
         method: 'POST'
       })
     },
-    async [ACTIONS.LOAD_ME] ({ state, getters }) {
+    async [ACTIONS.LOAD_ME]({ state, getters }) {
       try {
         const { data } = await getters.api('/me')
         state.user = data
@@ -117,22 +123,22 @@ const store = new Vuex.Store({
         }
       }
     },
-    async [ACTIONS.LOAD_LOGS] ({ state, getters }, params) {
+    async [ACTIONS.LOAD_LOGS]({ state, getters }, params) {
       const { data } = await getters.api('/logs', { params })
       return data
     },
-    async [ACTIONS.LOAD_COUNTS] ({ state, getters }, params) {
+    async [ACTIONS.LOAD_COUNTS]({ state, getters }, params) {
       const { data } = await getters.api('/counts', { params })
       return data
     },
-    async [ACTIONS.PAUSE_LOGS] ({ state }, paused) {
+    async [ACTIONS.PAUSE_LOGS]({ state }, paused) {
       return state.sock.pause(!!paused)
     },
-    async [ACTIONS.LOAD_LOGS_STATS] ({ getters }) {
+    async [ACTIONS.LOAD_LOGS_STATS]({ getters }) {
       const { data } = await getters.api('/logs/stats')
       return data
     },
-    async [ACTIONS.LOAD_COUNTS_STATS] ({ getters }) {
+    async [ACTIONS.LOAD_COUNTS_STATS]({ getters }) {
       const { data } = await getters.api('/counts/stats')
       return data
     }

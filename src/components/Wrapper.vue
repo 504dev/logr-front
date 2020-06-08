@@ -6,9 +6,6 @@
       <div class="filters">
         <slot name="filters"></slot>
       </div>
-      <div class="bottom">
-        <a href="#" @click="switchMode"><i class="icon fas fa-moon"></i></a>
-      </div>
     </div>
     <div class="container" :class="{ night: mode === 0 }">
       <span v-if="loading">Loading...</span>
@@ -25,23 +22,10 @@ export default {
   props: {
     loading: Boolean
   },
-  data() {
-    const mode = store.get('mode', 0)
-    console.log({ mode })
-    return {
-      mode
-    }
-  },
   computed: {
-    ...mapState(['user', 'dashboards']),
+    ...mapState(['user', 'dashboards', 'mode']),
     dash() {
       return (this.dashboards || []).find(dash => dash.id === +this.$route.params.id)
-    }
-  },
-  methods: {
-    switchMode() {
-      this.mode = 1 - this.mode
-      store.set('mode', this.mode)
     }
   }
 }
@@ -79,15 +63,6 @@ export default {
       outline: none;
       border-bottom: solid 1px green;
     }
-  }
-
-  .bottom {
-    text-align: right;
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 20px;
-    padding: 10px;
   }
 }
 

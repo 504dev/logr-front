@@ -34,6 +34,9 @@
         <input type="text" v-model="filters.limit" placeholder="Limit" class="filter-limit" />
         <range-date-time-picker v-model="filters.timestamp" />
       </form>
+      <div class="bottom">
+        <a href="#" @click="switchMode"><i class="icon fas fa-moon"></i></a>
+      </div>
     </template>
     <template v-slot:content>
       <div class="logs-live column-reverse">
@@ -60,6 +63,7 @@
 import _ from 'lodash'
 import store from 'store2'
 import ACTIONS from '../store/action-types'
+import MUTATIONS from '../store/mutations-types.js'
 import LogItem from './LogItem'
 import RangeDateTimePicker from './RangeDateTimePicker'
 import Wrapper from './Wrapper'
@@ -257,6 +261,9 @@ export default {
         .sortBy(v => -v[sort])
         .map(fieldname)
         .value()
+    },
+    switchMode() {
+      this.$store.commit(MUTATIONS.SWITCH_MODE)
     }
   }
 }
@@ -357,5 +364,14 @@ input.filter-limit {
     margin-left: -120px;
     margin-top: -1px;
   }
+}
+
+.bottom {
+  text-align: right;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 20px;
+  padding: 10px;
 }
 </style>
