@@ -146,10 +146,12 @@ export default {
 </script>
 <style scoped>
   div.container {
+    box-sizing: border-box;
     position: relative;
     display: inline-block;
     background-color: white;
-    outline: solid 1px #cccccc;
+    border: solid 1px #999;
+    border-bottom-width: 2px;
     white-space: nowrap;
     height: 30px;
     padding: 0;
@@ -164,9 +166,6 @@ export default {
     padding: 0 0 0 10px;
     height: 100%;
   }
-  div.container > input.time {
-    border-left: dashed 1px #cccccc;
-  }
   div.container > input:focus {
     outline: none;
     border-bottom: solid 2px green;
@@ -175,12 +174,12 @@ export default {
   div.container > input.invalid:focus {
     border-bottom: solid 2px red;
   }
-  input.date {
+  div.container > input.date {
     width: 60%;
   }
-  input.time {
+  div.container > input.time {
     width: 40%;
-    border-left: dashed 1px #cccccc;
+    border-left: dashed 1px #999;
   }
   span.icon {
     position: absolute;

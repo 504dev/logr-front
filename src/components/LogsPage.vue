@@ -1,23 +1,23 @@
 <template>
   <wrapper :loading="loading">
     <template v-slot:filters>
-      <p>
+      <p style="float: right; margin-top: -35px">
         <router-link :to="`/dashboard/${dash.id}/counts`">switch to metrics</router-link>
       </p>
       <form @change="onChangeFilters" @submit.prevent>
-        <select v-model="filters.logname">
+        <select v-model="filters.logname" id="filter-logname">
           <option value="">Any logname</option>
           <option v-for="logname in sortedLognames" :value="logname" :key="logname">
             {{ logname }}
           </option>
         </select>
-        <select v-model="filters.hostname">
+        <select v-model="filters.hostname" id="filter-hostname">
           <option value="">Any hostname</option>
           <option v-for="hostname in sortedHostnames" :value="hostname" :key="hostname">
             {{ hostname }}
           </option>
         </select>
-        <select v-model="filters.level">
+        <select v-model="filters.level" id="filter-level">
           <option value="">Any level</option>
           <option v-for="level in sortedLevels" :value="level" :key="level">
             {{ level }}
@@ -215,7 +215,7 @@ export default {
           text: ''
         }
         this.pausedTimer = setInterval(() => {
-          hr.text = new Date(Date.now() - hr.timestamp).toISOString().slice(11, 19)
+          hr.text = new Date(Date.now() - hr.timestamp).toISOString().slice(14, 19)
         }, 1000)
         this.logs.live.push(hr)
       }
@@ -272,15 +272,26 @@ export default {
 <style lang="scss" scoped>
 input#filter-message {
   width: 100%;
+  font-size: 20px;
+  height: 50px;
 }
 input#filter-pid {
   display: inline-block;
   width: 40%;
 }
+select#filter-hostname {
+  display: inline-block;
+  /*width: 55%;*/
+}
+select#filter-level {
+  display: inline-block;
+  /*width: 40%;*/
+  /*float: right;*/
+}
 select#filter-version {
   display: inline-block;
-  float: right;
   width: 55%;
+  float: right;
 }
 input#filter-limit {
   width: 25%;

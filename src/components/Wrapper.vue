@@ -1,8 +1,10 @@
 <template>
   <div class="wrapper" v-if="this.user && this.dash">
     <div class="lefter">
-      <img class="avatar" :src="`https://avatars0.githubusercontent.com/u/${user.github_id}`" />
-      <h3><router-link to="/dashboards">..</router-link>/{{ dash.name }}</h3>
+      <router-link to="/dashboards"
+        ><img class="avatar" :src="`https://avatars0.githubusercontent.com/u/${user.github_id}`"
+      /></router-link>
+      <!--      <h3><router-link to="/dashboards">..</router-link>/{{ dash.name }}</h3>-->
       <div class="filters">
         <slot name="filters"></slot>
       </div>
@@ -41,13 +43,17 @@ export default {
   z-index: 901;
 
   .avatar {
-    width: 32px;
-    height: 32px;
-    border-radius: 16px;
+    width: 24px;
+    height: 24px;
+    border-radius: 24px;
+    border: solid 1px transparent;
+    &:hover {
+      border-color: green;
+    }
   }
 
   .filters {
-    margin-top: 20px;
+    margin-top: 10px;
     display: block;
     select,
     input {
@@ -58,10 +64,11 @@ export default {
       height: 30px;
       padding: 0 10px;
       border: solid 1px #999;
+      border-bottom-width: 2px;
     }
     input:focus {
       outline: none;
-      border-bottom: solid 1px green;
+      border-bottom: solid 2px green;
     }
   }
 }
