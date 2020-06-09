@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="container">
-      <span class="icon date" @click="openDatePicker">📅</span
+      <span class="icon date" @click="openDatePicker"><i class="fa fa-calendar"></i></span
       ><input
         ref="idate"
         type="text"
@@ -10,9 +10,10 @@
         v-model="date"
         @change="onDateInput"
         maxlength="10"
-      /><span class="icon time" @click="openTimePicker">🕑</span><input
-      ref="itime"
-      type="text"
+      /><span class="icon time" @click="openTimePicker"><i class="fa fa-clock"></i></span
+      ><input
+        ref="itime"
+        type="text"
         :placeholder="ZERO_TIME"
         :class="{ time: true, invalid: isTimeInvalid }"
         v-model="time"
@@ -26,7 +27,8 @@
       zone="UTC"
       input-class="datetime-hidden"
       ref="sdate"
-      @input="onDatePick">
+      @input="onDatePick"
+    >
     </datetime>
     <datetime
       type="time"
@@ -34,7 +36,8 @@
       zone="UTC"
       input-class="datetime-hidden"
       ref="stime"
-      @input="onTimePick">
+      @input="onTimePick"
+    >
     </datetime>
   </div>
 </template>
@@ -48,7 +51,7 @@ const ZERO_TIME = '00:00'
 export default {
   components: { Datetime },
   props: ['value'],
-  data () {
+  data() {
     let date = ''
     let time = ''
     let selector = { date: null, time: null }
@@ -71,19 +74,19 @@ export default {
       ZERO_TIME
     }
   },
-  created () {
+  created() {
     //
   },
   computed: {
-    isDateInvalid () {
+    isDateInvalid() {
       return this.date ? isNaN(this.test(this.date, ZERO_TIME)) : false
     },
-    isTimeInvalid () {
+    isTimeInvalid() {
       return this.time ? isNaN(this.test(TODAY, this.time)) : false
     }
   },
   methods: {
-    onDatePick (date) {
+    onDatePick(date) {
       if (this.$el) {
         this.date = date.slice(0, 10)
         const timestamp = this.test(this.date, this.time)
@@ -97,7 +100,7 @@ export default {
         this.$el.dispatchEvent(new Event('change', { target, bubbles: true }))
       }
     },
-    onTimePick (time) {
+    onTimePick(time) {
       if (this.$el) {
         this.time = time.slice(11, 16)
         const timestamp = this.test(this.date, this.time)
@@ -111,7 +114,7 @@ export default {
         this.$el.dispatchEvent(new Event('change', { target, bubbles: true }))
       }
     },
-    onDateInput (e) {
+    onDateInput(e) {
       const timestamp = this.test(e.target.value, this.time)
       if (isNaN(timestamp)) {
         e.stopPropagation()
@@ -119,7 +122,7 @@ export default {
       }
       this.$emit('input', timestamp)
     },
-    onTimeInput (e) {
+    onTimeInput(e) {
       const timestamp = this.test(this.date, e.target.value)
       if (isNaN(timestamp)) {
         e.stopPropagation()
@@ -127,13 +130,13 @@ export default {
       }
       this.$emit('input', timestamp)
     },
-    openDatePicker () {
+    openDatePicker() {
       this.$refs.sdate.$el.firstElementChild.click()
     },
-    openTimePicker () {
+    openTimePicker() {
       this.$refs.stime.$el.firstElementChild.click()
     },
-    test (date, time) {
+    test(date, time) {
       if (date === '' && time === '') {
         return 0
       }
@@ -144,59 +147,63 @@ export default {
   }
 }
 </script>
-<style scoped>
-  div.container {
-    box-sizing: border-box;
-    position: relative;
-    display: inline-block;
-    background-color: white;
-    border: solid 1px #999;
-    border-bottom-width: 2px;
-    white-space: nowrap;
-    height: 30px;
-    padding: 0;
-    margin: 2px 0;
-    width: 100%;
-  }
-  div.container > input {
+<style scoped lang="scss">
+div.container {
+  box-sizing: border-box;
+  position: relative;
+  display: inline-block;
+  background-color: white;
+  border: solid 1px #999;
+  border-bottom-width: 2px;
+  white-space: nowrap;
+  height: 30px;
+  padding: 0;
+  margin: 2px 0;
+  width: 100%;
+  > input {
     box-sizing: border-box;
     display: inline-block;
     border: none;
     margin: 0;
     padding: 0 0 0 10px;
     height: 100%;
+    &.date {
+      width: 60%;
+    }
+    &.time {
+      width: 40%;
+      border-left: dashed 1px #999;
+    }
+    &:focus {
+      outline: none;
+      border-bottom: solid 2px green;
+    }
+    &.invalid,
+    &.invalid:focus {
+      border-bottom: solid 2px red;
+    }
   }
-  div.container > input:focus {
-    outline: none;
-    border-bottom: solid 2px green;
+}
+span.icon {
+  position: absolute;
+  display: inline-block;
+  margin-top: 4px;
+  margin-left: -25px;
+  cursor: pointer;
+  color: #ccc;
+  &:hover {
+    color: #333;
   }
-  div.container > input.invalid,
-  div.container > input.invalid:focus {
-    border-bottom: solid 2px red;
-  }
-  div.container > input.date {
-    width: 60%;
-  }
-  div.container > input.time {
-    width: 40%;
-    border-left: dashed 1px #999;
-  }
-  span.icon {
-    position: absolute;
-    display: inline-block;
-    margin-top: 2px;
-    margin-left: -25px;
-    cursor: pointer;
-  }
-  span.icon.date {
+  &.date {
     left: 60%;
   }
-  span.icon.time {
+  &.time {
     left: 100%;
   }
+}
 </style>
 <style>
-  .datetime-hidden {
-    display: none;
-  }
+.datetime-hidden {
+  display: none;
+}
 </style>
