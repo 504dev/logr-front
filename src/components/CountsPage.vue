@@ -24,11 +24,16 @@
             {{ version }}
           </option>
         </select>
+        <select v-model="filters.agg" id="filter-agg">
+          <option v-for="agg in ['m', 'h', 'd']" :value="agg" :key="agg">
+            {{ agg }}
+          </option>
+        </select>
         <p v-for="(keys, prefix) in keynames" :key="prefix">
           <strong>{{ prefix }}</strong
           ><br />
           <span v-for="key in keys" :key="key">
-            <a :href="`#${key}`">{{ key }}</a
+            <a :href="`#${key}`">{{ key.split(':').slice(1).join(':') }}</a
             ><br />
           </span>
         </p>
@@ -67,7 +72,7 @@ export default {
     await Promise.all([this.$store.dispatch(ACTIONS.LOAD_ME), this.$store.dispatch(ACTIONS.LOAD_DASHBOARDS)])
     this.stats = await this.$store.dispatch(ACTIONS.LOAD_COUNTS_STATS, this.dash.id)
 
-    let { hostname = '', logname = '', pid = '', version = '' } = this.$route.query
+    let { hostname = '', logname = '', pid = '', version = '', agg = 'm' } = this.$route.query
     if (logname === '') {
       logname = ls.get(`dash${this.dash.id}.filters.logname`) || _.first(this.sortedLognames) || ''
     }
@@ -75,7 +80,8 @@ export default {
       logname,
       hostname,
       pid,
-      version
+      version,
+      agg
     }
     this.updateLocation()
 
@@ -114,6 +120,7 @@ export default {
         return null
       }
       return _.chain(this.counts)
+        .sortBy('keyname')
         .groupBy(({ keyname, type }) => `${type}:${keyname}`)
         .mapValues(group => {
           return _.chain(group)
@@ -188,6 +195,11 @@ input#filter-pid {
 select#filter-version {
   display: inline-block;
   width: 55%;
+  float: right;
+}
+select#filter-agg {
+  display: inline-block;
+  width: 40%;
 }
 .chart {
   /*width: 50%;*/
