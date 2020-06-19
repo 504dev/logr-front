@@ -33,7 +33,12 @@
           <strong>{{ prefix }}</strong
           ><br />
           <span v-for="key in keys" :key="key">
-            <a :href="`#${key}`">{{ key.split(':').slice(1).join(':') }}</a
+            <a :href="`#${key}`">{{
+              key
+                .split(':')
+                .slice(1)
+                .join(':')
+            }}</a
             ><br />
           </span>
         </p>
@@ -126,7 +131,7 @@ export default {
           return _.chain(group)
             .keyBy(v => v.hostname)
             .map(({ data }, hostname) => {
-              data = data.map(([x, y]) => [x * 1000, y]).reverse()
+              data = this.filled(data.reverse()).map(([x, y]) => [x * 1000, y])
               return { name: hostname, data }
             })
             .value()
@@ -142,6 +147,25 @@ export default {
     }
   },
   methods: {
+    filled(list) {
+      if (list.length < 2) {
+        return list
+      }
+      const filled = [] //list.slice(0, 1)
+      const first = _.first(list)[0]
+      const last = _.last(list)[0]
+      const delta = 60
+      let i = 0
+      for (let t = first; t <= last; t += delta) {
+        if (t === list[i][0]) {
+          filled.push(list[i])
+          i++
+        } else {
+          filled.push([t, null])
+        }
+      }
+      return filled
+    },
     async onChangeFilters(e) {
       console.log('onChangeFilters', e)
       ls.set(`dash${this.dash.id}.filters.logname`, this.filters.logname)

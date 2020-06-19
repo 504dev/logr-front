@@ -1,5 +1,5 @@
 <template>
-  <div :id="id"/>
+  <div :id="id" />
 </template>
 
 <script>
@@ -12,17 +12,18 @@ export default {
     title: String,
     subtitle: String
   },
-  data () {
+  data() {
     const id = 'container_' + Math.random()
     return { id }
   },
-  mounted () {
+  mounted() {
     this.render()
   },
   methods: {
-    render () {
+    render() {
       Highcharts.stockChart(this.id, {
         chart: {
+          type: 'area',
           zoomType: 'x'
         },
         credits: {
@@ -42,6 +43,11 @@ export default {
         },
         scrollbar: {
           enabled: true
+        },
+        plotOptions: {
+          area: {
+            stacking: 'normal'
+          }
         },
         rangeSelector: {
           inputEnabled: false,
