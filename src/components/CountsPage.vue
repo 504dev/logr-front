@@ -154,7 +154,11 @@ export default {
       const filled = [] //list.slice(0, 1)
       const first = _.first(list)[0]
       const last = _.last(list)[0]
-      const delta = 60
+      const delta = {
+        m: 60,
+        h: 60 * 60,
+        d: 60 * 60 * 24
+      }[this.filters.agg]
       let i = 0
       for (let t = first; t <= last; t += delta) {
         if (t === list[i][0]) {
