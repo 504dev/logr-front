@@ -64,10 +64,10 @@ export default {
           type: 'datetime',
           events: {
             afterSetExtremes(e) {
-              console.log(title, e.min, e.max, e.trigger)
-              if (e.trigger) {
-                // Highcharts.charts.forEach((chart) => chart.xAxis[0].setExtremes(e.min, e.max))
-              }
+              // console.log(title, e.min, e.max, e.trigger)
+              // if (e.trigger) {
+              //   Highcharts.charts.forEach((chart) => chart.xAxis[0].setExtremes(e.min, e.max))
+              // }
             }
           }
         },

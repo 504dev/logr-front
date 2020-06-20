@@ -29,16 +29,11 @@
             {{ agg }}
           </option>
         </select>
-        <p v-for="(keys, prefix) in keynames" :key="prefix">
-          <strong>{{ prefix }}</strong
+        <p v-for="(group, type) in charts" :key="type">
+          <strong>{{ type }}</strong
           ><br />
-          <span v-for="key in keys" :key="key">
-            <a :href="`#${key}`" class="keyname">{{
-              key
-                .split(':')
-                .slice(1)
-                .join(':')
-            }}</a
+          <span v-for="(series, keyname) in group" :key="keyname">
+            <a :href="`#${keyname}`" class="keyname">{{ keyname }}</a
             ><br />
           </span>
         </p>
@@ -48,10 +43,12 @@
     <template v-slot:content>
       <span v-if="nodata">No data</span>
       <div v-else>
-        <div v-for="(series, keyname) in charts" :key="keyname">
-          <a :name="keyname">
-            <counts-chart :title="keyname" :series="series" class="chart" />
-          </a>
+        <div v-for="(group, type) in charts" :key="type">
+          <div v-for="(series, keyname) in group" :key="keyname">
+            <a :name="keyname">
+              <counts-chart :title="type + ':' + keyname" :series="series" class="chart" />
+            </a>
+          </div>
         </div>
       </div>
     </template>
@@ -67,7 +64,6 @@ import Wrapper from './Wrapper'
 import { mapState } from 'vuex'
 
 const ls = store.namespace('counts')
-
 
 export default {
   components: {
@@ -126,23 +122,24 @@ export default {
         return null
       }
       return _.chain(this.counts)
-        .sortBy('keyname')
-        .groupBy(({ keyname, type }) => `${type}:${keyname}`)
+        .groupBy('type')
+        .pick(['inc', 'avg', 'max', 'min', 'per', 'time'])
         .mapValues(group => {
           return _.chain(group)
-            .keyBy(v => v.hostname)
-            .map(({ data }, hostname) => {
-              data = this.filled(data.reverse()).map(([x, y]) => [x * 1000, y])
-              return { name: hostname, data }
+            .sortBy('keyname')
+            .groupBy('keyname')
+            .mapValues(group => {
+              return _.chain(group)
+                .keyBy('hostname')
+                .map(({ data }, hostname) => {
+                  data = this.filled(data.reverse()).map(([x, y]) => [x * 1000, y])
+                  return { name: hostname, data }
+                })
+                .value()
             })
             .value()
         })
         .value()
-    },
-    keynames() {
-      const keys = _.keys(this.charts)
-      const result = _.groupBy(keys, v => v.split(':')[0])
-      return _.pick(result, ['inc', 'avg', 'max', 'min', 'per', 'time'])
     },
     nodata() {
       return _.size(this.charts) === 0
