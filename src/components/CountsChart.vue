@@ -21,6 +21,7 @@ export default {
   },
   methods: {
     render() {
+      const { title, subtitle } = this
       Highcharts.stockChart(this.id, {
         chart: {
           type: 'area',
@@ -30,23 +31,26 @@ export default {
           enabled: false
         },
         title: {
-          text: this.title
+          text: title
         },
         subtitle: {
-          text: this.subtitle
+          text: subtitle
         },
         legend: {
           enabled: true
         },
         navigator: {
-          enabled: true
+          enabled: false
         },
         scrollbar: {
-          enabled: true
+          enabled: false
         },
         plotOptions: {
           area: {
             stacking: 'normal'
+          },
+          series: {
+            animation: false
           }
         },
         rangeSelector: {
@@ -57,7 +61,15 @@ export default {
           }
         },
         xAxis: {
-          type: 'datetime'
+          type: 'datetime',
+          events: {
+            afterSetExtremes(e) {
+              console.log(title, e.min, e.max, e.trigger)
+              if (e.trigger) {
+                // Highcharts.charts.forEach((chart) => chart.xAxis[0].setExtremes(e.min, e.max))
+              }
+            }
+          }
         },
         yAxis: [
           {

@@ -33,7 +33,7 @@
           <strong>{{ prefix }}</strong
           ><br />
           <span v-for="key in keys" :key="key">
-            <a :href="`#${key}`">{{
+            <a :href="`#${key}`" class="keyname">{{
               key
                 .split(':')
                 .slice(1)
@@ -67,6 +67,7 @@ import Wrapper from './Wrapper'
 import { mapState } from 'vuex'
 
 const ls = store.namespace('counts')
+
 
 export default {
   components: {
@@ -140,7 +141,8 @@ export default {
     },
     keynames() {
       const keys = _.keys(this.charts)
-      return _.groupBy(keys, v => v.split(':')[0])
+      const result = _.groupBy(keys, v => v.split(':')[0])
+      return _.pick(result, ['inc', 'avg', 'max', 'min', 'per', 'time'])
     },
     nodata() {
       return _.size(this.charts) === 0
@@ -231,5 +233,8 @@ select#filter-agg {
 }
 .chart {
   /*width: 50%;*/
+}
+a.keyname {
+  text-decoration: none;
 }
 </style>
