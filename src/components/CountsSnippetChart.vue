@@ -21,11 +21,10 @@ export default {
   },
   methods: {
     render() {
-      const { title, subtitle } = this
-      Highcharts.stockChart(this.id, {
+      const { title, subtitle, type } = this
+      Highcharts.chart(this.id, {
         chart: {
-          type: 'area',
-          zoomType: 'x'
+          type: 'line',
         },
         credits: {
           enabled: false
@@ -37,7 +36,7 @@ export default {
           text: subtitle
         },
         legend: {
-          enabled: true
+          enabled: false
         },
         navigator: {
           enabled: false
@@ -45,42 +44,21 @@ export default {
         scrollbar: {
           enabled: false
         },
-        plotOptions: {
-          area: {
-            stacking: 'normal'
-          }
-        },
         rangeSelector: {
-          inputEnabled: false,
-          labelStyle: {
-            display: 'none'
-          }
+          enabled: false
         },
         xAxis: {
-          type: 'datetime',
-          events: {
-            afterSetExtremes(e) {
-              // console.log(title, e.min, e.max, e.trigger)
-              // if (e.trigger) {
-              //   Highcharts.charts.forEach((chart) => chart.xAxis[0].setExtremes(e.min, e.max))
-              // }
-            }
-          }
+          type: 'datetime'
         },
         yAxis: [
           {
             labels: {
-              align: 'right',
-              x: -3
+              align: 'right'
             },
             title: {
               text: ''
             },
-            height: '75%',
-            lineWidth: 2,
-            resize: {
-              enabled: true
-            }
+            lineWidth: 2
           }
         ],
         tooltip: {

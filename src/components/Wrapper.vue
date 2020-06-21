@@ -4,7 +4,7 @@
       <router-link to="/dashboards"
         ><img class="avatar" :src="`https://avatars0.githubusercontent.com/u/${user.github_id}`"
       /></router-link>
-      <!--      <h3><router-link to="/dashboards">..</router-link>/{{ dash.name }}</h3>-->
+<!--      <h3><router-link to="/dashboards">..</router-link>/{{ dash.name }}</h3>-->
       <div class="filters">
         <slot name="filters"></slot>
       </div>

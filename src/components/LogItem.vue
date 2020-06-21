@@ -1,17 +1,35 @@
 <template>
   <span class="log-item">
-    <span class="log-logname ellipsis tag" :title="value.logname" v-show="!$attrs.filters.logname">{{
-      value.logname
-    }}</span>
-    <span class="log-hostname ellipsis tag" :title="value.hostname" v-show="!$attrs.filters.hostname">{{
-      value.hostname
-    }}</span>
+    <span
+      class="log-logname ellipsis tag"
+      @click="$emit('tag', { logname: value.logname })"
+      :title="value.logname"
+      v-show="!$attrs.filters.logname"
+      >{{ value.logname }}</span
+    >
+    <span
+      class="log-hostname ellipsis tag"
+      @click="$emit('tag', { hostname: value.hostname })"
+      :title="value.hostname"
+      v-show="!$attrs.filters.hostname"
+      >{{ value.hostname }}</span
+    >
     <span class="log-time"
       ><span>{{ formatted[0] }}</span> <span>{{ formatted[1] }}</span
       ><small>.{{ formatted[2] }}</small></span
     >
-    <span class="log-level ellipsis" :class="`log-level-${value.level}`">{{ value.level }}</span>
-    <log-item-msg :value="value.message" :filter="$attrs.filters.message" class="log-message" />
+    <span
+      class="log-level ellipsis"
+      :class="`log-level-${value.level}`"
+      @click="$emit('tag', { level: value.level })"
+      >{{ value.level }}</span
+    >
+    <log-item-msg
+      :value="value.message"
+      :filter="$attrs.filters.message"
+      :timestamp="value.timestamp"
+      class="log-message"
+    />
   </span>
 </template>
 
@@ -49,6 +67,11 @@ export default {
   background-color: rgba(128, 128, 128, 0.5);
   border-radius: 2px;
   text-align: center;
+  cursor: pointer;
+  vertical-align: text-bottom;
+  &:hover {
+    background-color: rgba(128, 128, 128, 0.7);
+  }
 }
 .log-item {
   display: block;
@@ -60,6 +83,7 @@ export default {
   }
 }
 .log-level {
+  cursor: pointer;
   color: green;
   width: 50px;
 }

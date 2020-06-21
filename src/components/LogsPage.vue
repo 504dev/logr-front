@@ -44,14 +44,14 @@
           <div v-if="log.hr" :key="key" class="pause-line">
             <span><i class="icon fas fa-pause"></i> {{ log.text }}</span>
           </div>
-          <log-item v-else :value="log" :filters="filters" :key="key" />
+          <log-item v-else :value="log" :filters="filters" :key="key" @tag="onTag" />
         </template>
       </div>
       <div class="logs-history">
-        <log-item v-for="(log, key) in logs.history" :value="log" :filters="filters" :key="key" />
+        <log-item v-for="(log, key) in logs.history" :value="log" :filters="filters" :key="key" @tag="onTag" />
       </div>
       <div class="logs-deep" v-for="(deep, key) in logs.deep" :key="key">
-        <log-item v-for="(log, key) in deep" :value="log" :filters="filters" :key="key" />
+        <log-item v-for="(log, key) in deep" :value="log" :filters="filters" :key="key" @tag="onTag" />
       </div>
       <span class="more" @click="onMore" v-if="offset">more ˅</span>
       <div class="pause" :class="{ 'pause-on': paused }" @click="onPause"><i class="icon fas fa-pause"></i></div>
@@ -151,6 +151,10 @@ export default {
     }
   },
   methods: {
+    onTag(value) {
+      Object.assign(this.filters, value)
+      this.onChangeFilters()
+    },
     parseLocation() {
       let {
         hostname = '',
@@ -279,7 +283,7 @@ input#filter-pid {
   display: inline-block;
   width: 40%;
 }
-select#filter-logname{
+select#filter-logname {
   /*font-weight: bold;*/
 }
 select#filter-hostname {

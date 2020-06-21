@@ -29,8 +29,8 @@
             {{ agg }}
           </option>
         </select>
-        <p v-for="(group, type) in charts" :key="type">
-          <strong>{{ type }}</strong
+        <p v-for="(group, kind) in charts" :key="kind">
+          <strong>{{ kind }}</strong
           ><br />
           <span v-for="(series, keyname) in group" :key="keyname">
             <a :href="`#${keyname}`" class="keyname">{{ keyname }}</a
@@ -43,10 +43,10 @@
     <template v-slot:content>
       <span v-if="nodata">No data</span>
       <div v-else>
-        <div v-for="(group, type) in charts" :key="type">
+        <div v-for="(group, kind) in charts" :key="kind">
           <div v-for="(series, keyname) in group" :key="keyname">
             <a :name="keyname">
-              <counts-chart :title="type + ':' + keyname" :series="series" class="chart" />
+              <counts-chart :title="kind + ':' + keyname" :series="series" class="chart" />
             </a>
           </div>
         </div>
@@ -122,7 +122,7 @@ export default {
         return null
       }
       return _.chain(this.counts)
-        .groupBy('type')
+        .groupBy('kind')
         .pick(['inc', 'avg', 'max', 'min', 'per', 'time'])
         .mapValues(group => {
           return _.chain(group)

@@ -131,6 +131,10 @@ const store = new Vuex.Store({
       const { data } = await getters.api('/counts', { params })
       return data
     },
+    async [ACTIONS.LOAD_COUNTS_SNIPPET]({ state, getters }, params) {
+      const { data } = await getters.api('/counts/snippet', { params })
+      return data
+    },
     async [ACTIONS.PAUSE_LOGS]({ state }, paused) {
       return state.sock.pause(!!paused)
     },

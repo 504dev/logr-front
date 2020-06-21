@@ -1,12 +1,15 @@
 <template>
   <span>
-    <span
-      v-for="({ text, css, json, match }, key) in chunks"
-      :key="key"
-      :tabindex="json && 0"
-      :style="css"
-      :class="{ chunk: true, json, match }"
-      >{{ json ? JSON.stringify(json, null, 2) : text }}</span
+    <span v-for="({ text, css, json, match }, key) in chunks" :key="key" :style="css" :class="{ chunk: true, match }"
+      ><template v-if="json"
+        ><counter-widget
+          v-if="json.widget === 'counter'"
+          v-bind="json"
+          :dashId="dashId"
+          :timestamp="timestamp"
+        ></counter-widget
+        ><span v-else :tabindex="json && 0" class="json">{{ JSON.stringify(json, null, 2) }}</span></template
+      ><template v-else>{{ text }}</template></span
     >
   </span>
 </template>
@@ -14,11 +17,14 @@
 <script>
 import _ from 'lodash'
 import ansicolor from 'ansicolor'
+import CounterWidget from './CounterWidget'
 
 export default {
+  components: { CounterWidget },
   props: {
     value: String,
-    filter: String
+    filter: String,
+    timestamp: Number
   },
   data() {
     return {
@@ -26,6 +32,9 @@ export default {
     }
   },
   computed: {
+    dashId() {
+      return +this.$route.params.id
+    },
     chunks() {
       const result = []
       let { spans } = ansicolor.parse(this.value)
@@ -122,7 +131,7 @@ export default {
   background-color: #dd0;
 }
 .json {
-  border-bottom: 1px dotted purple;
+  border-bottom: 1px dotted mediumpurple;
   white-space: normal;
   outline: none;
   &:focus {
