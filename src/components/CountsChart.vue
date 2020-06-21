@@ -22,7 +22,7 @@ export default {
   methods: {
     render() {
       const { title, subtitle } = this
-      Highcharts.stockChart(this.id, {
+      Highcharts.chart(this.id, {
         chart: {
           type: 'area',
           zoomType: 'x'
@@ -36,53 +36,19 @@ export default {
         subtitle: {
           text: subtitle
         },
-        legend: {
-          enabled: true
-        },
-        navigator: {
-          enabled: false
-        },
-        scrollbar: {
-          enabled: false
-        },
         plotOptions: {
           area: {
             stacking: 'normal'
           }
         },
-        rangeSelector: {
-          inputEnabled: false,
-          labelStyle: {
-            display: 'none'
-          }
-        },
         xAxis: {
-          type: 'datetime',
-          events: {
-            afterSetExtremes(e) {
-              // console.log(title, e.min, e.max, e.trigger)
-              // if (e.trigger) {
-              //   Highcharts.charts.forEach((chart) => chart.xAxis[0].setExtremes(e.min, e.max))
-              // }
-            }
+          type: 'datetime'
+        },
+        yAxis: {
+          title: {
+            text: ''
           }
         },
-        yAxis: [
-          {
-            labels: {
-              align: 'right',
-              x: -3
-            },
-            title: {
-              text: ''
-            },
-            height: '75%',
-            lineWidth: 2,
-            resize: {
-              enabled: true
-            }
-          }
-        ],
         tooltip: {
           split: true,
           shared: true,

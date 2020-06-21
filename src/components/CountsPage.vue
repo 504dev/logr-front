@@ -45,9 +45,8 @@
       <div v-else>
         <div v-for="(group, kind) in charts" :key="kind">
           <div v-for="(series, keyname) in group" :key="keyname">
-            <a :name="keyname">
-              <counts-chart :title="kind + ':' + keyname" :series="series" class="chart" />
-            </a>
+            <p class="header"><a :name="keyname"><b>{{ kind }}:</b>{{ keyname }}</a></p>
+            <counts-chart :series="series" class="chart" />
           </div>
         </div>
       </div>
@@ -229,7 +228,12 @@ select#filter-agg {
   width: 40%;
 }
 .chart {
-  /*width: 50%;*/
+  height: 320px;
+  border-bottom: dashed 1px #000;
+}
+.header {
+  font-size: 18px;
+  margin-left: 8px;
 }
 a.keyname {
   text-decoration: none;
