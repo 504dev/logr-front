@@ -21,10 +21,10 @@ export default {
   },
   methods: {
     render() {
-      const { title, subtitle, type } = this
+      const { title, subtitle } = this
       Highcharts.chart(this.id, {
         chart: {
-          type: 'line',
+          type: 'line'
         },
         credits: {
           enabled: false
@@ -38,34 +38,21 @@ export default {
         legend: {
           enabled: false
         },
-        navigator: {
-          enabled: false
-        },
-        scrollbar: {
-          enabled: false
-        },
-        rangeSelector: {
-          enabled: false
-        },
         xAxis: {
           type: 'datetime'
         },
-        yAxis: [
-          {
-            labels: {
-              align: 'right'
-            },
-            title: {
-              text: ''
-            },
-            lineWidth: 2
-          }
-        ],
+        yAxis: {
+          title: {
+            text: ''
+          },
+          lineWidth: 2
+        },
         tooltip: {
           split: true,
           shared: true,
           crosshairs: true,
-          pointFormat: `<span style="color:{point.color}">●</span> {series.name}: <b>{point.y:,.2f}</b><br/>`
+          pointFormat: `<span style="color:{point.color}">●</span> {series.name}: <b>{point.y:,.2f}</b><br/>`,
+          xDateFormat: '%H:%M'
         },
         series: this.series
       })

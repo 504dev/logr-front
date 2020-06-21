@@ -1,10 +1,15 @@
 <template>
   <div class="widget" v-if="expand && counts">
-    <counts-snippet-chart :subtitle="kind + ':' + keyname" :series="series" class="chart" />
-    <span @click="closeChart" class="close"><i class="fas fa-times-circle"></i></span>
+    <counts-snippet-chart :subtitle="kind + ':' + keyname" :series="series" class="chart" /><span
+      @click="closeChart"
+      class="close"
+      ><i class="fas fa-times-circle"></i
+    ></span>
   </div>
   <span v-else-if="valid" @click="showChart" class="label open"><i class="fas fa-chart-line"></i></span>
-  <span v-else class="label invalid" title="invalid widget"><i class="fas fa-exclamation-triangle"></i> {{ JSON.stringify(this.$attrs) }}</span>
+  <span v-else class="label invalid" title="invalid widget"
+    ><i class="fas fa-exclamation-triangle"></i> {{ JSON.stringify(this.$attrs) }}</span
+  >
 </template>
 
 <script>
@@ -65,7 +70,7 @@ export default {
         limit: this.limit || 15
       }
       console.log({ payload })
-      this.counts = this.counts || await this.$store.dispatch(ACTIONS.LOAD_COUNTS_SNIPPET, payload)
+      this.counts = this.counts || (await this.$store.dispatch(ACTIONS.LOAD_COUNTS_SNIPPET, payload))
     }
   }
 }
@@ -92,12 +97,14 @@ export default {
 }
 .close {
   cursor: pointer;
-  vertical-align: text-top;
+  vertical-align: top;
+  margin-left: 1px;
 }
 .chart {
   display: inline-block;
   width: 360px;
   height: 160px;
   border-radius: 5px;
+  border: solid 1px #000;
 }
 </style>
