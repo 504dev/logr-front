@@ -23,6 +23,12 @@ const store = new Vuex.Store({
     mode: ls.get('mode', 0)
   },
   getters: {
+    restUrl() {
+      return process.env.VUE_APP_REST || location.origin
+    },
+    wsUrl(state, getters) {
+      return getters.restUrl.replace(/^http/, 'ws').replace(/\/?$/, '/ws')
+    },
     dashgroups(state) {
       const own = []
       const shared = []
@@ -40,10 +46,10 @@ const store = new Vuex.Store({
     jwtPayload(state) {
       return jwtDecode(state.jwt)
     },
-    api: state => (path, options = {}) => {
+    api: (state, getters) => (path, options = {}) => {
       return axios({
         method: 'GET',
-        url: process.env.VUE_APP_REST + path,
+        url: getters.restUrl + path,
         headers: { Authorization: `Bearer ${state.jwt}` },
         ...options
       })
@@ -68,10 +74,9 @@ const store = new Vuex.Store({
       localStorage.removeItem('jwt')
       location.href = '/login'
     },
-    async [ACTIONS.WS_CONNECT]({ state }) {
+    async [ACTIONS.WS_CONNECT]({ state, getters }) {
       if (!state.sock) {
-        const wsUrl = process.env.VUE_APP_REST.replace(/^http/, 'ws').replace(/\/?$/, '/ws')
-        state.sock = new Sock(wsUrl, state.jwt)
+        state.sock = new Sock(getters.wsUrl, state.jwt)
         const event = await state.sock.connect()
         console.log('ws connected', event)
       }

@@ -14,12 +14,14 @@
 
 <script>
 import _ from 'lodash'
+import { mapGetters } from 'vuex'
 import store from 'store2'
 const qs = require('querystring')
 const ls = store.namespace('login.loginers')
 
 export default {
   computed: {
+    ...mapGetters(['restUrl']),
     loginers() {
       const res = {}
       ls.each((username, info) => (res[username] = info))
@@ -29,7 +31,7 @@ export default {
   methods: {
     url(query = {}) {
       const callback = `${location.origin}/jwt/`
-      return `${process.env.VUE_APP_REST}/oauth/authorize?${qs.stringify({ callback, ...query })}`
+      return `${this.restUrl}/oauth/authorize?${qs.stringify({ callback, ...query })}`
     }
   }
 }
