@@ -1,17 +1,12 @@
 <template>
   <div class="center loginers">
-    <p><a :href="url({})">Sign in</a></p>
+    <p><a :href="url()">Sign in</a></p>
     <template v-if="loginers.length">
       <p v-for="info in loginers" :key="info.username">
         <a :href="url({ login: info.username })">
           by <img class="avatar" :src="`https://avatars0.githubusercontent.com/u/${info.github_id}`" />
           {{ info.username }}
         </a>
-      </p>
-    </template>
-    <template v-else>
-      <p>
-        <a :href="url()">Sign in</a>
       </p>
     </template>
   </div>
@@ -32,7 +27,7 @@ export default {
     }
   },
   methods: {
-    url(query) {
+    url(query = {}) {
       const callback = `${location.origin}/jwt/`
       return `${process.env.VUE_APP_REST}/oauth/authorize?${qs.stringify({ callback, ...query })}`
     }

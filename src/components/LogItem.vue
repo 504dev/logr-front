@@ -85,7 +85,7 @@ export default {
 .log-level {
   cursor: pointer;
   color: green;
-  width: 50px;
+  width: 60px;
 }
 .log-level-info {
   color: green;
