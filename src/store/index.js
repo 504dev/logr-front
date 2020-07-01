@@ -49,7 +49,7 @@ const store = new Vuex.Store({
     api: (state, getters) => (path, options = {}) => {
       return axios({
         method: 'GET',
-        url: getters.restUrl + path,
+        url: getters.restUrl + '/api' + path,
         headers: { Authorization: `Bearer ${state.jwt}` },
         ...options
       })
