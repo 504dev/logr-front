@@ -70,7 +70,8 @@ const store = new Vuex.Store({
     },
     async [ACTIONS.WS_CONNECT]({ state }) {
       if (!state.sock) {
-        state.sock = new Sock(process.env.VUE_APP_WS, state.jwt)
+        const wsUrl = process.env.VUE_APP_REST.replace(/^http/, 'ws').replace(/\/?$/, '/ws')
+        state.sock = new Sock(wsUrl, state.jwt)
         const event = await state.sock.connect()
         console.log('ws connected', event)
       }
