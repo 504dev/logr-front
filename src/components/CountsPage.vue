@@ -195,7 +195,6 @@ export default {
     },
     groupStatsBy(fieldname, sort = 'cnt') {
       return _.chain(this.stats)
-        .filter({ dash_id: this.dash.id })
         .groupBy(fieldname)
         .map((group, key) => {
           const cnt = _.sumBy(group, 'cnt')

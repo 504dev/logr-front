@@ -144,12 +144,12 @@ const store = new Vuex.Store({
     async [ACTIONS.PAUSE_LOGS]({ state }, paused) {
       return state.sock.pause(!!paused)
     },
-    async [ACTIONS.LOAD_LOGS_STATS]({ getters }) {
-      const { data } = await getters.api('/logs/stats')
+    async [ACTIONS.LOAD_LOGS_STATS]({ getters }, dashId) {
+      const { data } = await getters.api(`/logs/stats/${dashId}`)
       return data
     },
-    async [ACTIONS.LOAD_COUNTS_STATS]({ getters }) {
-      const { data } = await getters.api('/counts/stats')
+    async [ACTIONS.LOAD_COUNTS_STATS]({ getters }, dashId) {
+      const { data } = await getters.api(`/counts/stats/${dashId}`)
       return data
     }
   }

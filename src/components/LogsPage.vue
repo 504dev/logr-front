@@ -83,7 +83,7 @@ export default {
       this.$store.dispatch(ACTIONS.LOAD_ME),
       this.$store.dispatch(ACTIONS.LOAD_DASHBOARDS)
     ])
-    this.stats = await this.$store.dispatch(ACTIONS.LOAD_LOGS_STATS, this.dashid)
+    this.stats = await this.$store.dispatch(ACTIONS.LOAD_LOGS_STATS, this.dash.id)
 
     this.parseLocation()
     this.updateLocation()
@@ -124,11 +124,8 @@ export default {
   },
   computed: {
     ...mapState(['user', 'dashboards', 'sock', 'mode']),
-    dashid() {
-      return +this.$route.params.id
-    },
     dash() {
-      return (this.dashboards || []).find(dash => dash.id === this.dashid)
+      return (this.dashboards || []).find(dash => dash.id === +this.$route.params.id)
     },
     sortedHostnames() {
       return this.groupStatsBy('hostname')
@@ -168,7 +165,7 @@ export default {
         paused
       } = this.$route.query
       if (logname === '') {
-        logname = ls.get(`dash${this.dashid}.filters.logname`) || ''
+        logname = ls.get(`dash${this.dash.id}.filters.logname`) || ''
       }
       timestamp = []
         .concat(timestamp)
@@ -198,7 +195,7 @@ export default {
       console.log('onMore', e)
       const logs = await this.$store.dispatch(ACTIONS.LOAD_LOGS, {
         ...this.filters,
-        dash_id: this.dashid,
+        dash_id: this.dash.id,
         sock_id: this.sock.id,
         offset: this.offset
       })
@@ -226,7 +223,7 @@ export default {
     },
     async onChangeFilters(e) {
       console.log('onChangeFilters', e)
-      ls.set(`dash${this.dashid}.filters.logname`, this.filters.logname)
+      ls.set(`dash${this.dash.id}.filters.logname`, this.filters.logname)
 
       await this.updateLogs()
       this.updateLocation()
@@ -245,14 +242,13 @@ export default {
       this.logs.deep = []
       this.logs.history = await this.$store.dispatch(ACTIONS.LOAD_LOGS, {
         ...this.filters,
-        dash_id: this.dashid,
+        dash_id: this.dash.id,
         sock_id: this.sock.id
       })
       this.loading = false
     },
     groupStatsBy(fieldname, sort = 'cnt') {
       return _.chain(this.stats)
-        .filter({ dash_id: this.dashid })
         .groupBy(fieldname)
         .map((group, key) => {
           const cnt = _.sumBy(group, 'cnt')
