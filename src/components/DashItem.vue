@@ -1,28 +1,43 @@
 <template>
-  <div class="dashboard" :class="{ shared: user.id !== dash.owner_id }">
-    <router-link :to="`/dashboard/${dash.id}/logs`">
-      <h3>{{ dash.name }}</h3>
-    </router-link>
-    <p class="team">
-      <img :src="`https://avatars0.githubusercontent.com/u/${dash.owner.github_id}`" :title="dash.owner.name" class="owner" />
-      <template v-for="member in dash.members">
-        <img :src="`https://avatars0.githubusercontent.com/u/${member.user.github_id}`" :title="member.user.name" :key="member.user_id" class="member" />
-      </template>
-    </p>
-    <span class="tools">
-      <span @click="onEdit(dash)">
-        <i class="icon fas fa-edit"></i>
+  <div class="container">
+    <div class="dashboard" :class="{ shared: user.id !== dash.owner_id }">
+      <router-link :to="`/dashboard/${dash.id}/logs`">
+        <strong>{{ dash.name }}</strong>
+      </router-link>
+      <span class="team">
+        <a :href="`https://github.com/${dash.owner.username}`">
+          <img
+            :src="`https://avatars0.githubusercontent.com/u/${dash.owner.github_id}`"
+            :title="dash.owner.username"
+            class="owner"/></a
+        ><a v-for="member in dash.members" :key="member.id" :href="`https://github.com/${member.user.username}`"
+          ><img
+            :src="`https://avatars0.githubusercontent.com/u/${member.user.github_id}`"
+            :title="member.user.username"
+            :key="member.user_id"
+            class="member"
+          />
+        </a>
       </span>
-      <span @click="onShare(dash)">
-        <i class="icon fas fa-share"></i>
-      </span>
-      <span @click="onDelete(dash)">
-        <i class="icon fas fa-trash-alt"></i>
-      </span>
-      <span @click="onKeys(dash)">
-        <i class="icon fas fa-key"></i>
-      </span>
-    </span>
+      <div>
+        <router-link :to="`/dashboard/${dash.id}/logs`" class="window logs"></router-link>
+        <router-link :to="`/dashboard/${dash.id}/counts`" class="window counts"></router-link>
+      </div>
+      <div class="tools">
+        <span @click="onEdit(dash)">
+          <i class="icon fas fa-edit"></i>
+        </span>
+        <span @click="onShare(dash)">
+          <i class="icon fas fa-share"></i>
+        </span>
+        <span @click="onDelete(dash)">
+          <i class="icon fas fa-trash-alt"></i>
+        </span>
+        <span @click="onKeys(dash)">
+          <i class="icon fas fa-key"></i>
+        </span>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -33,7 +48,7 @@ export default {
   props: {
     dash: Object
   },
-  data () {
+  data() {
     return {
       //
     }
@@ -42,7 +57,7 @@ export default {
     ...mapState(['user'])
   },
   methods: {
-    async onShare (dash) {
+    async onShare(dash) {
       const username = prompt('Enter @username to share:')
       if (!username) {
         return
@@ -60,20 +75,20 @@ export default {
         }
       }
     },
-    async onEdit (dash) {
+    async onEdit(dash) {
       const name = prompt('Edit dash name:', dash.name)
       if (!name) {
         return
       }
       await this.$store.dispatch(ACTIONS.EDIT_DASHBOARD, { id: dash.id, name })
     },
-    async onDelete (dash) {
+    async onDelete(dash) {
       const confirm = prompt('Enter dash name for delete:')
       if (confirm === dash.name) {
         await this.$store.dispatch(ACTIONS.DELETE_DASHBOARD, dash.id)
       }
     },
-    onKeys (dash) {
+    onKeys(dash) {
       let msg = dash.keys.map(key => `name: ${key.name}\npublic: ${key.public_key}\nprivate: ${key.private_key}`)
       alert(msg.join('\n\n'))
     }
@@ -82,40 +97,82 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .dashboard {
-    text-decoration: none;
-    display: inline-block;
-    width: 200px;
-    height: 140px;
-    background-color: #cccccc;
-    margin: 0 20px 20px 0;
-    padding: 10px;
-    border-radius: 4px;
-    &.shared .tools {
-      display: none;
-    }
+.container {
+  display: inline-block;
+  position: relative;
+  margin: 10px 20px 0 0;
+}
+.dashboard {
+  display: inline-block;
+  position: relative;
+  width: 200px;
+  height: 140px;
+  box-shadow: 2px 2px #ddd;
+  background-color: #eee;
+  padding: 10px;
+  border-radius: 4px;
+  &.shared .tools {
+    display: none;
   }
-  .icon {
-    cursor: pointer;
+  .tools {
+    zoom: 0.75;
+    position: absolute;
+    bottom: 0;
+    right: 0;
     margin: 5px;
   }
-  .team {
-    img {
-      width: 16px;
-      height: 16px;
-      margin: 0;
-      border-radius: 16px;
-      &.member {
-        margin-left: -8px;
-        border: solid 1px grey;
-      }
-      &.owner {
-        border: solid 2px green;
-        width: 24px;
-        height: 24px;
-        margin-right: -8px;
-      }
+  .window {
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 10px;
+    width: 90px;
+    height: 90px;
+    border-radius: 45px;
+    background-color: #ddd;
+    cursor: pointer;
+    &.logs {
+      background-color: #444;
+      /*background-image: url('/static/logs.jpg');*/
+      /*background-size: 90px;*/
+    }
+    &.counts {
+      /*background-image: url('/static/counts.jpg');*/
+      /*background-size: 90px;*/
     }
   }
-
+  a {
+    color: black;
+    &:hover {
+      color: red;
+    }
+  }
+}
+.icon {
+  cursor: pointer;
+  margin: 5px;
+}
+.team {
+  display: inline-block;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  img {
+    position: relative;
+    width: 16px;
+    height: 16px;
+    border-radius: 16px;
+    margin: 0;
+    margin-right: -4px;
+    z-index: 1;
+    &.member {
+      //
+    }
+    &.owner {
+      margin-right: 0;
+    }
+    &:hover {
+      z-index: 2;
+    }
+  }
+}
 </style>

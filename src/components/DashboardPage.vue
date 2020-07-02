@@ -1,11 +1,13 @@
 <template>
   <div class="wrapper" v-if="this.user && this.dashboards">
-    <div>
+    <div class="hello">
       <img class="avatar" :src="`https://avatars0.githubusercontent.com/u/${jwtPayload.github_id}`" />
       <span>
         <strong>{{ jwtPayload.username }}</strong>
         |
-        <a href="#" @click.prevent="$store.dispatch(ACTIONS.LOGOUT)">Sign out</a>
+        <a href="#" @click.prevent="$store.dispatch(ACTIONS.LOGOUT)">
+          <i class="fa fa-sign-out-alt"></i>
+        </a>
       </span>
     </div>
     <div>
@@ -14,7 +16,7 @@
       <template v-else v-for="dash in dashgroups.own">
         <dash-item :dash="dash" :key="dash.id" />
       </template>
-      <span class="dashboard-add" @click="onAddDashboard">+</span>
+      <span class="dashboard-add" @click="onAddDashboard"><i class="fa fa-plus-square"></i></span>
     </div>
     <div>
       <h1>Shared</h1>
@@ -57,21 +59,30 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+h1 {
+  opacity: 0.1;
+  /*border-bottom: dashed 1px black;*/
+  margin: 30px 0 0 -15px;
+}
 .wrapper {
   padding: 20px;
 }
 .dashboard-add {
-  color: #ffffff;
-  font-weight: bold;
-  background-color: #9e9;
-  padding: 8px 16px;
-  border-radius: 4px;
+  display: inline-block;
+  vertical-align: bottom;
+  color: #9e9;
   cursor: pointer;
+  font-size: 32px;
 }
-.avatar {
-  width: 64px;
-  height: 64px;
-  border-radius: 32px;
+.hello {
+  position: relative;
+  top: -32px;
+  left: -32px;
+  .avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 32px;
+  }
 }
 </style>

@@ -6,43 +6,43 @@
       </p>
       <form @change="onChangeFilters" @submit.prevent>
         <select v-model="filters.logname" id="filter-logname">
-          <option value="">Any logname</option>
+          <option value="">Logname</option>
           <option v-for="logname in sortedLognames" :value="logname" :key="logname">
             {{ logname }}
           </option>
         </select>
         <select v-model="filters.hostname" id="filter-hostname">
-          <option value="">Any hostname</option>
+          <option value="">Hostname</option>
           <option v-for="hostname in sortedHostnames" :value="hostname" :key="hostname">
             {{ hostname }}
           </option>
         </select>
         <select v-model="filters.level" id="filter-level">
-          <option value="">Any level</option>
+          <option value="">Level</option>
           <option v-for="level in sortedLevels" :value="level" :key="level">
             {{ level }}
           </option>
         </select>
-        <input type="text" v-model="filters.message" placeholder="Message" id="filter-message" />
-        <input type="number" v-model="filters.pid" placeholder="Pid" id="filter-pid" maxlength="6" />
         <select v-model="filters.version" id="filter-version">
-          <option value="">Any version</option>
+          <option value="">Version</option>
           <option v-for="version in sortedVersions" :value="version" :key="version" v-if="version">
             {{ version }}
           </option>
         </select>
+        <input type="text" v-model="filters.message" placeholder="Message" id="filter-message" />
+        <!--        <input type="number" v-model="filters.pid" placeholder="Pid" id="filter-pid" maxlength="6" />-->
         <range-date-time-picker v-model="filters.timestamp" />
         <input type="text" v-model="filters.limit" placeholder="Limit" id="filter-limit" />
       </form>
       <div class="bottom">
-        <a href="#" @click="switchMode"><i class="icon fas fa-moon"></i></a>
+        <a href="#" @click="switchMode"><i class="fas fa-moon"></i></a>
       </div>
     </template>
     <template v-slot:content>
       <div class="logs-live column-reverse">
         <template v-for="(log, key) in logs.live">
           <div v-if="log.hr" :key="key" class="pause-line">
-            <span><i class="icon fas fa-pause"></i> {{ log.text }}</span>
+            <span><i class="fas fa-pause"></i> {{ log.text }}</span>
           </div>
           <log-item v-else :value="log" :filters="filters" :key="key" @tag="onTag" />
         </template>
@@ -54,7 +54,7 @@
         <log-item v-for="(log, key) in deep" :value="log" :filters="filters" :key="key" @tag="onTag" />
       </div>
       <span class="more" @click="onMore" v-if="offset">more ˅</span>
-      <div class="pause" :class="{ 'pause-on': paused }" @click="onPause"><i class="icon fas fa-pause"></i></div>
+      <div class="pause" :class="{ 'pause-on': paused }" @click="onPause"><i class="fas fa-pause"></i></div>
     </template>
   </wrapper>
 </template>
@@ -137,7 +137,7 @@ export default {
       return this.groupStatsBy('level')
     },
     sortedVersions() {
-      return this.groupStatsBy('version', 'updated')
+      return this.groupStatsBy('version', 'updated').slice(0, 10)
     },
     offset() {
       const list = _.last(this.logs.deep) || this.logs.history
@@ -288,8 +288,7 @@ select#filter-hostname {
 }
 select#filter-level {
   display: inline-block;
-  /*width: 40%;*/
-  /*float: right;*/
+  width: 40%;
 }
 select#filter-version {
   display: inline-block;

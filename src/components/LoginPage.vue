@@ -45,7 +45,7 @@ a {
   position: absolute;
   margin: auto;
   left: 45%;
-  top: 50%;
+  top: 45%;
   text-align: left;
 }
 .center > p:first-child {

@@ -68,6 +68,7 @@ export default {
     display: block;
     select,
     input {
+      background-color: white;
       box-sizing: border-box;
       display: block;
       margin-bottom: 10px;

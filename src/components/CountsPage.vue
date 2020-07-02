@@ -17,7 +17,7 @@
             {{ hostname }}
           </option>
         </select>
-        <input type="number" v-model="filters.pid" placeholder="Pid" id="filter-pid" maxlength="6" />
+<!--        <input type="number" v-model="filters.pid" placeholder="Pid" id="filter-pid" maxlength="6" />-->
         <select v-model="filters.version" id="filter-version">
           <option value="">Any version</option>
           <option v-for="version in sortedVersions" :value="version" :key="version" v-if="version">
@@ -220,11 +220,11 @@ input#filter-pid {
 select#filter-version {
   display: inline-block;
   width: 55%;
-  float: right;
 }
 select#filter-agg {
   display: inline-block;
   width: 40%;
+  float: right;
 }
 .chart {
   height: 240px;
