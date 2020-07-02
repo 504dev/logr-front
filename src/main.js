@@ -8,9 +8,11 @@ import '@fortawesome/fontawesome-free/js/solid'
 import '@fortawesome/fontawesome-free/js/regular'
 import '@fortawesome/fontawesome-free/js/brands'
 
+import VModal from 'vue-js-modal'
 import { Datetime } from 'vue-datetime'
 import 'vue-datetime/dist/vue-datetime.css'
 Vue.use(Datetime)
+Vue.use(VModal)
 
 Vue.config.productionTip = false
 

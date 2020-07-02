@@ -38,6 +38,12 @@
         </span>
       </div>
     </div>
+    <modal :name="`keys-${dash.id}`" width="320">
+      <div v-for="key in dash.keys" :key="key.public_key" class="keys">
+        <p><b>Public:</b><br />{{ key.public_key }}</p>
+        <p><b>Private:</b><br />{{ key.private_key }}</p>
+      </div>
+    </modal>
   </div>
 </template>
 
@@ -89,8 +95,7 @@ export default {
       }
     },
     onKeys(dash) {
-      let msg = dash.keys.map(key => `name: ${key.name}\npublic: ${key.public_key}\nprivate: ${key.private_key}`)
-      alert(msg.join('\n\n'))
+      this.$modal.show(`keys-${dash.id}`)
     }
   }
 }
@@ -174,5 +179,9 @@ export default {
       z-index: 2;
     }
   }
+}
+.keys {
+  padding: 10px;
+  word-wrap: break-word;
 }
 </style>
