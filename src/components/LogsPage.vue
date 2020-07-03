@@ -2,7 +2,7 @@
   <wrapper :loading="loading" :class="{ night: mode === 0 }">
     <template v-slot:filters>
       <p style="float: right; margin-top: -35px">
-        <router-link :to="`/dashboard/${dash.id}/counts`">switch to metrics</router-link>
+        <router-link :to="`/dashboard/${dash.id}/counts`">switch to counts</router-link>
       </p>
       <form @change="onChangeFilters" @submit.prevent>
         <select v-model="filters.logname" id="filter-logname">

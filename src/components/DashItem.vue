@@ -116,15 +116,35 @@ export default {
   background-color: #eee;
   padding: 10px;
   border-radius: 4px;
-  &.shared .tools {
-    display: none;
+  a {
+    color: black;
+    &:hover {
+      color: red;
+    }
   }
-  .tools {
-    zoom: 0.75;
+  .team {
+    display: inline-block;
     position: absolute;
-    bottom: 0;
-    right: 0;
-    margin: 5px;
+    top: 10px;
+    right: 10px;
+    img {
+      position: relative;
+      width: 16px;
+      height: 16px;
+      border-radius: 16px;
+      margin: 0;
+      margin-right: -4px;
+      z-index: 1;
+      &.member {
+        //
+      }
+      &.owner {
+        margin-right: 0;
+      }
+      &:hover {
+        z-index: 2;
+      }
+    }
   }
   .window {
     display: inline-block;
@@ -145,43 +165,23 @@ export default {
       /*background-size: 90px;*/
     }
   }
-  a {
-    color: black;
-    &:hover {
-      color: red;
+  &.shared .tools {
+    display: none;
+  }
+  .tools {
+    zoom: 0.75;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin: 5px;
+    .icon {
+      cursor: pointer;
+      margin: 5px;
     }
   }
-}
-.icon {
-  cursor: pointer;
-  margin: 5px;
-}
-.team {
-  display: inline-block;
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  img {
-    position: relative;
-    width: 16px;
-    height: 16px;
-    border-radius: 16px;
-    margin: 0;
-    margin-right: -4px;
-    z-index: 1;
-    &.member {
-      //
-    }
-    &.owner {
-      margin-right: 0;
-    }
-    &:hover {
-      z-index: 2;
-    }
+  .keys {
+    padding: 10px;
+    word-wrap: break-word;
   }
-}
-.keys {
-  padding: 10px;
-  word-wrap: break-word;
 }
 </style>
