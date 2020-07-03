@@ -63,7 +63,7 @@ export default {
   font-size: 10px;
   line-height: 16px;
   display: inline-block;
-  padding: 0 5px;
+  padding: 0 4px;
   background-color: rgba(128, 128, 128, 0.5);
   border-radius: 2px;
   text-align: center;
@@ -74,6 +74,7 @@ export default {
   }
 }
 .log-item {
+  line-height: 17px;
   display: block;
   white-space: nowrap;
 }
@@ -83,8 +84,10 @@ export default {
   }
 }
 .log-level {
+  vertical-align: bottom;
+  text-align: center;
   cursor: pointer;
-  color: green;
+  color: grey;
   width: 60px;
 }
 .log-level-info {
