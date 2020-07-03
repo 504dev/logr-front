@@ -139,10 +139,12 @@ export default {
       background-color: #444;
       /*background-image: url('/static/logs.jpg');*/
       /*background-size: 90px;*/
+      /*filter: saturate(0);*/
     }
     &.counts {
       /*background-image: url('/static/counts.jpg');*/
       /*background-size: 90px;*/
+      /*filter: saturate(0);*/
     }
   }
   a {

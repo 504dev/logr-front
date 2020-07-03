@@ -2,37 +2,40 @@
   <wrapper :loading="loading" :class="{ night: mode === 0 }">
     <template v-slot:filters>
       <p style="float: right; margin-top: -35px">
-        <router-link :to="`/dashboard/${dash.id}/counts`">switch to metrics</router-link>
+        <router-link :to="`/dashboard/${dash.id}/counts`">switch to counts</router-link>
       </p>
       <form @change="onChangeFilters" @submit.prevent>
         <select v-model="filters.logname" id="filter-logname">
           <option value="">Logname</option>
           <option v-for="logname in sortedLognames" :value="logname" :key="logname">
             {{ logname }}
-          </option>
-        </select>
-        <select v-model="filters.hostname" id="filter-hostname">
+          </option> </select
+        ><select v-model="filters.hostname" id="filter-hostname">
           <option value="">Hostname</option>
           <option v-for="hostname in sortedHostnames" :value="hostname" :key="hostname">
             {{ hostname }}
-          </option>
-        </select>
-        <select v-model="filters.level" id="filter-level">
+          </option> </select
+        ><select v-model="filters.level" id="filter-level">
           <option value="">Level</option>
           <option v-for="level in sortedLevels" :value="level" :key="level">
             {{ level }}
-          </option>
-        </select>
-        <select v-model="filters.version" id="filter-version">
+          </option> </select
+        ><select v-model="filters.version" id="filter-version">
           <option value="">Version</option>
           <option v-for="version in sortedVersions" :value="version" :key="version" v-if="version">
             {{ version }}
-          </option>
-        </select>
-        <input type="text" v-model="filters.message" placeholder="Message" id="filter-message" />
-        <!--        <input type="number" v-model="filters.pid" placeholder="Pid" id="filter-pid" maxlength="6" />-->
-        <range-date-time-picker v-model="filters.timestamp" />
-        <input type="text" v-model="filters.limit" placeholder="Limit" id="filter-limit" />
+          </option> </select
+        ><input
+          type="text"
+          v-model="filters.message"
+          placeholder="Message"
+          id="filter-message"
+        /><range-date-time-picker v-model="filters.timestamp" id="filter-timestamp" /><input
+          type="text"
+          v-model="filters.limit"
+          placeholder="Limit"
+          id="filter-limit"
+        />
       </form>
       <div class="bottom">
         <a href="#" @click="switchMode"><i class="fas fa-moon"></i></a>
@@ -134,6 +137,7 @@ export default {
       return this.groupStatsBy('logname')
     },
     sortedLevels() {
+      console.log(this.filters)
       return this.groupStatsBy('level')
     },
     sortedVersions() {
@@ -248,7 +252,13 @@ export default {
       this.loading = false
     },
     groupStatsBy(fieldname, sort = 'cnt') {
+      // const f = _.chain(this.filters)
+      //   .pick(['logname', 'hostname'])
+      //   .omit([fieldname])
+      //   .pickBy()
+      //   .value()
       return _.chain(this.stats)
+        // .filter(f)
         .groupBy(fieldname)
         .map((group, key) => {
           const cnt = _.sumBy(group, 'cnt')
@@ -271,34 +281,29 @@ export default {
 
 <style lang="scss" scoped>
 input#filter-message {
-  width: 100%;
-  font-size: 20px;
-  height: 50px;
+  width: 200px;
 }
 input#filter-pid {
-  display: inline-block;
-  width: 40%;
+  width: 60px;
 }
 select#filter-logname {
-  /*font-weight: bold;*/
+  width: 120px;
 }
 select#filter-hostname {
-  display: inline-block;
-  /*width: 55%;*/
+  width: 120px;
 }
 select#filter-level {
-  display: inline-block;
-  width: 40%;
+  width: 80px;
 }
 select#filter-version {
-  display: inline-block;
-  width: 55%;
-  float: right;
+  width: 80px;
 }
 input#filter-limit {
-  width: 25%;
-  float: right;
-  margin-top: 10px;
+  width: 60px;
+}
+#filter-timestamp {
+  display: none;
+  width: 200px;
 }
 
 .logs-live {
@@ -388,9 +393,8 @@ input#filter-limit {
 .bottom {
   text-align: right;
   position: absolute;
-  left: 0;
   right: 0;
-  bottom: 20px;
-  padding: 10px;
+  /*bottom: 20px;*/
+  /*padding: 10px;*/
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <wrapper :loading="loading">
     <template v-slot:filters>
-      <p>
+      <p style="float: right; margin-top: -35px">
         <router-link :to="`/dashboard/${dash.id}/logs`">switch to logs</router-link>
       </p>
       <form @change="onChangeFilters" @submit.prevent>
