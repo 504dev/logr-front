@@ -270,38 +270,30 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-input#filter-message {
-  width: 100%;
-  font-size: 20px;
-  height: 50px;
-}
-input#filter-pid {
-  display: inline-block;
-  width: 40%;
-}
 select#filter-logname {
-  /*font-weight: bold;*/
 }
 select#filter-hostname {
-  display: inline-block;
-  /*width: 55%;*/
 }
 select#filter-level {
-  display: inline-block;
   width: 40%;
 }
 select#filter-version {
-  display: inline-block;
   width: 55%;
   float: right;
 }
+input#filter-pid {
+  width: 40%;
+}
+input#filter-message {
+  width: 100%;
+  height: 50px;
+  font-size: 20px;
+}
+#filter-timestamp {
+}
 input#filter-limit {
   width: 25%;
-  /*float: right;*/
   margin-top: 10px;
-}
-
-#filter-timestamp {
 }
 
 .logs-live {
@@ -341,8 +333,7 @@ input#filter-limit {
 }
 
 .pause {
-  font-family: Arial;
-  /*zoom: 0.5;*/
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   position: fixed;
   z-index: 900;
   left: 50%;
@@ -364,15 +355,16 @@ input#filter-limit {
     /*zoom: 1.1;*/
     background-color: rgba(128, 128, 128, 0.5);
   }
-}
-.pause-on {
-  border-color: rgb(0, 128, 128);
-  /*zoom: 1.1;*/
-  background-color: rgb(0, 128, 128);
-  &:hover {
+  &.pause-on {
+    border-color: rgb(0, 128, 128);
+    /*zoom: 1.1;*/
     background-color: rgb(0, 128, 128);
+    &:hover {
+      background-color: rgb(0, 128, 128);
+    }
   }
 }
+
 .pause-line {
   border-top: dashed 1px #088;
   span {

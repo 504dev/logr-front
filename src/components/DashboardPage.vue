@@ -60,29 +60,29 @@ export default {
 </script>
 
 <style scoped lang="scss">
-h1 {
-  opacity: 0.1;
-  /*border-bottom: dashed 1px black;*/
-  margin: 30px 0 0 -15px;
-}
 .wrapper {
   padding: 20px;
-}
-.dashboard-add {
-  display: inline-block;
-  vertical-align: bottom;
-  color: #9e9;
-  cursor: pointer;
-  font-size: 32px;
-}
-.hello {
-  position: relative;
-  top: -32px;
-  left: -32px;
-  .avatar {
-    width: 64px;
-    height: 64px;
-    border-radius: 32px;
+  .hello {
+    position: relative;
+    top: -32px;
+    left: -32px;
+    .avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 32px;
+    }
+  }
+  h1 {
+    opacity: 0.1;
+    /*border-bottom: dashed 1px black;*/
+    margin: 30px 0 0 -15px;
+  }
+  .dashboard-add {
+    display: inline-block;
+    vertical-align: bottom;
+    color: #9e9;
+    cursor: pointer;
+    font-size: 32px;
   }
 }
 </style>

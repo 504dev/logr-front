@@ -77,38 +77,38 @@ export default {
   line-height: 17px;
   display: block;
   white-space: nowrap;
-}
-.log-time {
-  small {
-    color: #888;
+  .log-time {
+    small {
+      color: #888;
+    }
   }
-}
-.log-level {
-  vertical-align: bottom;
-  text-align: center;
-  cursor: pointer;
-  color: grey;
-  width: 60px;
-}
-.log-level-info {
-  color: green;
-}
-.log-level-error {
-  color: red;
-}
-.log-level-warn {
-  color: orange;
-}
-.log-level-debug {
-  color: blue;
-}
-.log-logname {
-  width: 80px;
-}
-.log-hostname {
-  width: 80px;
-}
-.log-message {
-  white-space: pre;
+  .log-logname {
+    width: 80px;
+  }
+  .log-hostname {
+    width: 80px;
+  }
+  .log-message {
+    white-space: pre;
+  }
+  .log-level {
+    vertical-align: bottom;
+    text-align: center;
+    cursor: pointer;
+    color: grey;
+    width: 60px;
+    &.log-level-info {
+      color: green;
+    }
+    &.log-level-error {
+      color: red;
+    }
+    &.log-level-warn {
+      color: orange;
+    }
+    &.log-level-debug {
+      color: blue;
+    }
+  }
 }
 </style>

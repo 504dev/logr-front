@@ -163,6 +163,24 @@ div.container {
   border-radius: 4px;
   overflow: hidden;
 
+  span.icon {
+    position: absolute;
+    display: inline-block;
+    margin-top: 4px;
+    margin-left: -25px;
+    cursor: pointer;
+    color: #ccc;
+    &:hover {
+      color: #333;
+    }
+    &.date {
+      left: 60%;
+    }
+    &.time {
+      left: 100%;
+    }
+  }
+
   > input {
     box-sizing: border-box;
     display: inline-block;
@@ -185,23 +203,6 @@ div.container {
     &.invalid:focus {
       border-bottom: solid 2px red;
     }
-  }
-}
-span.icon {
-  position: absolute;
-  display: inline-block;
-  margin-top: 4px;
-  margin-left: -25px;
-  cursor: pointer;
-  color: #ccc;
-  &:hover {
-    color: #333;
-  }
-  &.date {
-    left: 60%;
-  }
-  &.time {
-    left: 100%;
   }
 }
 </style>

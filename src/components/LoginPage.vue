@@ -1,5 +1,5 @@
 <template>
-  <div class="center loginers">
+  <div class="center">
     <p><a :href="url()">Sign in</a></p>
     <template v-if="loginers.length">
       <p v-for="info in loginers" :key="info.username">
@@ -37,7 +37,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 a {
   color: #111111;
 }
@@ -47,12 +47,9 @@ a {
   left: 45%;
   top: 45%;
   text-align: left;
-}
-.center > p:first-child {
-  zoom: 1.5;
-}
-.center > p:first-child > a {
-  color: #111111;
+  > p:first-child {
+    zoom: 1.5;
+  }
 }
 .avatar {
   width: 16px;

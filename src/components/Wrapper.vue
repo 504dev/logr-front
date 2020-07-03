@@ -85,7 +85,7 @@ export default {
       padding-top: 10px;
       text-align: center;
       position: absolute;
-      top: 50%;
+      top: 55%;
       margin-top: -20px;
       right: 0;
       width: 20px;
@@ -118,7 +118,7 @@ export default {
       input {
         background-color: white;
         box-sizing: border-box;
-        display: block;
+        display: inline-block;
         margin-bottom: 10px;
         width: 100%;
         height: 30px;

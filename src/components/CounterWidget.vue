@@ -79,32 +79,32 @@ export default {
 .widget {
   display: inline-block;
   vertical-align: text-top;
+  .chart {
+    display: inline-block;
+    width: 360px;
+    height: 160px;
+    border-radius: 5px;
+    border: solid 1px #000;
+  }
+  .close {
+    cursor: pointer;
+    vertical-align: top;
+    margin-left: 1px;
+  }
 }
 .label {
   padding: 2px 5px;
   border-radius: 2px;
-}
-.open {
-  cursor: pointer;
-  background-color: rgba(160, 160, 160, 0.5);
-  &:hover {
-    background-color: rgba(160, 160, 160, 0.7);
+  &.open {
+    cursor: pointer;
+    background-color: rgba(160, 160, 160, 0.5);
+    &:hover {
+      background-color: rgba(160, 160, 160, 0.7);
+    }
   }
-}
-.invalid {
-  cursor: pointer;
-  background-color: rgba(192, 64, 64, 0.5);
-}
-.close {
-  cursor: pointer;
-  vertical-align: top;
-  margin-left: 1px;
-}
-.chart {
-  display: inline-block;
-  width: 360px;
-  height: 160px;
-  border-radius: 5px;
-  border: solid 1px #000;
+  &.invalid {
+    cursor: pointer;
+    background-color: rgba(192, 64, 64, 0.5);
+  }
 }
 </style>
