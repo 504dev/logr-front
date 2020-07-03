@@ -160,6 +160,9 @@ div.container {
   padding: 0;
   margin: 2px 0;
   width: 100%;
+  border-radius: 4px;
+  overflow: hidden;
+
   > input {
     box-sizing: border-box;
     display: inline-block;

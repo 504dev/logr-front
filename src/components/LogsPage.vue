@@ -31,11 +31,11 @@
         </select>
         <input type="text" v-model="filters.message" placeholder="Message" id="filter-message" />
         <!--        <input type="number" v-model="filters.pid" placeholder="Pid" id="filter-pid" maxlength="6" />-->
-        <range-date-time-picker v-model="filters.timestamp" />
+        <range-date-time-picker v-model="filters.timestamp" id="filter-timestamp" />
         <input type="text" v-model="filters.limit" placeholder="Limit" id="filter-limit" />
       </form>
       <div class="bottom">
-        <a href="#" @click="switchMode"><i class="fas fa-moon"></i></a>
+        <a href="#" @click.prevent="switchMode"><i class="fas fa-moon"></i></a>
       </div>
     </template>
     <template v-slot:content>
@@ -297,8 +297,11 @@ select#filter-version {
 }
 input#filter-limit {
   width: 25%;
-  float: right;
+  /*float: right;*/
   margin-top: 10px;
+}
+
+#filter-timestamp {
 }
 
 .logs-live {
@@ -319,7 +322,7 @@ input#filter-limit {
 }
 
 .more {
-  width: calc(100vw - 250px);
+  width: 250px;
   height: 25px;
   line-height: 25px;
   vertical-align: middle;
@@ -351,20 +354,20 @@ input#filter-limit {
   color: white;
   text-align: center;
   border-radius: 10px 10px 0 0;
-  border: solid 3px white;
+  border: solid 2px white;
   border-bottom: none;
   overflow: hidden;
   background-color: rgba(128, 128, 128, 0.5);
   cursor: pointer;
-  margin-left: -40px;
+  margin-left: 70px;
   &:hover {
-    zoom: 1.1;
+    /*zoom: 1.1;*/
     background-color: rgba(128, 128, 128, 0.5);
   }
 }
 .pause-on {
   border-color: rgb(0, 128, 128);
-  zoom: 1.1;
+  /*zoom: 1.1;*/
   background-color: rgb(0, 128, 128);
   &:hover {
     background-color: rgb(0, 128, 128);
@@ -380,13 +383,13 @@ input#filter-limit {
     border-radius: 0 0 3px 3px;
     position: absolute;
     left: 100vw;
-    margin-left: -120px;
+    margin-left: -60px;
     margin-top: -1px;
   }
 }
 
 .bottom {
-  text-align: right;
+  /*text-align: right;*/
   position: absolute;
   left: 0;
   right: 0;
