@@ -213,7 +213,7 @@ export default {
         const hr = {
           hr: true,
           timestamp: Date.now(),
-          text: ''
+          text: '00:00'
         }
         this.pausedTimer = setInterval(() => {
           hr.text = new Date(Date.now() - hr.timestamp).toISOString().slice(14, 19)
