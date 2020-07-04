@@ -5,21 +5,21 @@
         <router-link :to="`/dashboard/${dash.id}/logs`">switch to logs</router-link>
       </p>
       <form @change="onChangeFilters" @submit.prevent>
-        <select v-model="filters.logname">
-          <option value="">Any logname</option>
+        <select v-model="filters.logname" id="filter-logname">
+          <option value="" v-if="sortedLognames.length === 0">Logname</option>
           <option v-for="logname in sortedLognames" :value="logname" :key="logname">
             {{ logname }}
           </option>
         </select>
-        <select v-model="filters.hostname">
-          <option value="">Any hostname</option>
+        <select v-model="filters.hostname" v-if="sortedHostnames.length > 1" id="filter-hostname">
+          <option value="">Hostname</option>
           <option v-for="hostname in sortedHostnames" :value="hostname" :key="hostname">
             {{ hostname }}
           </option>
         </select>
-<!--        <input type="number" v-model="filters.pid" placeholder="Pid" id="filter-pid" maxlength="6" />-->
+        <!--        <input type="number" v-model="filters.pid" placeholder="Pid" id="filter-pid" maxlength="6" />-->
         <select v-model="filters.version" id="filter-version">
-          <option value="">Any version</option>
+          <option value="">Version</option>
           <option v-for="version in sortedVersions" :value="version" :key="version" v-if="version">
             {{ version }}
           </option>
@@ -45,7 +45,11 @@
       <div v-else>
         <div v-for="(group, kind) in charts" :key="kind">
           <div v-for="(series, keyname) in group" :key="keyname">
-            <p class="header"><a :name="keyname"><b>{{ kind }}:</b>{{ keyname }}</a></p>
+            <p class="header">
+              <a :name="keyname"
+                ><b>{{ kind }}:</b>{{ keyname }}</a
+              >
+            </p>
             <counts-chart :series="series" class="chart" />
           </div>
         </div>
@@ -75,7 +79,8 @@ export default {
 
     let { hostname = '', logname = '', pid = '', version = '', agg = 'm' } = this.$route.query
     if (logname === '') {
-      logname = ls.get(`dash${this.dash.id}.filters.logname`) || _.first(this.sortedLognames) || ''
+      logname = _.find(this.sortedLognames, { logname: ls.get(`dash${this.dash.id}.filters.logname`) })
+      logname = logname || _.first(this.sortedLognames) || ''
     }
     this.filters = {
       logname,

@@ -179,9 +179,9 @@ export default {
       margin: 5px;
     }
   }
-  .keys {
-    padding: 10px;
-    word-wrap: break-word;
-  }
+}
+.keys {
+  padding: 10px;
+  word-wrap: break-word;
 }
 </style>

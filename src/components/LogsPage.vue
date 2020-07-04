@@ -6,12 +6,12 @@
       </p>
       <form @change="onChangeFilters" @submit.prevent>
         <select v-model="filters.logname" id="filter-logname">
-          <option value="">Logname</option>
+          <option value="" v-if="sortedLognames.length === 0">Logname</option>
           <option v-for="logname in sortedLognames" :value="logname" :key="logname">
             {{ logname }}
           </option>
         </select>
-        <select v-model="filters.hostname" id="filter-hostname">
+        <select v-model="filters.hostname" v-if="sortedHostnames.length > 1" id="filter-hostname">
           <option value="">Hostname</option>
           <option v-for="hostname in sortedHostnames" :value="hostname" :key="hostname">
             {{ hostname }}
@@ -165,7 +165,8 @@ export default {
         paused
       } = this.$route.query
       if (logname === '') {
-        logname = ls.get(`dash${this.dash.id}.filters.logname`) || ''
+        logname = _.find(this.sortedLognames, { logname: ls.get(`dash${this.dash.id}.filters.logname`) })
+        logname = logname || this.sortedLognames[0] || ''
       }
       timestamp = []
         .concat(timestamp)
