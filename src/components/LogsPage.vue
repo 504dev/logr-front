@@ -11,7 +11,7 @@
             {{ logname }}
           </option>
         </select>
-        <select v-model="filters.hostname" v-if="sortedHostnames.length > 1" id="filter-hostname">
+        <select v-model="filters.hostname" v-if="sortedHostnames.length > 1 || filters.hostname" id="filter-hostname">
           <option value="">Hostname</option>
           <option v-for="hostname in sortedHostnames" :value="hostname" :key="hostname">
             {{ hostname }}
@@ -32,6 +32,7 @@
         <input type="text" v-model="filters.message" placeholder="Message" id="filter-message" />
         <!--        <input type="number" v-model="filters.pid" placeholder="Pid" id="filter-pid" maxlength="6" />-->
         <range-date-time-picker v-model="filters.timestamp" id="filter-timestamp" />
+<!--        <date-picker v-model="filters.timestamp" />-->
         <input type="text" v-model="filters.limit" placeholder="Limit" id="filter-limit" />
       </form>
       <div class="bottom">
@@ -53,7 +54,7 @@
       <div class="logs-deep" v-for="(deep, key) in logs.deep" :key="key">
         <log-item v-for="(log, key) in deep" :value="log" :filters="filters" :key="key" @tag="onTag" />
       </div>
-      <span class="more" @click="onMore" v-if="offset">more ˅</span>
+      <span class="more" @click="onMore" v-if="offset">more <i class="fas fa-angle-down"></i></span>
       <div class="pause" :class="{ 'pause-on': paused }" @click="onPause"><i class="fas fa-pause"></i></div>
     </template>
   </wrapper>
@@ -66,6 +67,7 @@ import ACTIONS from '../store/action-types'
 import MUTATIONS from '../store/mutations-types.js'
 import LogItem from './LogItem'
 import RangeDateTimePicker from './RangeDateTimePicker'
+import DatePicker from './DatePicker'
 import Wrapper from './Wrapper'
 import { mapState } from 'vuex'
 
@@ -75,7 +77,8 @@ export default {
   components: {
     Wrapper,
     LogItem,
-    RangeDateTimePicker
+    RangeDateTimePicker,
+    DatePicker
   },
   async created() {
     await Promise.all([
@@ -149,6 +152,9 @@ export default {
   },
   methods: {
     onTag(value) {
+      if (value.timestamp) {
+        return console.log('onTag', value)
+      }
       Object.assign(this.filters, value)
       this.onChangeFilters()
     },
@@ -173,6 +179,7 @@ export default {
         .map(t => +t || 0)
         .concat([0, 0])
         .slice(0, 2)
+
       this.paused = parseInt(paused) || 0
       this.filters = {
         hostname,
@@ -293,19 +300,18 @@ input#filter-message {
 #filter-timestamp {
 }
 input#filter-limit {
-  width: 25%;
+  width: 60px;
   margin-top: 10px;
 }
 
 .logs-live {
-  border-bottom: dashed 1px #888;
+  border-bottom: dashed 1px grey;
 }
 .logs-history {
-  /*border-top: dashed 1px green;*/
-  opacity: 0.7;
+  opacity: 0.8;
 }
 .logs-deep {
-  border-top: 1px dashed green;
+  border-top: 1px dashed grey;
   opacity: 0.7;
   margin-top: 5px;
 }

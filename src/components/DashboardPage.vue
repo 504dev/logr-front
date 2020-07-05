@@ -6,7 +6,7 @@
         <strong>{{ jwtPayload.username }}</strong>
         |
         <a href="#" @click.prevent="$store.dispatch(ACTIONS.LOGOUT)">
-          <i class="fa fa-sign-out-alt"></i>
+          <i class="fas fa-sign-out-alt"></i>
         </a>
       </span>
     </div>
@@ -16,7 +16,7 @@
       <template v-else v-for="dash in dashgroups.own">
         <dash-item :dash="dash" :key="dash.id" />
       </template>
-      <span class="dashboard-add" @click="onAddDashboard"><i class="fa fa-plus-square"></i></span>
+      <span class="dashboard-add" @click="onAddDashboard"><i class="fas fa-plus-square"></i></span>
     </div>
     <div>
       <h1>Shared</h1>

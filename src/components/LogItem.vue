@@ -15,7 +15,8 @@
       >{{ value.hostname }}</span
     >
     <span class="log-time"
-      ><span>{{ formatted[0] }}</span> <span>{{ formatted[1] }}</span
+      ><span @dblclick="$emit('tag', { timestamp: formatted[0] })">{{ formatted[0] }}</span>
+      <span @dblclick="$emit('tag', { timestamp: formatted.slice(0, 2).join(' ') })">{{ formatted[1] }}</span
       ><small>.{{ formatted[2] }}</small></span
     >
     <span
@@ -45,7 +46,7 @@ export default {
   },
   computed: {
     formatted() {
-      const iso = new Date(this.value.timestamp / 1000000).toISOString()
+      const iso = new Date(this.value.timestamp / 1e6).toISOString()
       return [iso.slice(0, 10), iso.slice(11, 19), iso.slice(20, 23)]
     }
   }

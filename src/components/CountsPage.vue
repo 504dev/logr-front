@@ -11,7 +11,7 @@
             {{ logname }}
           </option>
         </select>
-        <select v-model="filters.hostname" v-if="sortedHostnames.length > 1" id="filter-hostname">
+        <select v-model="filters.hostname" v-if="sortedHostnames.length > 1 || filters.hostname" id="filter-hostname">
           <option value="">Hostname</option>
           <option v-for="hostname in sortedHostnames" :value="hostname" :key="hostname">
             {{ hostname }}

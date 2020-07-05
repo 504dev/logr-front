@@ -1,43 +1,29 @@
 <template>
   <div>
     <div class="container">
-      <span class="icon date" @click="openDatePicker"><i class="fa fa-calendar"></i></span
+      <span class="icon date" @click="openDatePicker"><i class="fas fa-calendar"></i></span
       ><input
         ref="idate"
         type="text"
         :placeholder="TODAY"
         :class="{ date: true, invalid: isDateInvalid }"
-        v-model="date"
+        :value="input.date"
         @change="onDateInput"
         maxlength="10"
-      /><span class="icon time" @click="openTimePicker"><i class="fa fa-clock"></i></span
+      /><span class="icon time" @click="openTimePicker"><i class="fas fa-clock"></i></span
       ><input
         ref="itime"
         type="text"
         :placeholder="ZERO_TIME"
         :class="{ time: true, invalid: isTimeInvalid }"
-        v-model="time"
+        :value="input.time"
         @change="onTimeInput"
         maxlength="5"
       />
     </div>
-    <datetime
-      type="date"
-      v-model="selector.date"
-      zone="UTC"
-      input-class="datetime-hidden"
-      ref="sdate"
-      @input="onDatePick"
-    >
+    <datetime type="date" :value="picker.date" zone="UTC" input-class="datetime-hidden" ref="sdate" @input="onDatePick">
     </datetime>
-    <datetime
-      type="time"
-      v-model="selector.time"
-      zone="UTC"
-      input-class="datetime-hidden"
-      ref="stime"
-      @input="onTimePick"
-    >
+    <datetime type="time" :value="picker.time" zone="UTC" input-class="datetime-hidden" ref="stime" @input="onTimePick">
     </datetime>
   </div>
 </template>
@@ -52,24 +38,7 @@ export default {
   components: { Datetime },
   props: ['value'],
   data() {
-    let date = ''
-    let time = ''
-    let selector = { date: null, time: null }
-    if (this.value) {
-      let dt = new Date(this.value).toISOString()
-      selector = { date: dt, time: dt }
-      date = dt.slice(0, 10)
-      time = dt.slice(11, 16)
-      if (time === ZERO_TIME) {
-        time = ''
-      } else if (date === new Date().toISOString().slice(0, 10)) {
-        date = ''
-      }
-    }
     return {
-      date,
-      time,
-      selector,
       TODAY,
       ZERO_TIME
     }
@@ -78,18 +47,37 @@ export default {
     //
   },
   computed: {
+    datetime() {
+      return this.value ? new Date(this.value).toISOString() : null
+    },
+    picker() {
+      return { date: this.datetime, time: this.datetime }
+    },
+    input() {
+      let date = ''
+      let time = ''
+      if (this.value) {
+        date = this.datetime.slice(0, 10)
+        time = this.datetime.slice(11, 16)
+        if (time === ZERO_TIME) {
+          time = ''
+        } else if (date === new Date().toISOString().slice(0, 10)) {
+          date = ''
+        }
+      }
+      return { date, time }
+    },
     isDateInvalid() {
-      return this.date ? isNaN(this.test(this.date, ZERO_TIME)) : false
+      return this.input.date ? isNaN(this.test(this.input.date, ZERO_TIME)) : false
     },
     isTimeInvalid() {
-      return this.time ? isNaN(this.test(TODAY, this.time)) : false
+      return this.input.time ? isNaN(this.test(TODAY, this.input.time)) : false
     }
   },
   methods: {
     onDatePick(date) {
       if (this.$el) {
-        this.date = date.slice(0, 10)
-        const timestamp = this.test(this.date, this.time)
+        const timestamp = this.test(date.slice(0, 10), this.input.time)
         if (isNaN(timestamp)) {
           return
         }
@@ -102,8 +90,7 @@ export default {
     },
     onTimePick(time) {
       if (this.$el) {
-        this.time = time.slice(11, 16)
-        const timestamp = this.test(this.date, this.time)
+        const timestamp = this.test(this.input.date, time.slice(11, 16))
         if (isNaN(timestamp)) {
           return
         }
@@ -115,7 +102,7 @@ export default {
       }
     },
     onDateInput(e) {
-      const timestamp = this.test(e.target.value, this.time)
+      const timestamp = this.test(e.target.value, this.input.time)
       if (isNaN(timestamp)) {
         e.stopPropagation()
         return
@@ -123,7 +110,7 @@ export default {
       this.$emit('input', timestamp)
     },
     onTimeInput(e) {
-      const timestamp = this.test(this.date, e.target.value)
+      const timestamp = this.test(this.input.date, e.target.value)
       if (isNaN(timestamp)) {
         e.stopPropagation()
         return
@@ -152,15 +139,11 @@ div.container {
   box-sizing: border-box;
   position: relative;
   display: inline-block;
-  background-color: white;
-  border: solid 1px #999;
-  border-bottom-width: 2px;
   white-space: nowrap;
   height: 30px;
   padding: 0;
   margin: 2px 0;
   width: 100%;
-  border-radius: 4px;
   overflow: hidden;
 
   span.icon {
@@ -184,16 +167,20 @@ div.container {
   > input {
     box-sizing: border-box;
     display: inline-block;
-    border: none;
+    border: solid 1px #999;
+    border-bottom-width: 2px;
     margin: 0;
     padding: 0 0 0 10px;
     height: 100%;
     &.date {
       width: 60%;
+      border-right: none;
+      border-radius: 4px 0 0 4px;
     }
     &.time {
       width: 40%;
       border-left: dashed 1px #999;
+      border-radius: 0 4px 4px 0;
     }
     &:focus {
       outline: none;

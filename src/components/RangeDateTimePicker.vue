@@ -1,7 +1,7 @@
 <template>
   <div>
-    <date-time-picker v-model="nano[0]" @input="onInput" />
-    <date-time-picker v-model="nano[1]" @input="onInput" />
+    <date-time-picker :value="milliseconds[0]" @input="v => onInput(v, this.milliseconds[1])" />
+    <date-time-picker :value="milliseconds[1]" @input="v => onInput(this.milliseconds[0], v)" />
   </div>
 </template>
 
@@ -13,18 +13,16 @@ export default {
     value: Array
   },
   components: { DateTimePicker },
-  data () {
-    return {
-      nano: this.value.map(v => Math.round(v / 1e6))
+  computed: {
+    milliseconds() {
+      return this.value.map(v => Math.round(v / 1e6))
     }
   },
   methods: {
-    onInput () {
-      this.$emit('input', this.nano.map(v => v * 1e6))
+    onInput(since, to) {
+      this.$emit('input', [since * 1e6, to * 1e6])
     }
   }
 }
 </script>
-<style scoped>
-
-</style>
+<style scoped></style>
