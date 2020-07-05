@@ -1,13 +1,15 @@
 <template>
   <div class="wrapper">
     <input
+      ref="template"
       type="text"
       :placeholder="`0000-00-00 00:00:00`"
       :class="{ invalid: !isValid }"
-      :value="template"
+      v-model="template"
       @change="onChange"
       maxlength="19"
     />
+    <span class="icon" @click="onClear"><i class="fas fa-times-circle"></i></span>
   </div>
 </template>
 
@@ -16,17 +18,29 @@ export default {
   props: {
     value: Array
   },
+  watch: {
+    value(v) {
+      this.template = this.range2text(v)
+    }
+  },
+  data() {
+    const template = this.range2text(this.value)
+    return { template }
+  },
   computed: {
-    template() {
-      return this.range2text(this.value)
-    },
     isValid() {
       return !!this.text2range(this.template)
     }
   },
   methods: {
+    onClear() {
+      if (this.template) {
+        this.$emit('input', [0, 0])
+        const target = this.$refs.template
+        this.$el.dispatchEvent(new Event('change', { target, bubbles: true }))
+      }
+    },
     onChange(e) {
-      console.log('change')
       const timestamps = this.text2range(e.target.value)
       if (timestamps === null) {
         e.stopPropagation()
@@ -124,7 +138,6 @@ div.wrapper {
   height: 30px;
   padding: 0;
   margin: 2px 0;
-  /*overflow: hidden;*/
 
   > input {
     box-sizing: border-box;
@@ -143,6 +156,18 @@ div.wrapper {
     &.invalid,
     &.invalid:focus {
       border-bottom: solid 2px red;
+    }
+  }
+
+  span.icon {
+    position: absolute;
+    top: 6px;
+    right: 9px;
+    display: inline-block;
+    cursor: pointer;
+    color: #ccc;
+    &:hover {
+      color: #333;
     }
   }
 }

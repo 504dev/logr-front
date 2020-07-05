@@ -32,7 +32,7 @@
         <input type="text" v-model="filters.message" placeholder="Message" id="filter-message" />
         <!--        <input type="number" v-model="filters.pid" placeholder="Pid" id="filter-pid" maxlength="6" />-->
         <range-date-time-picker v-model="filters.timestamp" id="filter-timestamp" />
-<!--        <date-picker v-model="filters.timestamp" />-->
+        <date-picker v-model="filters.timestamp" ref="datetime-template" />
         <input type="text" v-model="filters.limit" placeholder="Limit" id="filter-limit" />
       </form>
       <div class="bottom">
@@ -153,7 +153,10 @@ export default {
   methods: {
     onTag(value) {
       if (value.timestamp) {
-        return console.log('onTag', value)
+        const target = this.$refs['datetime-template'].$el.firstChild
+        target.value = value.timestamp
+        target.dispatchEvent(new Event('change', { bubbles: true }))
+        return
       }
       Object.assign(this.filters, value)
       this.onChangeFilters()
