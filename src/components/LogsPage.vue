@@ -32,7 +32,7 @@
         <input type="text" v-model="filters.message" placeholder="Message" id="filter-message" />
         <!--        <input type="number" v-model="filters.pid" placeholder="Pid" id="filter-pid" maxlength="6" />-->
         <range-date-time-picker v-model="filters.timestamp" id="filter-timestamp" />
-        <date-picker v-model="filters.timestamp" ref="datetime-template" />
+        <date-time-pattern v-model="filters.timestamp" ref="datetime-template" />
         <input type="text" v-model="filters.limit" placeholder="Limit" id="filter-limit" />
       </form>
       <div class="bottom">
@@ -67,7 +67,7 @@ import ACTIONS from '../store/action-types'
 import MUTATIONS from '../store/mutations-types.js'
 import LogItem from './LogItem'
 import RangeDateTimePicker from './RangeDateTimePicker'
-import DatePicker from './DatePicker'
+import DateTimePattern from './DateTimePattern'
 import Wrapper from './Wrapper'
 import { mapState } from 'vuex'
 
@@ -78,7 +78,7 @@ export default {
     Wrapper,
     LogItem,
     RangeDateTimePicker,
-    DatePicker
+    DateTimePattern
   },
   async created() {
     await Promise.all([

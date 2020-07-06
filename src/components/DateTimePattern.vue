@@ -1,11 +1,11 @@
 <template>
   <div class="wrapper">
     <input
-      ref="template"
+      ref="pattern"
       type="text"
       :placeholder="`0000-00-00 00:00:00`"
       :class="{ invalid: !isValid }"
-      v-model="template"
+      v-model="pattern"
       @change="onChange"
       maxlength="19"
     />
@@ -20,23 +20,23 @@ export default {
   },
   watch: {
     value(v) {
-      this.template = this.range2text(v)
+      this.pattern = this.range2text(v)
     }
   },
   data() {
-    const template = this.range2text(this.value)
-    return { template }
+    const pattern = this.range2text(this.value)
+    return { pattern }
   },
   computed: {
     isValid() {
-      return !!this.text2range(this.template)
+      return !!this.text2range(this.pattern)
     }
   },
   methods: {
     onClear() {
-      if (this.template) {
+      if (this.pattern) {
         this.$emit('input', [0, 0])
-        const target = this.$refs.template
+        const target = this.$refs.pattern
         this.$el.dispatchEvent(new Event('change', { target, bubbles: true }))
       }
     },
@@ -80,8 +80,8 @@ export default {
       if (text.length < 7) {
         return null
       }
-      const template = '0000-00-00 00:00:00'
-      let since = text + template.slice(text.length)
+      const pattern = '0000-00-00 00:00:00'
+      let since = text + pattern.slice(text.length)
       since = since.replace(/-00/g, '-01')
       since = new Date(since.replace(' ', 'T') + 'Z')
       let to = new Date(since)

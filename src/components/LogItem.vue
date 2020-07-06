@@ -14,9 +14,11 @@
       v-show="!$attrs.filters.hostname"
       >{{ value.hostname }}</span
     >
-    <span class="log-time"
-      ><span @dblclick="$emit('tag', { timestamp: formatted[0] })">{{ formatted[0] }}</span>
-      <span @dblclick="$emit('tag', { timestamp: formatted.slice(0, 2).join(' ') })">{{ formatted[1] }}</span
+    <span class="log-datetime"
+      ><span class="date" @click="$emit('tag', { timestamp: formatted[0] })">{{ formatted[0] }}</span>
+      <span class="time" @click="$emit('tag', { timestamp: formatted.slice(0, 2).join(' ') })">{{
+        formatted[1]
+      }}</span
       ><small>.{{ formatted[2] }}</small></span
     >
     <span
@@ -78,7 +80,15 @@ export default {
   line-height: 17px;
   display: block;
   white-space: nowrap;
-  .log-time {
+  .log-datetime {
+    .date:hover,
+    .time:hover {
+      cursor: pointer;
+      box-shadow: 0 0 0 1px #888;
+      /*background-color: rgba(128, 128, 128, 0.2);*/
+      border-radius: 4px;
+      padding: 1px 0;
+    }
     small {
       color: #888;
     }
@@ -95,7 +105,6 @@ export default {
   .log-level {
     vertical-align: bottom;
     text-align: center;
-    cursor: pointer;
     color: grey;
     width: 60px;
     &.log-level-info {
@@ -109,6 +118,11 @@ export default {
     }
     &.log-level-debug {
       color: blue;
+    }
+    &:hover {
+      cursor: pointer;
+      background-color: rgba(128, 128, 128, 0.2);
+      border-radius: 4px;
     }
   }
 }
