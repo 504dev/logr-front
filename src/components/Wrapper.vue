@@ -131,6 +131,9 @@ export default {
         outline: none;
         border-bottom: solid 2px green;
       }
+      .selected {
+        border-color: black;
+      }
     }
   }
   .container {

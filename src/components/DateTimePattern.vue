@@ -9,7 +9,7 @@
       @change="onChange"
       maxlength="19"
     />
-    <span class="icon" @click="onClear"><i class="fas fa-times-circle"></i></span>
+    <span class="icon" @click="onClear" v-if="pattern"><i class="fas fa-times-circle"></i></span>
   </div>
 </template>
 
@@ -139,6 +139,10 @@ div.wrapper {
   padding: 0;
   margin: 2px 0;
 
+  &.selected > input {
+    border-color: black;
+  }
+
   > input {
     box-sizing: border-box;
     display: inline-block;
@@ -165,9 +169,9 @@ div.wrapper {
     right: 9px;
     display: inline-block;
     cursor: pointer;
-    color: #ccc;
+    color: #333;
     &:hover {
-      color: #333;
+      color: #000;
     }
   }
 }

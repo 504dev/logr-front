@@ -5,34 +5,51 @@
         <router-link :to="`/dashboard/${dash.id}/counts`">switch to counts</router-link>
       </p>
       <form @change="onChangeFilters" @submit.prevent>
-        <select v-model="filters.logname" id="filter-logname">
+        <select v-model="filters.logname" id="filter-logname" :class="{ selected: filters.logname }">
           <option value="" v-if="sortedLognames.length === 0">Logname</option>
           <option v-for="logname in sortedLognames" :value="logname" :key="logname">
             {{ logname }}
           </option>
         </select>
-        <select v-model="filters.hostname" v-if="sortedHostnames.length > 1 || filters.hostname" id="filter-hostname">
+        <select
+          v-model="filters.hostname"
+          v-if="sortedHostnames.length > 1 || filters.hostname"
+          id="filter-hostname"
+          :class="{ selected: filters.hostname }"
+        >
           <option value="">Hostname</option>
           <option v-for="hostname in sortedHostnames" :value="hostname" :key="hostname">
             {{ hostname }}
           </option>
         </select>
-        <select v-model="filters.level" id="filter-level">
+        <select v-model="filters.level" id="filter-level" :class="{ selected: filters.level }">
           <option value="">Level</option>
           <option v-for="level in sortedLevels" :value="level" :key="level">
             {{ level }}
           </option>
         </select>
-        <select v-model="filters.version" id="filter-version">
+        <select v-model="filters.version" id="filter-version" :class="{ selected: filters.version }">
           <option value="">Version</option>
           <option v-for="version in sortedVersions" :value="version" :key="version" v-if="version">
             {{ version }}
           </option>
         </select>
-        <input type="text" v-model="filters.message" placeholder="Message" id="filter-message" />
+        <input
+          type="text"
+          v-model="filters.message"
+          placeholder="Message"
+          id="filter-message"
+          :class="{ selected: filters.message }"
+        />
         <!--        <input type="number" v-model="filters.pid" placeholder="Pid" id="filter-pid" maxlength="6" />-->
-        <range-date-time-picker v-model="filters.timestamp" id="filter-timestamp" />
-        <date-time-pattern v-model="filters.timestamp" ref="datetime-template" />
+        <range-date-time-picker v-model="filters.timestamp" id="filter-timestamp" v-if="false" />
+        <date-time-pattern
+          ref="date-time-pattern"
+          v-model="filters.timestamp"
+          :class="{ selected: filters.timestamp.some(v => v) }"
+          v-if="false"
+        />
+        <date-time-regexp ref="date-time-regexp" v-model="filters.pattern" :class="{ selected: filters.pattern }" />
         <input type="text" v-model="filters.limit" placeholder="Limit" id="filter-limit" />
       </form>
       <div class="bottom">
@@ -68,6 +85,7 @@ import MUTATIONS from '../store/mutations-types.js'
 import LogItem from './LogItem'
 import RangeDateTimePicker from './RangeDateTimePicker'
 import DateTimePattern from './DateTimePattern'
+import DateTimeRegexp from './DateTimeRegexp'
 import Wrapper from './Wrapper'
 import { mapState } from 'vuex'
 
@@ -75,6 +93,7 @@ const ls = store.namespace('logs')
 
 export default {
   components: {
+    DateTimeRegexp,
     Wrapper,
     LogItem,
     RangeDateTimePicker,
@@ -111,7 +130,8 @@ export default {
         version: '',
         message: '',
         limit: 100,
-        timestamp: []
+        timestamp: [],
+        pattern: ''
       },
       logs: {
         live: [],
@@ -152,10 +172,18 @@ export default {
   },
   methods: {
     onTag(value) {
+      console.log('onTag', value)
       if (value.timestamp) {
-        const target = this.$refs['datetime-template'].$el.firstChild
-        target.value = value.timestamp
-        target.dispatchEvent(new Event('change', { bubbles: true }))
+        if (this.$refs['date-time-pattern']) {
+          const pattern = this.$refs['date-time-pattern'].$el.firstChild
+          pattern.value = value.timestamp
+          pattern.dispatchEvent(new Event('change', { bubbles: true }))
+        }
+        if (this.$refs['date-time-regexp']) {
+          const regexp = this.$refs['date-time-regexp'].$el.firstChild
+          regexp.value = value.timestamp
+          regexp.dispatchEvent(new Event('change', { bubbles: true }))
+        }
         return
       }
       Object.assign(this.filters, value)
@@ -170,6 +198,7 @@ export default {
         version = '',
         message = '',
         timestamp = [],
+        pattern = '',
         limit = 100,
         paused
       } = this.$route.query
@@ -192,7 +221,8 @@ export default {
         version,
         message,
         limit,
-        timestamp
+        timestamp,
+        pattern
       }
     },
     logHandler(data) {

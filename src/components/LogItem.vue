@@ -15,10 +15,9 @@
       >{{ value.hostname }}</span
     >
     <span class="log-datetime"
-      ><span class="date" @click="$emit('tag', { timestamp: formatted[0] })">{{ formatted[0] }}</span>
-      <span class="time" @click="$emit('tag', { timestamp: formatted.slice(0, 2).join(' ') })">{{
-        formatted[1]
-      }}</span
+      ><span class="date" @click="$emit('tag', { timestamp: formatted[0] })">{{ formatted[0] }}</span
+      ><span class="separator">T</span
+      ><span class="time" @click="$emit('tag', { timestamp: formatted.slice(0, 2).join('T') })">{{ formatted[1] }}</span
       ><small>.{{ formatted[2] }}</small></span
     >
     <span
@@ -86,9 +85,10 @@ export default {
       cursor: pointer;
       box-shadow: 0 0 0 1px #888;
       /*background-color: rgba(128, 128, 128, 0.2);*/
-      border-radius: 4px;
-      padding: 1px 0;
+      border-radius: 3px;
+      padding-bottom: 1px;
     }
+    .separator,
     small {
       color: #888;
     }
@@ -122,7 +122,7 @@ export default {
     &:hover {
       cursor: pointer;
       background-color: rgba(128, 128, 128, 0.2);
-      border-radius: 4px;
+      border-radius: 3px;
     }
   }
 }
