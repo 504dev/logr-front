@@ -50,6 +50,7 @@
           v-if="false"
         />
         <date-time-regexp
+          ref="date-time-regexp"
           v-model="filters.pattern"
           :class="{ selected: filters.pattern }"
           :placeholder="placeholderRe"
@@ -190,10 +191,19 @@ export default {
     },
     onTag(value) {
       console.log('onTag', value)
-      if (value.pattern && this.$refs['date-time-pattern']) {
-        const pattern = this.$refs['date-time-pattern'].$el.firstChild
-        pattern.value = value.pattern
-        pattern.dispatchEvent(new Event('change', { bubbles: true }))
+      if (value.pattern) {
+        if (this.$refs['date-time-pattern']) {
+          const $pattern = this.$refs['date-time-pattern'].$el.firstChild
+          $pattern.value = value.pattern
+          $pattern.dispatchEvent(new Event('change', { bubbles: true }))
+        }
+        if (this.$refs['date-time-regexp']) {
+          const $regexp = this.$refs['date-time-regexp'].$el.firstChild
+          $regexp.value = value.pattern
+          $regexp.dispatchEvent(new Event('change', { bubbles: true }))
+          $regexp.focus()
+        }
+        return
       }
       Object.assign(this.filters, value)
       this.onChangeFilters()
