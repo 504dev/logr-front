@@ -1,6 +1,12 @@
 <template>
   <div class="wrapper">
-    <input ref="regexp" type="text" :placeholder="`0000-00-00T00:00:00`" :value="value" @change="onChange" />
+    <input
+      ref="regexp"
+      type="text"
+      :placeholder="placeholder || `0000-00-00T00:00:00`"
+      :value="value"
+      @change="onChange"
+    />
     <span class="icon" @click="onClear" v-if="value"><i class="fas fa-times-circle"></i></span>
   </div>
 </template>
@@ -8,7 +14,8 @@
 <script>
 export default {
   props: {
-    value: String
+    value: String,
+    placeholder: String
   },
   methods: {
     onClear() {

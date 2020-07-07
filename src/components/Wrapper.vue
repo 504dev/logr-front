@@ -126,9 +126,9 @@ export default {
         border: solid 1px #999;
         border-bottom-width: 2px;
         border-radius: 4px;
+        outline: none;
       }
       input:focus {
-        outline: none;
         border-bottom: solid 2px green;
       }
       .selected {

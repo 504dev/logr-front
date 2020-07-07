@@ -15,10 +15,20 @@
       >{{ value.hostname }}</span
     >
     <span class="log-datetime"
-      ><span class="date" @click="$emit('tag', { timestamp: formatted[0] })">{{ formatted[0] }}</span
+      ><span
+        class="date"
+        @click="$emit('tag', { pattern: date })"
+        @mouseover="$emit('hover', { pattern: date })"
+        @mouseleave="$emit('hover', { pattern: '' })"
+        >{{ date }}</span
       ><span class="separator">T</span
-      ><span class="time" @click="$emit('tag', { timestamp: formatted.slice(0, 2).join('T') })">{{ formatted[1] }}</span
-      ><small>.{{ formatted[2] }}</small></span
+      ><span
+        class="time"
+        @click="$emit('tag', { pattern: datetime })"
+        @mouseover="$emit('hover', { pattern: datetime })"
+        @mouseleave="$emit('hover', { pattern: '' })"
+        >{{ time }}</span
+      ><small>.{{ msec }}</small></span
     >
     <span
       class="log-level ellipsis"
@@ -49,6 +59,18 @@ export default {
     formatted() {
       const iso = new Date(this.value.timestamp / 1e6).toISOString()
       return [iso.slice(0, 10), iso.slice(11, 19), iso.slice(20, 23)]
+    },
+    date() {
+      return this.formatted[0]
+    },
+    time() {
+      return this.formatted[1]
+    },
+    datetime() {
+      return this.formatted.slice(0, 2).join('T')
+    },
+    msec() {
+      return this.formatted[2]
     }
   }
 }

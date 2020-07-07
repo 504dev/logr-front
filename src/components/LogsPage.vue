@@ -49,7 +49,11 @@
           :class="{ selected: filters.timestamp.some(v => v) }"
           v-if="false"
         />
-        <date-time-regexp ref="date-time-regexp" v-model="filters.pattern" :class="{ selected: filters.pattern }" />
+        <date-time-regexp
+          v-model="filters.pattern"
+          :class="{ selected: filters.pattern }"
+          :placeholder="placeholderRe"
+        />
         <input type="text" v-model="filters.limit" placeholder="Limit" id="filter-limit" />
       </form>
       <div class="bottom">
@@ -62,14 +66,21 @@
           <div v-if="log.hr" :key="key" class="pause-line">
             <span><i class="fas fa-pause"></i> {{ log.text }}</span>
           </div>
-          <log-item v-else :value="log" :filters="filters" :key="key" @tag="onTag" />
+          <log-item v-else :value="log" :filters="filters" :key="key" @tag="onTag" @hover="onHover" />
         </template>
       </div>
       <div class="logs-history">
-        <log-item v-for="(log, key) in logs.history" :value="log" :filters="filters" :key="key" @tag="onTag" />
+        <log-item
+          v-for="(log, key) in logs.history"
+          :value="log"
+          :filters="filters"
+          :key="key"
+          @tag="onTag"
+          @hover="onHover"
+        />
       </div>
       <div class="logs-deep" v-for="(deep, key) in logs.deep" :key="key">
-        <log-item v-for="(log, key) in deep" :value="log" :filters="filters" :key="key" @tag="onTag" />
+        <log-item v-for="(log, key) in deep" :value="log" :filters="filters" :key="key" @tag="onTag" @hover="onHover" />
       </div>
       <span class="more" @click="onMore" v-if="offset">more <i class="fas fa-angle-down"></i></span>
       <div class="pause" :class="{ 'pause-on': paused }" @click="onPause"><i class="fas fa-pause"></i></div>
@@ -139,7 +150,8 @@ export default {
         deep: []
       },
       stats: [],
-      loading: true
+      loading: true,
+      placeholderRe: ''
     }
   },
   watch: {
@@ -171,20 +183,17 @@ export default {
     }
   },
   methods: {
+    onHover(value) {
+      if ('pattern' in value) {
+        this.placeholderRe = value.pattern
+      }
+    },
     onTag(value) {
       console.log('onTag', value)
-      if (value.timestamp) {
-        if (this.$refs['date-time-pattern']) {
-          const pattern = this.$refs['date-time-pattern'].$el.firstChild
-          pattern.value = value.timestamp
-          pattern.dispatchEvent(new Event('change', { bubbles: true }))
-        }
-        if (this.$refs['date-time-regexp']) {
-          const regexp = this.$refs['date-time-regexp'].$el.firstChild
-          regexp.value = value.timestamp
-          regexp.dispatchEvent(new Event('change', { bubbles: true }))
-        }
-        return
+      if (value.pattern && this.$refs['date-time-pattern']) {
+        const pattern = this.$refs['date-time-pattern'].$el.firstChild
+        pattern.value = value.pattern
+        pattern.dispatchEvent(new Event('change', { bubbles: true }))
       }
       Object.assign(this.filters, value)
       this.onChangeFilters()
