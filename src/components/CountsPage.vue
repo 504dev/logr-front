@@ -136,7 +136,7 @@ export default {
               return _.chain(group)
                 .keyBy('hostname')
                 .map(({ data }, hostname) => {
-                  data = this.filled(data.reverse()).map(([x, y]) => [x * 1000, y])
+                  data = this.filled(data.map(([x, y]) => [x * 1000, y]).reverse())
                   return { name: hostname, data }
                 })
                 .value()
@@ -156,15 +156,15 @@ export default {
       }
       const filled = [] //list.slice(0, 1)
       const first = _.first(list)[0]
-      const last = Date.now()//_.last(list)[0]
+      const last = Date.now() //_.last(list)[0]
       const delta = {
-        m: 60,
-        h: 60 * 60,
-        d: 60 * 60 * 24
+        m: 1000 * 60,
+        h: 1000 * 60 * 60,
+        d: 1000 * 60 * 60 * 24
       }[this.filters.agg]
       let i = 0
       for (let t = first; t <= last; t += delta) {
-        if (t === list[i][0]) {
+        if (t === _.get(list, [i, 0])) {
           filled.push(list[i])
           i++
         } else {
