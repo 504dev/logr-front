@@ -156,7 +156,7 @@ export default {
       }
       const filled = [] //list.slice(0, 1)
       const first = _.first(list)[0]
-      const last = _.last(list)[0]
+      const last = Date.now()//_.last(list)[0]
       const delta = {
         m: 60,
         h: 60 * 60,
