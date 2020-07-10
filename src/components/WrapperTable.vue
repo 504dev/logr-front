@@ -19,12 +19,12 @@
       <td>
         <div class="content">
           <span v-if="loading">
-            <i class="fa fa-cog fa-spin fa-3x fa-fw spinner"></i>
-<!--            <span>Loading...</span>-->
+            <i class="fa fa-cog fa-spin fa-2x fa-fw spinner"></i>
+            <!--            <span>Loading...</span>-->
           </span>
           <slot v-else name="content"></slot>
         </div>
-        <span class="arrow" :class="arrowDirection" @click="fullscreen = !fullscreen"></span>
+        <span class="arrow" :class="arrowDirection" @click="onFull"></span>
       </td>
     </tr>
   </table>
@@ -50,6 +50,14 @@ export default {
     },
     arrowDirection() {
       return this.orient ? (this.fullscreen ? 'down' : 'up') : this.fullscreen ? 'right' : 'left'
+    }
+  },
+  methods: {
+    onFull() {
+      this.fullscreen = !this.fullscreen
+      this.$nextTick(() => {
+        window.dispatchEvent(new Event('resize'))
+      })
     }
   }
 }
@@ -104,7 +112,7 @@ table {
         overflow: scroll;
         font-size: 14px;
         .spinner {
-          margin-left: -5px;
+          margin-left: -3px;
           margin-top: 5px;
         }
       }
