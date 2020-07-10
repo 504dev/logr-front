@@ -18,7 +18,6 @@
 </template>
 
 <script>
-import store from 'store2'
 import { mapState } from 'vuex'
 
 export default {
@@ -64,6 +63,9 @@ export default {
     }
     .container {
       padding-left: 30px;
+      .pause {
+        margin-left: -130px;
+      }
     }
   }
   .lefter {

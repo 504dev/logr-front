@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import DashItem from './DashItem'
+import DashItem from '../components/DashItem'
 import ACTIONS from '../store/action-types'
 import { mapState, mapGetters } from 'vuex'
 

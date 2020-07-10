@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import LoginPage from '@/components/LoginPage'
-import DashboardPage from '@/components/DashboardPage'
-import LogsPage from '@/components/LogsPage'
-import CountsPage from '@/components/CountsPage'
-import JwtPage from '@/components/JwtPage'
+import LoginPage from '@/pages/LoginPage'
+import DashboardPage from '@/pages/DashboardPage'
+import LogsPage from '@/pages/LogsPage'
+import CountsPage from '@/pages/CountsPage'
+import JwtPage from '@/pages/JwtPage'
 
 Vue.use(Router)
 

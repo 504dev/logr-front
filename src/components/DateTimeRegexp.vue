@@ -36,9 +36,7 @@ div.wrapper {
   box-sizing: border-box;
   position: relative;
   white-space: nowrap;
-  height: 30px;
-  padding: 0;
-  margin: 2px 0;
+  margin: 0;
 
   &.selected > input {
     border-color: black;
@@ -50,9 +48,6 @@ div.wrapper {
     border: solid 1px #999;
     border-bottom-width: 2px;
     margin: 0;
-    padding: 0 0 0 10px;
-    height: 100%;
-    width: 100%;
     border-radius: 4px;
     &:focus {
       outline: none;
@@ -62,7 +57,7 @@ div.wrapper {
 
   span.icon {
     position: absolute;
-    top: 6px;
+    top: 5px;
     right: 9px;
     display: inline-block;
     cursor: pointer;

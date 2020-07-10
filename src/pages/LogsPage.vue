@@ -1,17 +1,16 @@
 <template>
-  <wrapper :loading="loading" :class="{ night: mode === 0 }">
+  <wrapper :loading="loading" :class="{ night: mode === 0 }" :orient="orient">
     <template v-slot:filters>
-      <p style="float: right; margin-top: -35px">
+      <small style="float: right; margin-top: -32px">
         <router-link :to="`/dashboard/${dash.id}/counts`">switch to counts</router-link>
-      </p>
+      </small>
       <form @change="onChangeFilters" @submit.prevent>
         <select v-model="filters.logname" id="filter-logname" :class="{ selected: filters.logname }">
           <option value="" v-if="sortedLognames.length === 0">Logname</option>
           <option v-for="logname in sortedLognames" :value="logname" :key="logname">
             {{ logname }}
-          </option>
-        </select>
-        <select
+          </option> </select
+        ><select
           v-model="filters.hostname"
           v-if="sortedHostnames.length > 1 || filters.hostname"
           id="filter-hostname"
@@ -20,49 +19,50 @@
           <option value="">Hostname</option>
           <option v-for="hostname in sortedHostnames" :value="hostname" :key="hostname">
             {{ hostname }}
-          </option>
-        </select>
-        <select v-model="filters.level" id="filter-level" :class="{ selected: filters.level }">
+          </option> </select
+        ><select v-model="filters.level" id="filter-level" :class="{ selected: filters.level }">
           <option value="">Level</option>
           <option v-for="level in sortedLevels" :value="level" :key="level">
             {{ level }}
-          </option>
-        </select>
-        <select v-model="filters.version" id="filter-version" :class="{ selected: filters.version }">
+          </option> </select
+        ><select v-model="filters.version" id="filter-version" :class="{ selected: filters.version }">
           <option value="">Version</option>
           <option v-for="version in sortedVersions" :value="version" :key="version" v-if="version">
             {{ version }}
-          </option>
-        </select>
-        <input
+          </option> </select
+        ><input
           type="text"
           v-model="filters.message"
           placeholder="Message"
           id="filter-message"
           :class="{ selected: filters.message }"
-        />
-        <!--        <input type="number" v-model="filters.pid" placeholder="Pid" id="filter-pid" maxlength="6" />-->
-        <range-date-time-picker v-model="filters.timestamp" id="filter-timestamp" v-if="false" />
-        <date-time-pattern
+        /><input
+          type="number"
+          v-model="filters.pid"
+          placeholder="Pid"
+          id="filter-pid"
+          maxlength="6"
+          v-if="false"
+        /><range-date-time-picker v-model="filters.timestamp" id="filter-timestamp" v-if="false" /><date-time-pattern
           ref="date-time-pattern"
           v-model="filters.timestamp"
           :class="{ selected: filters.timestamp.some(v => v) }"
           v-if="false"
-        />
-        <date-time-regexp
+        /><date-time-regexp
+          id="filter-regexp"
           ref="date-time-regexp"
           v-model="filters.pattern"
           :class="{ selected: filters.pattern }"
           :placeholder="placeholderRe"
-        />
-        <input type="text" v-model="filters.limit" placeholder="Limit" id="filter-limit" />
+        /><input type="text" v-model="filters.limit" placeholder="Limit" id="filter-limit" />
       </form>
       <div class="bottom">
         <a href="#" @click.prevent="switchMode"><i class="fas fa-moon"></i></a>
+<!--        <a href="#" @click.prevent="switchOrient"><i class="fas fa-window-maximize"></i></a>-->
       </div>
     </template>
     <template v-slot:content>
-      <div class="logs-live column-reverse">
+      <div class="block block-live reverse">
         <template v-for="(log, key) in logs.live">
           <div v-if="log.hr" :key="key" class="pause-line">
             <span><i class="fas fa-pause"></i> {{ log.text }}</span>
@@ -70,7 +70,7 @@
           <log-item v-else :value="log" :filters="filters" :key="key" @tag="onTag" @hover="onHover" />
         </template>
       </div>
-      <div class="logs-history">
+      <div class="block block-history">
         <log-item
           v-for="(log, key) in logs.history"
           :value="log"
@@ -79,9 +79,11 @@
           @tag="onTag"
           @hover="onHover"
         />
+        <span class="cnt" :title="`${logs.history.length}rows`">{{ logs.history.length }}<small>.</small></span>
       </div>
-      <div class="logs-deep" v-for="(deep, key) in logs.deep" :key="key">
+      <div class="block block-deep" v-for="(deep, key) in logs.deep" :key="key">
         <log-item v-for="(log, key) in deep" :value="log" :filters="filters" :key="key" @tag="onTag" @hover="onHover" />
+        <span class="cnt" :title="`${deep.length}rows`">{{ deep.length }}<small>.</small></span>
       </div>
       <span class="more" @click="onMore" v-if="offset">more <i class="fas fa-angle-down"></i></span>
       <div class="pause" :class="{ 'pause-on': paused }" @click="onPause"><i class="fas fa-pause"></i></div>
@@ -92,13 +94,13 @@
 <script>
 import _ from 'lodash'
 import store from 'store2'
-import ACTIONS from '../store/action-types'
-import MUTATIONS from '../store/mutations-types.js'
-import LogItem from './LogItem'
-import RangeDateTimePicker from './RangeDateTimePicker'
-import DateTimePattern from './DateTimePattern'
-import DateTimeRegexp from './DateTimeRegexp'
-import Wrapper from './Wrapper'
+import ACTIONS from '@/store/action-types'
+import MUTATIONS from '@/store/mutations-types.js'
+import LogItem from '@/components/LogItem'
+import RangeDateTimePicker from '@/components/RangeDateTimePicker'
+import DateTimePattern from '@/components/DateTimePattern'
+import DateTimeRegexp from '@/components/DateTimeRegexp'
+import Wrapper from '@/components/WrapperTable'
 import { mapState } from 'vuex'
 
 const ls = store.namespace('logs')
@@ -132,6 +134,7 @@ export default {
   },
   data() {
     return {
+      orient: 0,
       paused: false,
       pausedTimer: null,
       filters: {
@@ -324,52 +327,59 @@ export default {
     },
     switchMode() {
       this.$store.commit(MUTATIONS.SWITCH_MODE)
+    },
+    switchOrient() {
+      this.orient = 1 - this.orient
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-select#filter-logname {
-}
-select#filter-hostname {
-}
 select#filter-level {
-  width: 40%;
+  width: 80px;
 }
 select#filter-version {
-  width: 55%;
+  width: 90px;
   float: right;
-}
-input#filter-pid {
-  width: 40%;
-}
-input#filter-message {
-  width: 100%;
-  height: 50px;
-  font-size: 20px;
-}
-#filter-timestamp {
 }
 input#filter-limit {
   width: 60px;
-  margin-top: 10px;
 }
 
-.logs-live {
-  border-bottom: dashed 1px grey;
-}
-.logs-history {
-  opacity: 0.8;
-}
-.logs-deep {
-  border-top: 1px dashed grey;
-  opacity: 0.7;
-  margin-top: 5px;
-}
-.column-reverse {
-  display: flex;
-  flex-direction: column-reverse;
+.block {
+  position: relative;
+  padding: 0;
+  margin: 0;
+  &.block-live {
+    border-bottom: dashed 1px grey;
+  }
+  &.block-history {
+    opacity: 0.8;
+  }
+  &.block-deep {
+    border-top: 1px dashed grey;
+    opacity: 0.7;
+    margin-top: 5px;
+  }
+  &.reverse {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+  .cnt {
+    position: absolute;
+    top: -1px;
+    right: 0;
+    color: #fff;
+    font-size: 10px;
+    background-color: #888;
+    padding: 2px 4px;
+    border-radius: 0 0 3px 3px;
+    margin-right: 5px;
+    small {
+      /*display: none;*/
+    }
+  }
 }
 
 .more {
@@ -425,17 +435,18 @@ input#filter-limit {
 }
 
 .pause-line {
+  position: relative;
   border-top: dashed 1px #088;
   span {
+    position: absolute;
+    top: -1px;
+    right: 0;
     color: #fff;
     font-size: 10px;
     background-color: #088;
     padding: 2px 4px;
     border-radius: 0 0 3px 3px;
-    position: absolute;
-    left: 100vw;
-    margin-left: -60px;
-    margin-top: -1px;
+    margin-right: 5px;
   }
 }
 
@@ -444,7 +455,7 @@ input#filter-limit {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 20px;
+  bottom: 0;
   padding: 10px;
 }
 </style>

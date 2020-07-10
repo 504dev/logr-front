@@ -1,43 +1,46 @@
 <template>
   <wrapper :loading="loading">
     <template v-slot:filters>
-      <p style="float: right; margin-top: -35px">
+      <small style="float: right; margin-top: -32px">
         <router-link :to="`/dashboard/${dash.id}/logs`">switch to logs</router-link>
-      </p>
+      </small>
       <form @change="onChangeFilters" @submit.prevent>
-        <select v-model="filters.logname" id="filter-logname">
+        <select v-model="filters.logname" id="filter-logname" :class="{ selected: filters.logname }">
           <option value="" v-if="sortedLognames.length === 0">Logname</option>
           <option v-for="logname in sortedLognames" :value="logname" :key="logname">
             {{ logname }}
-          </option>
-        </select>
-        <select v-model="filters.hostname" v-if="sortedHostnames.length > 1 || filters.hostname" id="filter-hostname">
+          </option> </select
+        ><select
+          id="filter-hostname"
+          v-model="filters.hostname"
+          v-if="sortedHostnames.length > 1 || filters.hostname"
+          :class="{ selected: filters.logname }"
+        >
           <option value="">Hostname</option>
           <option v-for="hostname in sortedHostnames" :value="hostname" :key="hostname">
             {{ hostname }}
-          </option>
-        </select>
-        <!--        <input type="number" v-model="filters.pid" placeholder="Pid" id="filter-pid" maxlength="6" />-->
-        <select v-model="filters.version" id="filter-version">
+          </option> </select
+        ><select v-model="filters.version" id="filter-version" :class="{ selected: filters.version }">
           <option value="">Version</option>
           <option v-for="version in sortedVersions" :value="version" :key="version" v-if="version">
             {{ version }}
-          </option>
-        </select>
-        <select v-model="filters.agg" id="filter-agg">
+          </option> </select
+        ><select v-model="filters.agg" id="filter-agg" :class="{ selected: filters.agg }">
           <option v-for="agg in ['m', 'h', 'd']" :value="agg" :key="agg">
             {{ agg }}
           </option>
         </select>
+      </form>
+      <div class="kinds">
         <p v-for="(group, kind) in charts" :key="kind">
           <strong>{{ kind }}</strong
           ><br />
           <span v-for="(series, keyname) in group" :key="keyname">
-            <a :href="`#${keyname}`" class="keyname">{{ keyname }}</a
+            <a :href="`#${kind}:${keyname}`" class="keyname">{{ keyname }}</a
             ><br />
           </span>
         </p>
-      </form>
+      </div>
     </template>
 
     <template v-slot:content>
@@ -46,7 +49,7 @@
         <div v-for="(group, kind) in charts" :key="kind">
           <div v-for="(series, keyname) in group" :key="keyname">
             <p class="header">
-              <a :name="keyname"
+              <a :name="`${kind}:${keyname}`"
                 ><b>{{ kind }}:</b>{{ keyname }}</a
               >
             </p>
@@ -62,8 +65,8 @@
 import _ from 'lodash'
 import store from 'store2'
 import ACTIONS from '../store/action-types'
-import CountsChart from './CountsChart'
-import Wrapper from './Wrapper'
+import CountsChart from '../components/CountsChart'
+import Wrapper from '../components/WrapperTable'
 import { mapState } from 'vuex'
 
 const ls = store.namespace('counts')
@@ -239,7 +242,13 @@ select#filter-agg {
   font-size: 18px;
   margin-left: 8px;
 }
-a.keyname {
-  text-decoration: none;
+.kinds {
+  font-size: 13px;
+  a.keyname {
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 </style>
