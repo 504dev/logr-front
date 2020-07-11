@@ -3,6 +3,7 @@
     <template v-slot:goto>
       <router-link :to="`/dashboard/${dash.id}/counts`">switch to counts</router-link>
     </template>
+
     <template v-slot:filters>
       <form @change="onChangeFilters" @submit.prevent>
         <select v-model="filters.logname" id="filter-logname" :class="{ selected: filters.logname }">
@@ -57,12 +58,14 @@
         /><input type="text" v-model="filters.limit" placeholder="Limit" id="filter-limit" />
       </form>
     </template>
+
     <template v-slot:customs>
       <a href="#" @click.prevent="switchMode"><font-awesome-icon :icon="[mode ? 'fas' : 'far', 'moon']"/></a>
       <a href="#" @click.prevent="switchOrient"
         ><font-awesome-icon :icon="['far', 'window-maximize']" :rotation="orient ? '270' : null"
       /></a>
     </template>
+
     <template v-slot:content>
       <div class="block block-live reverse">
         <template v-for="(log, key) in logs.live">

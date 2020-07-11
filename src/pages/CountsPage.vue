@@ -1,8 +1,9 @@
 <template>
-  <wrapper :loading="loading">
+  <wrapper :loading="loading" :orient="orient">
     <template v-slot:goto>
       <router-link :to="`/dashboard/${dash.id}/logs`">switch to logs</router-link>
     </template>
+
     <template v-slot:filters>
       <form @change="onChangeFilters" @submit.prevent>
         <select v-model="filters.logname" id="filter-logname" :class="{ selected: filters.logname }">
@@ -31,6 +32,9 @@
           </option>
         </select>
       </form>
+    </template>
+
+    <template v-slot:kinds>
       <div class="kinds">
         <p v-for="(group, kind) in charts" :key="kind">
           <strong>{{ kind }}</strong
@@ -41,6 +45,12 @@
           </span>
         </p>
       </div>
+    </template>
+
+    <template v-slot:customs>
+      <a href="#" @click.prevent="orient = 1 - orient"
+        ><font-awesome-icon :icon="['far', 'window-maximize']" :rotation="orient ? '270' : null"
+      /></a>
     </template>
 
     <template v-slot:content>
@@ -98,6 +108,7 @@ export default {
   },
   data() {
     return {
+      orient: 0,
       paused: false,
       filters: {
         hostname: '',
@@ -227,11 +238,11 @@ input#filter-pid {
 }
 select#filter-version {
   display: inline-block;
-  width: 55%;
+  width: 100px;
 }
 select#filter-agg {
   display: inline-block;
-  width: 40%;
+  width: 70px;
   float: right;
 }
 .chart {

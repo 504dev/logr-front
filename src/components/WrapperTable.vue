@@ -24,6 +24,9 @@
         <div class="filters">
           <slot name="filters" />
         </div>
+        <div class="kinds">
+          <slot name="kinds" />
+        </div>
         <div class="customs">
           <slot name="customs" />
         </div>
@@ -31,7 +34,7 @@
       <td>
         <div class="content">
           <span v-if="loading">
-            <font-awesome-icon icon="compact-disc" spin size="2x" />
+            <font-awesome-icon icon="compact-disc" spin size="2x" class="spinner" />
           </span>
           <slot v-else name="content"></slot>
         </div>
@@ -132,6 +135,10 @@ table {
         padding: 5px 10px;
         overflow: scroll;
         font-size: 14px;
+        .spinner {
+          margin-top: 6px;
+          margin-left: 2px;
+        }
       }
     }
   }
@@ -168,6 +175,9 @@ table {
         margin-right: 8px;
       }
       #filter-version {
+        float: inherit;
+      }
+      #filter-agg {
         float: inherit;
       }
       #filter-regexp {
