@@ -5,6 +5,9 @@
         <div class="filters">
           <slot name="filters" />
         </div>
+        <div class="customs">
+          <slot name="customs" />
+        </div>
       </td>
     </tr>
     <tr>
@@ -12,14 +15,20 @@
         <router-link to="/dashboards"
           ><img class="avatar" :src="`https://avatars0.githubusercontent.com/u/${user.github_id}`"
         /></router-link>
+        <small class="goto">
+          <slot name="goto" />
+        </small>
         <div class="filters">
           <slot name="filters" />
+        </div>
+        <div class="customs">
+          <slot name="customs" />
         </div>
       </td>
       <td>
         <div class="content">
           <span v-if="loading">
-            <i class="fa fa-cog fa-spin fa-2x fa-fw spinner"></i>
+            <i class="fa fa-compact-disc fa-spin fa-2x fa-fw spinner"></i>
             <!--            <span>Loading...</span>-->
           </span>
           <slot v-else name="content"></slot>
@@ -90,14 +99,24 @@ table {
         width: 180px;
         min-width: 180px;
         padding: 10px;
+        .customs {
+          position: absolute;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          padding: 10px;
+        }
       }
       &.header {
         padding: 10px;
+        padding-bottom: 5px;
         height: 30px;
         background-color: #ddd;
-        input,
-        select {
-          margin: 0;
+        .customs {
+          position: absolute;
+          right: 15px;
+          top: 15px;
+          display: inline-block;
         }
       }
       .content {
@@ -123,7 +142,7 @@ table {
       padding-left: 30px;
     }
     &.head-orient .content {
-      padding-top: 20px;
+      /*padding-top: 20px;*/
     }
   }
   &.left-orient {
@@ -135,7 +154,6 @@ table {
       }
       #filter-regexp {
         margin-bottom: 10px;
-        /*width: 200px;*/
       }
       #filter-message {
         height: 50px;
@@ -145,35 +163,20 @@ table {
   }
   &.head-orient {
     .filters {
+      padding-right: 50px;
+      line-height: 35px;
       select,
       input {
         margin-right: 8px;
       }
-    }
-    #filter-logname {
-    }
-    #filter-hostname {
-    }
-    #filter-level {
-    }
-    #filter-version {
-      float: inherit;
-    }
-    #filter-message {
-    }
-    #filter-regexp {
-      display: inline-block;
-      margin-right: 8px;
-      width: 200px;
-    }
-    #filter-limit {
-      margin-top: 0;
-    }
-    .bottom {
-      position: static;
-      display: inline-block;
-      float: right;
-      margin-top: -40px;
+      #filter-version {
+        float: inherit;
+      }
+      #filter-regexp {
+        display: inline-block;
+        margin-right: 8px;
+        width: 200px;
+      }
     }
   }
   .arrow {
@@ -219,16 +222,8 @@ table {
       width: 20px;
       margin-top: -10px;
       border-radius: 20px 0 0 20px;
-      /*color: #000;*/
-      //&.up {
-      //  margin-left: -10px;
-      //  margin-top: -30px;
-      //  transform: rotate(90deg);
-      //}
-      //&.down {
       margin-left: -10px;
       transform: rotate(-90deg);
-      //}
     }
   }
 
@@ -245,6 +240,11 @@ table {
     &:hover {
       border-color: green;
     }
+  }
+
+  .goto {
+    float: right;
+    margin-top: 7px;
   }
 }
 </style>

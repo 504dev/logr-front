@@ -1,9 +1,9 @@
 <template>
   <wrapper :loading="loading" :class="{ night: mode === 0 }" :orient="orient">
+    <template v-slot:goto>
+      <router-link :to="`/dashboard/${dash.id}/counts`">switch to counts</router-link>
+    </template>
     <template v-slot:filters>
-      <small style="float: right; margin-top: -32px">
-        <router-link :to="`/dashboard/${dash.id}/counts`">switch to counts</router-link>
-      </small>
       <form @change="onChangeFilters" @submit.prevent>
         <select v-model="filters.logname" id="filter-logname" :class="{ selected: filters.logname }">
           <option value="" v-if="sortedLognames.length === 0">Logname</option>
@@ -56,10 +56,10 @@
           :placeholder="placeholderRe"
         /><input type="text" v-model="filters.limit" placeholder="Limit" id="filter-limit" />
       </form>
-      <div class="bottom">
-        <a href="#" @click.prevent="switchMode"><i class="fas fa-moon"></i></a>
-<!--        <a href="#" @click.prevent="switchOrient"><i class="fas fa-window-maximize"></i></a>-->
-      </div>
+    </template>
+    <template v-slot:customs>
+      <a href="#" @click.prevent="switchMode"><i class="fas fa-moon"></i></a>
+      <a href="#" @click.prevent="switchOrient"><i class="fas fa-window-maximize"></i></a>
     </template>
     <template v-slot:content>
       <div class="block block-live reverse">
@@ -367,6 +367,7 @@ input#filter-limit {
     flex-direction: column-reverse;
   }
   .cnt {
+    display: none;
     position: absolute;
     top: -1px;
     right: 0;
@@ -377,7 +378,7 @@ input#filter-limit {
     border-radius: 0 0 3px 3px;
     margin-right: 5px;
     small {
-      /*display: none;*/
+      display: none;
     }
   }
 }
@@ -448,14 +449,5 @@ input#filter-limit {
     border-radius: 0 0 3px 3px;
     margin-right: 5px;
   }
-}
-
-.bottom {
-  /*text-align: right;*/
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding: 10px;
 }
 </style>

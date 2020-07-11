@@ -1,9 +1,9 @@
 <template>
   <wrapper :loading="loading">
+    <template v-slot:goto>
+      <router-link :to="`/dashboard/${dash.id}/logs`">switch to logs</router-link>
+    </template>
     <template v-slot:filters>
-      <small style="float: right; margin-top: -32px">
-        <router-link :to="`/dashboard/${dash.id}/logs`">switch to logs</router-link>
-      </small>
       <form @change="onChangeFilters" @submit.prevent>
         <select v-model="filters.logname" id="filter-logname" :class="{ selected: filters.logname }">
           <option value="" v-if="sortedLognames.length === 0">Logname</option>
