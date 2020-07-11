@@ -3,12 +3,11 @@
     <counts-snippet-chart :subtitle="kind + ':' + keyname" :series="series" class="chart" /><span
       @click="closeChart"
       class="close"
-      ><i class="fas fa-times-circle"></i
-    ></span>
+      ><font-awesome-icon icon="times-circle"/></span>
   </div>
-  <span v-else-if="valid" @click="showChart" class="label open"><i class="fas fa-chart-line"></i></span>
+  <span v-else-if="valid" @click="showChart" class="label open"><font-awesome-icon icon="chart-line"/></span>
   <span v-else class="label invalid" title="invalid widget"
-    ><i class="fas fa-exclamation-triangle"></i> {{ JSON.stringify(this.$attrs) }}</span
+    ><font-awesome-icon icon="exclamation-triangle"/> {{ JSON.stringify(this.$attrs) }}</span
   >
 </template>
 

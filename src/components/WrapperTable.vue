@@ -2,6 +2,9 @@
   <table :class="{ fullscreen, 'left-orient': !orient, 'head-orient': orient }" v-if="this.user && this.dash">
     <tr v-show="orient && !fullscreen">
       <td class="header">
+        <router-link to="/dashboards"
+          ><img class="avatar" :src="`https://avatars0.githubusercontent.com/u/${user.github_id}`"
+        /></router-link>
         <div class="filters">
           <slot name="filters" />
         </div>
@@ -28,8 +31,7 @@
       <td>
         <div class="content">
           <span v-if="loading">
-            <i class="fa fa-compact-disc fa-spin fa-2x fa-fw spinner"></i>
-            <!--            <span>Loading...</span>-->
+            <font-awesome-icon icon="compact-disc" spin size="2x" />
           </span>
           <slot v-else name="content"></slot>
         </div>
@@ -130,10 +132,6 @@ table {
         padding: 5px 10px;
         overflow: scroll;
         font-size: 14px;
-        .spinner {
-          margin-left: -3px;
-          margin-top: 5px;
-        }
       }
     }
   }
@@ -147,7 +145,6 @@ table {
   }
   &.left-orient {
     .filters {
-      margin-top: 10px;
       select,
       input {
         margin-bottom: 10px;
@@ -164,6 +161,7 @@ table {
   &.head-orient {
     .filters {
       padding-right: 50px;
+      padding-left: 40px;
       line-height: 35px;
       select,
       input {
@@ -232,6 +230,9 @@ table {
   }
 
   .avatar {
+    position: absolute;
+    top: 12px;
+    left: 10px;
     width: 24px;
     height: 24px;
     border-radius: 24px;
@@ -244,7 +245,8 @@ table {
 
   .goto {
     float: right;
-    margin-top: 7px;
+    margin-top: 8px;
+    margin-bottom: 15px;
   }
 }
 </style>

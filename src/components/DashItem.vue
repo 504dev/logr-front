@@ -25,16 +25,16 @@
       </div>
       <div class="tools">
         <span @click="onEdit(dash)">
-          <i class="icon fas fa-edit"></i>
+          <font-awesome-icon class="icon" icon="edit" />
         </span>
         <span @click="onShare(dash)">
-          <i class="icon fas fa-share"></i>
+          <font-awesome-icon class="icon" icon="share" />
         </span>
         <span @click="onDelete(dash)">
-          <i class="icon fas fa-trash-alt"></i>
+          <font-awesome-icon class="icon" icon="trash-alt" />
         </span>
         <span @click="onKeys(dash)">
-          <i class="icon fas fa-key"></i>
+          <font-awesome-icon class="icon" icon="key" />
         </span>
       </div>
     </div>

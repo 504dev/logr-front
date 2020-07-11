@@ -7,7 +7,7 @@
       :value="value"
       @change="onChange"
     />
-    <span class="icon" @click="onClear" v-if="value"><i class="fas fa-times-circle"></i></span>
+    <span class="icon" @click="onClear" v-if="value"><font-awesome-icon icon="times-circle"/></span>
   </div>
 </template>
 
@@ -57,11 +57,12 @@ div.wrapper {
 
   span.icon {
     position: absolute;
-    top: 5px;
+    top: 7px;
     right: 9px;
     display: inline-block;
     cursor: pointer;
     color: #333;
+    line-height: 0;
     &:hover {
       color: #000;
     }

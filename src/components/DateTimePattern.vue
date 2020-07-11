@@ -9,7 +9,7 @@
       @change="onChange"
       maxlength="19"
     />
-    <span class="icon" @click="onClear" v-if="pattern"><i class="fas fa-times-circle"></i></span>
+    <span class="icon" @click="onClear" v-if="pattern"><font-awesome-icon icon="times-circle"/></span>
   </div>
 </template>
 

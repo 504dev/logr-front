@@ -58,14 +58,16 @@
       </form>
     </template>
     <template v-slot:customs>
-      <a href="#" @click.prevent="switchMode"><i class="fas fa-moon"></i></a>
-      <a href="#" @click.prevent="switchOrient"><i class="fas fa-window-maximize"></i></a>
+      <a href="#" @click.prevent="switchMode"><font-awesome-icon :icon="[mode ? 'fas' : 'far', 'moon']"/></a>
+      <a href="#" @click.prevent="switchOrient"
+        ><font-awesome-icon :icon="['far', 'window-maximize']" :rotation="orient ? '270' : null"
+      /></a>
     </template>
     <template v-slot:content>
       <div class="block block-live reverse">
         <template v-for="(log, key) in logs.live">
           <div v-if="log.hr" :key="key" class="pause-line">
-            <span><i class="fas fa-pause"></i> {{ log.text }}</span>
+            <span><font-awesome-icon icon="pause" /> {{ log.text }}</span>
           </div>
           <log-item v-else :value="log" :filters="filters" :key="key" @tag="onTag" @hover="onHover" />
         </template>
@@ -85,8 +87,14 @@
         <log-item v-for="(log, key) in deep" :value="log" :filters="filters" :key="key" @tag="onTag" @hover="onHover" />
         <span class="cnt" :title="`${deep.length}rows`">{{ deep.length }}<small>.</small></span>
       </div>
-      <span class="more" @click="onMore" v-if="offset">more <i class="fas fa-angle-down"></i></span>
-      <div class="pause" :class="{ 'pause-on': paused }" @click="onPause"><i class="fas fa-pause"></i></div>
+      <span class="more" @click="onMore" v-if="offset">
+        more
+        <font-awesome-icon icon="compact-disc" spin v-if="deepLoading" />
+        <font-awesome-icon icon="chevron-circle-down" v-else />
+      </span>
+      <div class="pause" :class="{ 'pause-on': paused }" @click="onPause">
+        <font-awesome-icon icon="pause" />
+      </div>
     </template>
   </wrapper>
 </template>
@@ -155,6 +163,7 @@ export default {
       },
       stats: [],
       loading: true,
+      deepLoading: false,
       placeholderRe: ''
     }
   },
@@ -256,12 +265,14 @@ export default {
     },
     async onMore(e) {
       console.log('onMore', e)
+      this.deepLoading = true
       const logs = await this.$store.dispatch(ACTIONS.LOAD_LOGS, {
         ...this.filters,
         dash_id: this.dash.id,
         sock_id: this.sock.id,
         offset: this.offset
       })
+      this.deepLoading = false
       this.logs.deep.push(logs)
     },
     async onPause(e) {

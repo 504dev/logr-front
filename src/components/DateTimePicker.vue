@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="container">
-      <span class="icon date" @click="openDatePicker"><i class="fas fa-calendar"></i></span
+      <span class="icon date" @click="openDatePicker"><font-awesome-icon icon="calendar"/></span
       ><input
         ref="idate"
         type="text"
@@ -10,7 +10,7 @@
         :value="input.date"
         @change="onDateInput"
         maxlength="10"
-      /><span class="icon time" @click="openTimePicker"><i class="fas fa-clock"></i></span
+      /><span class="icon time" @click="openTimePicker"><font-awesome-icon icon="clock"/></span
       ><input
         ref="itime"
         type="text"
@@ -149,8 +149,8 @@ div.container {
   span.icon {
     position: absolute;
     display: inline-block;
-    margin-top: 4px;
-    margin-left: -25px;
+    margin-top: 5px;
+    margin-left: -24px;
     cursor: pointer;
     color: #ccc;
     &:hover {
