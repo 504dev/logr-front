@@ -145,6 +145,7 @@ export default {
   border-radius: 4px;
   border: solid 1px black;
   border-bottom-width: 2px;
+  vertical-align: top;
   .title {
     color: black;
     font-weight: bold;
