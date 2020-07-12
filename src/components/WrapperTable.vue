@@ -8,6 +8,9 @@
         <div class="filters">
           <slot name="filters" />
         </div>
+        <small class="goto">
+          <slot name="goto" />
+        </small>
         <div class="kinds">
           <slot name="kinds" />
         </div>
@@ -37,7 +40,8 @@
       <td>
         <div class="content">
           <span v-if="loading">
-            <font-awesome-icon icon="compact-disc" spin size="2x" class="spinner" />
+            <span>Loading...</span>
+<!--            <font-awesome-icon icon="compact-disc" spin size="2x" class="spinner" />-->
           </span>
           <slot v-else name="content"></slot>
         </div>
@@ -106,6 +110,7 @@ table {
           right: 0;
           bottom: 0;
           padding: 10px;
+          padding-bottom: 15px;
         }
       }
       &.header {
@@ -113,6 +118,7 @@ table {
         padding-bottom: 5px;
         height: 30px;
         background-color: #ddd;
+        /*border-bottom: solid 1px black;*/
         .customs {
           position: absolute;
           right: 15px;
@@ -133,7 +139,7 @@ table {
         font-size: 14px;
         .spinner {
           margin-top: 5px;
-          margin-left: 2px;
+          margin-left: 1px;
         }
       }
     }
@@ -143,7 +149,7 @@ table {
       padding-left: 30px;
     }
     &.head-orient .content {
-      /*padding-top: 20px;*/
+      padding-top: 20px;
     }
   }
   &.left-orient {
@@ -229,6 +235,10 @@ table {
       margin-left: -10px;
       transform: rotate(-90deg);
     }
+    /*&.up {
+      margin-top: -30px;
+      transform: rotate(90deg);
+    }*/
   }
 
   a {
@@ -253,6 +263,12 @@ table {
     float: right;
     margin-top: 8px;
     margin-bottom: 15px;
+  }
+
+  &.head-orient {
+    .goto {
+      display: none;
+    }
   }
 
   .kinds {
@@ -282,10 +298,16 @@ table {
 
   &.head-orient {
     .kinds {
-      text-align: center;
+      /*text-align: center;*/
+      margin-left: 26px;
       .kindblock {
         display: inline-block;
         margin: 10px;
+        .kindname {
+          a:hover {
+            text-decoration: underline;
+          }
+        }
         .keynames {
           display: none;
         }

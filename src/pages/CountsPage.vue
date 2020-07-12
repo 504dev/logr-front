@@ -251,7 +251,7 @@ select#filter-agg {
 }
 .chart {
   height: 240px;
-  min-width: 480px;
+  min-width: 360px;
   border-bottom: dashed 1px #000;
 }
 .header {

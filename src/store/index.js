@@ -21,7 +21,7 @@ const store = new Vuex.Store({
     jwt: localStorage.getItem('jwt'),
     sock: null,
     mode: ls.get('mode', 0),
-    orient: 0,
+    orient: ls.get('orient', 0),
     fullscreen: 0
   },
   getters: {
@@ -78,6 +78,7 @@ const store = new Vuex.Store({
     },
     [MUTATIONS.SWITCH_ORIENT]: state => {
       state.orient = 1 - state.orient
+      ls.set('orient', state.orient)
       Vue.nextTick(() => {
         window.dispatchEvent(new Event('resize'))
       })
