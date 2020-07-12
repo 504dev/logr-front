@@ -20,10 +20,21 @@
         </a>
       </span>
       <div>
-        <router-link :to="`/dashboard/${dash.id}/logs`" class="window window-logs"> logs </router-link
-        ><router-link :to="`/dashboard/${dash.id}/counts`" class="window window-counts">
-          counts
+        <router-link
+          :to="`/dashboard/${dash.id}/logs`"
+          class="window list window-logs"
+          :class="{ x2: !hasCounts }"
+          v-if="hasLogs"
+          ><span>logs</span></router-link
+        ><router-link
+          :to="`/dashboard/${dash.id}/counts`"
+          class="window list window-counts"
+          :class="{ x2: !hasLogs }"
+          v-if="hasCounts"
+        >
+          <span>counts</span>
         </router-link>
+        <div class="empty" v-if="isEmpty">empty yet.</div>
       </div>
       <div class="tools">
         <span @click="onEdit(dash)">
@@ -42,8 +53,8 @@
     </div>
     <modal :name="`keys-${dash.id}`" width="320">
       <div v-for="key in dash.keys" :key="key.public_key" class="keys">
-        <p><b>Public:</b><br />{{ key.public_key }}</p>
-        <p><b>Private:</b><br />{{ key.private_key }}</p>
+        <p><label>Public:</label><br />{{ key.public_key }}</p>
+        <p><label>Private:</label><br />{{ key.private_key }}</p>
       </div>
     </modal>
   </div>
@@ -62,7 +73,16 @@ export default {
     }
   },
   computed: {
-    ...mapState(['user'])
+    ...mapState(['user']),
+    hasLogs() {
+      return !!this.dash.lognames.logs
+    },
+    hasCounts() {
+      return !!this.dash.lognames.counts
+    },
+    isEmpty() {
+      return !this.hasLogs && !this.hasCounts
+    }
   },
   methods: {
     async onShare(dash) {
@@ -112,11 +132,11 @@ export default {
   margin: 10px 20px 0 0;
 }
 .dashboard {
+  box-sizing: border-box;
   display: inline-block;
   position: relative;
-  width: 200px;
-  height: 140px;
-  /*box-shadow: 2px 2px #ddd;*/
+  width: 220px;
+  height: 160px;
   background-color: #eee;
   padding: 10px;
   border-radius: 4px;
@@ -125,7 +145,7 @@ export default {
   .title {
     color: black;
     font-weight: bold;
-    font-size: 18px;
+    font-size: 16px;
     text-decoration: none;
     &:hover {
       color: red;
@@ -155,25 +175,39 @@ export default {
       }
     }
   }
+  .empty {
+    margin-top: 40px;
+    color: grey;
+    text-align: center;
+  }
   .window {
     box-sizing: border-box;
     display: inline-block;
     vertical-align: top;
-    margin-top: 20px;
     width: 95px;
     height: 60px;
+    margin-top: 20px;
     border-radius: 3px;
     background-color: #ddd;
     border: dashed 1px #000;
     cursor: pointer;
     line-height: 60px;
-    color: transparent;
+    color: #fff;
     text-align: center;
     text-decoration: none;
+    span {
+      display: none;
+    }
+    &:hover {
+      opacity: 1;
+      span {
+        display: inline-block;
+      }
+    }
     &.window-logs {
       opacity: 0.7;
       font-size: 28px;
-      margin-right: 10px;
+      margin-right: 8px;
       background-color: #444;
       background-image: url('/static/logs.jpg');
       background-size: 90px;
@@ -185,9 +219,30 @@ export default {
       background-size: 95px;
       background-position-y: -15px;
     }
-    &:hover {
-      color: #fff;
-      opacity: 1;
+    &.x2 {
+      width: 100%;
+    }
+    &.--no--list {
+      margin-top: 7px;
+      width: 200px;
+      height: 40px;
+      border: solid 1px #000;
+      line-height: 40px;
+      &.window-logs {
+        margin-right: 0;
+      }
+      &.window-counts {
+        background-size: 55px;
+        background-position-y: -5px;
+      }
+      &.x2 {
+        height: 90px;
+        line-height: 90px;
+        &.window-counts {
+          background-size: 110px;
+          background-position-y: 0;
+        }
+      }
     }
   }
   &.shared .tools {
@@ -208,5 +263,8 @@ export default {
 .keys {
   padding: 10px;
   word-wrap: break-word;
+  label {
+    color: grey;
+  }
 }
 </style>

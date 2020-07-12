@@ -16,9 +16,6 @@
         <dash-item :dash="dash" :key="dash.id" />
       </template>
       <div class="ghost" :class="{ mini: dashgroups.own.length > 0 }" @click="onAddDashboard"></div>
-<!--      <span class="dashboard-add" @click="onAddDashboard">-->
-<!--        <font-awesome-icon icon="plus-square" />-->
-<!--      </span>-->
     </div>
     <div>
       <h1>Shared</h1>
@@ -55,7 +52,9 @@ export default {
   methods: {
     async onAddDashboard() {
       const name = prompt('Enter dashboard name:')
-      await this.$store.dispatch(ACTIONS.ADD_DASHBOARD, name)
+      if (name) {
+        await this.$store.dispatch(ACTIONS.ADD_DASHBOARD, name)
+      }
     }
   }
 }
@@ -76,16 +75,9 @@ export default {
     }
   }
   h1 {
-    opacity: 0.1;
+    color: #eee;
     /*border-bottom: dashed 1px black;*/
     margin: 30px 0 0 -15px;
-  }
-  .dashboard-add {
-    display: inline-block;
-    vertical-align: bottom;
-    color: #9e9;
-    cursor: pointer;
-    font-size: 32px;
   }
   .ghost {
     display: inline-block;
@@ -115,7 +107,7 @@ export default {
       height: 80px;
       line-height: 40px;
       font-size: 60px;
-      zoom: 0.5;
+      zoom: 0.6;
     }
   }
 }

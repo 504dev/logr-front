@@ -40,8 +40,8 @@
       <td>
         <div class="content">
           <span v-if="loading">
-            <span>Loading...</span>
-<!--            <font-awesome-icon icon="compact-disc" spin size="2x" class="spinner" />-->
+            <!--            <span>Loading...</span>-->
+            <font-awesome-icon icon="compact-disc" spin size="2x" class="spinner" />
           </span>
           <slot v-else name="content"></slot>
         </div>
