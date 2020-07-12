@@ -5,6 +5,7 @@
         <router-link to="/dashboards"
           ><img class="avatar" :src="`https://avatars0.githubusercontent.com/u/${user.github_id}`"
         /></router-link>
+        <span class="name">{{ dash.name }}</span>
         <div class="filters">
           <slot name="filters" />
         </div>
@@ -24,6 +25,7 @@
         <router-link to="/dashboards"
           ><img class="avatar" :src="`https://avatars0.githubusercontent.com/u/${user.github_id}`"
         /></router-link>
+        <div class="name">{{ dash.name }}</div>
         <small class="goto">
           <slot name="goto" />
         </small>
@@ -104,13 +106,33 @@ table {
         width: 180px;
         min-width: 180px;
         padding: 10px;
+        padding-bottom: 80px;
+        /*border-right: solid 1px black;*/
+        .name {
+          color: #111;
+          font-weight: bold;
+          text-align: center;
+          /*margin-left: 36px;*/
+          margin-top: 6px;
+          margin-bottom: 14px;
+          max-width: 180px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
         .customs {
+          display: inline-block;
           position: absolute;
           left: 0;
-          right: 0;
           bottom: 0;
           padding: 10px;
           padding-bottom: 15px;
+        }
+        .goto {
+          position: absolute;
+          right: 0;
+          bottom: 0;
+          margin-right: 10px;
+          margin-bottom: 17px;
         }
       }
       &.header {
@@ -119,11 +141,23 @@ table {
         height: 30px;
         background-color: #ddd;
         /*border-bottom: solid 1px black;*/
+        .name {
+          color: #111;
+          font-weight: bold;
+          margin-left: 36px;
+          line-height: 32px;
+        }
         .customs {
+          display: inline-block;
           position: absolute;
           right: 15px;
           top: 15px;
-          display: inline-block;
+        }
+        .goto {
+          position: absolute;
+          right: 75px;
+          top: 17px;
+          /*display: none;*/
         }
       }
       .content {
@@ -169,8 +203,9 @@ table {
   }
   &.head-orient {
     .filters {
-      padding-right: 50px;
-      padding-left: 35px;
+      padding-top: 7px;
+      /*padding-right: 60px;*/
+      /*padding-left: 35px;*/
       line-height: 35px;
       select,
       input {
@@ -203,15 +238,12 @@ table {
     text-align: center;
     line-height: 40px;
     cursor: pointer;
-
     &::before {
       content: '\00a0❮';
     }
-
     &:hover {
       zoom: 1.1;
     }
-
     &.left,
     &.right {
       top: 55%;
@@ -242,32 +274,19 @@ table {
   }
 
   a {
-    color: #111111;
+    color: #111;
   }
 
   .avatar {
     position: absolute;
-    top: 12px;
-    left: 10px;
+    top: 13px;
+    left: 11px;
     width: 24px;
     height: 24px;
     border-radius: 24px;
-    border: solid 1px transparent;
 
     &:hover {
-      border-color: green;
-    }
-  }
-
-  .goto {
-    float: right;
-    margin-top: 8px;
-    margin-bottom: 15px;
-  }
-
-  &.head-orient {
-    .goto {
-      display: none;
+      box-shadow: 0 0 0 1px green;
     }
   }
 
@@ -299,10 +318,11 @@ table {
   &.head-orient {
     .kinds {
       /*text-align: center;*/
-      margin-left: 26px;
+      /*margin-left: 26px;*/
       .kindblock {
         display: inline-block;
-        margin: 10px;
+        margin: 5px 15px;
+        margin-left: 5px;
         .kindname {
           a:hover {
             text-decoration: underline;
