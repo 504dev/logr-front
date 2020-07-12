@@ -1,8 +1,8 @@
 <template>
   <div class="container">
     <div class="dashboard" :class="{ shared: user.id !== dash.owner_id }">
-      <router-link :to="`/dashboard/${dash.id}/logs`">
-        <strong>{{ dash.name }}</strong>
+      <router-link :to="`/dashboard/${dash.id}/logs`" class="title">
+        <span>{{ dash.name }}</span>
       </router-link>
       <span class="team">
         <a :href="`https://github.com/${dash.owner.username}`">
@@ -20,8 +20,10 @@
         </a>
       </span>
       <div>
-        <router-link :to="`/dashboard/${dash.id}/logs`" class="window logs"></router-link>
-        <router-link :to="`/dashboard/${dash.id}/counts`" class="window counts"></router-link>
+        <router-link :to="`/dashboard/${dash.id}/logs`" class="window window-logs"> logs </router-link
+        ><router-link :to="`/dashboard/${dash.id}/counts`" class="window window-counts">
+          counts
+        </router-link>
       </div>
       <div class="tools">
         <span @click="onEdit(dash)">
@@ -112,12 +114,17 @@ export default {
   position: relative;
   width: 200px;
   height: 140px;
-  box-shadow: 2px 2px #ddd;
+  /*box-shadow: 2px 2px #ddd;*/
   background-color: #eee;
   padding: 10px;
   border-radius: 4px;
-  a {
+  border: solid 1px black;
+  border-bottom-width: 2px;
+  .title {
     color: black;
+    font-weight: bold;
+    font-size: 18px;
+    text-decoration: none;
     &:hover {
       color: red;
     }
@@ -147,22 +154,38 @@ export default {
     }
   }
   .window {
+    box-sizing: border-box;
     display: inline-block;
     vertical-align: top;
-    margin-top: 10px;
-    width: 90px;
-    height: 90px;
-    border-radius: 45px;
+    margin-top: 20px;
+    width: 95px;
+    height: 60px;
+    border-radius: 3px;
     background-color: #ddd;
+    border: dashed 1px #000;
     cursor: pointer;
-    &.logs {
+    line-height: 60px;
+    color: transparent;
+    text-align: center;
+    text-decoration: none;
+    &.window-logs {
+      opacity: 0.7;
+      font-size: 28px;
+      margin-right: 10px;
       background-color: #444;
-      /*background-image: url('/static/logs.jpg');*/
-      /*background-size: 90px;*/
+      background-image: url('/static/logs.jpg');
+      background-size: 90px;
     }
-    &.counts {
-      /*background-image: url('/static/counts.jpg');*/
-      /*background-size: 90px;*/
+    &.window-counts {
+      opacity: 0.8;
+      font-size: 24px;
+      background-image: url('/static/counts.jpg');
+      background-size: 95px;
+      background-position-y: -15px;
+    }
+    &:hover {
+      color: #fff;
+      opacity: 1;
     }
   }
   &.shared .tools {

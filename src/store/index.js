@@ -20,9 +20,14 @@ const store = new Vuex.Store({
     shared: null,
     jwt: localStorage.getItem('jwt'),
     sock: null,
-    mode: ls.get('mode', 0)
+    mode: ls.get('mode', 0),
+    orient: 0,
+    fullscreen: 0
   },
   getters: {
+    isExpired(state, getters) {
+      return getters.jwtPayload.exp * 1000 < Date.now()
+    },
     restUrl() {
       return process.env.VUE_APP_REST || location.origin
     },
@@ -46,7 +51,10 @@ const store = new Vuex.Store({
     jwtPayload(state) {
       return jwtDecode(state.jwt)
     },
-    api: (state, getters) => (path, options = {}) => {
+    api: (state, getters, a, b) => (path, options = {}) => {
+      if (getters.isExpired) {
+        location.href = '/login'
+      }
       return axios({
         method: 'GET',
         url: getters.restUrl + '/api' + path,
@@ -64,9 +72,21 @@ const store = new Vuex.Store({
       localStorage.removeItem('jwt', token)
       state.jwt = null
     },
-    [MUTATIONS.SWITCH_MODE]: (state, token) => {
+    [MUTATIONS.SWITCH_MODE]: state => {
       state.mode = 1 - state.mode
       ls.set('mode', state.mode)
+    },
+    [MUTATIONS.SWITCH_ORIENT]: state => {
+      state.orient = 1 - state.orient
+      Vue.nextTick(() => {
+        window.dispatchEvent(new Event('resize'))
+      })
+    },
+    [MUTATIONS.SWITCH_FULL]: state => {
+      state.fullscreen = 1 - state.fullscreen
+      Vue.nextTick(() => {
+        window.dispatchEvent(new Event('resize'))
+      })
     }
   },
   actions: {

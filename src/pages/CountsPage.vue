@@ -35,20 +35,20 @@
     </template>
 
     <template v-slot:kinds>
-      <div class="kinds">
-        <p v-for="(group, kind) in charts" :key="kind">
-          <strong>{{ kind }}</strong
-          ><br />
-          <span v-for="(series, keyname) in group" :key="keyname">
-            <a :href="`#${kind}:${keyname}`" class="keyname">{{ keyname }}</a
-            ><br />
-          </span>
-        </p>
+      <div v-for="(group, kind) in charts" :key="kind" class="kindblock">
+        <div class="kindname">
+          <a :href="`#${kind}`">{{ kind }}</a>
+        </div>
+        <div class="keynames">
+          <div v-for="(series, keyname) in group" :key="keyname" class="keyname">
+            <a :href="`#${kind}:${keyname}`">{{ keyname }}</a>
+          </div>
+        </div>
       </div>
     </template>
 
     <template v-slot:customs>
-      <a href="#" @click.prevent="orient = 1 - orient"
+      <a href="#" @click.prevent="switchOrient"
         ><font-awesome-icon :icon="['far', 'window-maximize']" :rotation="orient ? '270' : null"
       /></a>
     </template>
@@ -57,6 +57,7 @@
       <span v-if="nodata">No data</span>
       <div v-else>
         <div v-for="(group, kind) in charts" :key="kind">
+          <a :name="`${kind}`"></a>
           <div v-for="(series, keyname) in group" :key="keyname">
             <p class="header">
               <a :name="`${kind}:${keyname}`"
@@ -74,10 +75,11 @@
 <script>
 import _ from 'lodash'
 import store from 'store2'
-import ACTIONS from '../store/action-types'
-import CountsChart from '../components/CountsChart'
-import Wrapper from '../components/WrapperTable'
 import { mapState } from 'vuex'
+import ACTIONS from '@/store/action-types'
+import MUTATIONS from '@/store/mutations-types.js'
+import CountsChart from '@/components/CountsChart'
+import Wrapper from '@/components/WrapperTable'
 
 const ls = store.namespace('counts')
 
@@ -108,7 +110,6 @@ export default {
   },
   data() {
     return {
-      orient: 0,
       paused: false,
       filters: {
         hostname: '',
@@ -122,7 +123,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['user', 'dashboards']),
+    ...mapState(['user', 'dashboards', 'orient']),
     dash() {
       return (this.dashboards || []).find(dash => dash.id === +this.$route.params.id)
     },
@@ -226,6 +227,9 @@ export default {
         .sortBy(v => -v[sort])
         .map(fieldname)
         .value()
+    },
+    switchOrient() {
+      this.$store.commit(MUTATIONS.SWITCH_ORIENT)
     }
   }
 }
@@ -253,14 +257,6 @@ select#filter-agg {
 .header {
   font-size: 18px;
   margin-left: 8px;
-}
-.kinds {
-  font-size: 13px;
-  a.keyname {
-    text-decoration: none;
-    &:hover {
-      text-decoration: underline;
-    }
-  }
+  text-align: left;
 }
 </style>

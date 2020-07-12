@@ -8,6 +8,9 @@
         <div class="filters">
           <slot name="filters" />
         </div>
+        <div class="kinds">
+          <slot name="kinds" />
+        </div>
         <div class="customs">
           <slot name="customs" />
         </div>
@@ -46,19 +49,15 @@
 
 <script>
 import { mapState } from 'vuex'
+import MUTATIONS from '@/store/mutations-types.js'
 
 export default {
   props: {
     loading: Boolean,
     orient: Number
   },
-  data() {
-    return {
-      fullscreen: false
-    }
-  },
   computed: {
-    ...mapState(['user', 'dashboards']),
+    ...mapState(['user', 'dashboards', 'fullscreen']),
     dash() {
       return (this.dashboards || []).find(dash => dash.id === +this.$route.params.id)
     },
@@ -68,10 +67,7 @@ export default {
   },
   methods: {
     onFull() {
-      this.fullscreen = !this.fullscreen
-      this.$nextTick(() => {
-        window.dispatchEvent(new Event('resize'))
-      })
+      this.$store.commit(MUTATIONS.SWITCH_FULL)
     }
   }
 }
@@ -136,7 +132,7 @@ table {
         overflow: scroll;
         font-size: 14px;
         .spinner {
-          margin-top: 6px;
+          margin-top: 5px;
           margin-left: 2px;
         }
       }
@@ -168,7 +164,7 @@ table {
   &.head-orient {
     .filters {
       padding-right: 50px;
-      padding-left: 40px;
+      padding-left: 35px;
       line-height: 35px;
       select,
       input {
@@ -257,6 +253,44 @@ table {
     float: right;
     margin-top: 8px;
     margin-bottom: 15px;
+  }
+
+  .kinds {
+    font-size: 13px;
+    .kindblock {
+      margin-top: 10px;
+      vertical-align: top;
+      text-align: left;
+      .kindname {
+        a {
+          font-weight: bold;
+          text-decoration: none;
+        }
+      }
+      .keynames {
+        vertical-align: top;
+        text-align: left;
+        a {
+          text-decoration: none;
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+  }
+
+  &.head-orient {
+    .kinds {
+      text-align: center;
+      .kindblock {
+        display: inline-block;
+        margin: 10px;
+        .keynames {
+          display: none;
+        }
+      }
+    }
   }
 }
 </style>

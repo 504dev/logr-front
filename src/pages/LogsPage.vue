@@ -145,7 +145,6 @@ export default {
   },
   data() {
     return {
-      orient: 0,
       paused: false,
       pausedTimer: null,
       filters: {
@@ -174,7 +173,7 @@ export default {
     //
   },
   computed: {
-    ...mapState(['user', 'dashboards', 'sock', 'mode']),
+    ...mapState(['user', 'dashboards', 'sock', 'mode', 'orient']),
     dash() {
       return (this.dashboards || []).find(dash => dash.id === +this.$route.params.id)
     },
@@ -343,7 +342,7 @@ export default {
       this.$store.commit(MUTATIONS.SWITCH_MODE)
     },
     switchOrient() {
-      this.orient = 1 - this.orient
+      this.$store.commit(MUTATIONS.SWITCH_ORIENT)
     }
   }
 }
