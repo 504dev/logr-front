@@ -12,13 +12,13 @@
     </div>
     <div>
       <h1>Own</h1>
-      <span v-if="dashgroups.own.length === 0">No dashboards</span>
-      <template v-else v-for="dash in dashgroups.own">
+      <template v-for="dash in dashgroups.own">
         <dash-item :dash="dash" :key="dash.id" />
       </template>
-      <span class="dashboard-add" @click="onAddDashboard">
-        <font-awesome-icon icon="plus-square" />
-      </span>
+      <div class="ghost" :class="{ mini: dashgroups.own.length > 0 }" @click="onAddDashboard"></div>
+<!--      <span class="dashboard-add" @click="onAddDashboard">-->
+<!--        <font-awesome-icon icon="plus-square" />-->
+<!--      </span>-->
     </div>
     <div>
       <h1>Shared</h1>
@@ -68,6 +68,7 @@ export default {
     position: relative;
     top: -32px;
     left: -32px;
+    margin-bottom: -20px;
     .avatar {
       width: 64px;
       height: 64px;
@@ -85,6 +86,37 @@ export default {
     color: #9e9;
     cursor: pointer;
     font-size: 32px;
+  }
+  .ghost {
+    display: inline-block;
+    vertical-align: bottom;
+    box-sizing: border-box;
+    width: 220px;
+    height: 160px;
+    border-radius: 4px;
+    padding: 10px;
+    margin: 0;
+    margin-top: 10px;
+    border: dashed 4px #eee;
+    color: #eee;
+    line-height: 110px;
+    text-align: center;
+    font-size: 100px;
+    cursor: pointer;
+    &::before {
+      content: '+';
+    }
+    &:hover {
+      color: #9e9;
+      border-color: #9e9;
+    }
+    &.mini {
+      width: 110px;
+      height: 80px;
+      line-height: 40px;
+      font-size: 60px;
+      zoom: 0.5;
+    }
   }
 }
 </style>

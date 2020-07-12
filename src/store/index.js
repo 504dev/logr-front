@@ -123,8 +123,8 @@ const store = new Vuex.Store({
         method: 'PUT',
         data: { name }
       })
-      const index = _.findIndex(state.dashboards, { id })
-      state.dashboards.splice(index, 1, data)
+      const dash = _.find(state.dashboards, { id })
+      dash.name = data.name
     },
     async [ACTIONS.DELETE_DASHBOARD]({ state, getters }, id) {
       const { data } = await getters.api(`/me/dashboard/${id}`, {

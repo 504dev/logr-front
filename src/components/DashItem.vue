@@ -94,6 +94,8 @@ export default {
       const confirm = prompt('Enter dash name for delete:')
       if (confirm === dash.name) {
         await this.$store.dispatch(ACTIONS.DELETE_DASHBOARD, dash.id)
+      } else {
+        alert('Wrong name.')
       }
     },
     onKeys(dash) {
