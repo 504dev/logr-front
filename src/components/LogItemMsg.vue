@@ -1,6 +1,6 @@
 <template>
-  <span>
-    <span v-for="({ text, css, json, match }, key) in chunks" :key="key" :style="css" :class="{ chunk: true, match }"
+  <span
+    ><span v-for="({ text, css, json, match }, key) in chunks" :key="key" :style="css" :class="{ chunk: true, match }"
       ><template v-if="json"
         ><counter-widget
           v-if="json.widget === 'counter'"
@@ -10,8 +10,8 @@
         ></counter-widget
         ><span v-else :tabindex="json && 0" class="json">{{ JSON.stringify(json, null, 2) }}</span></template
       ><template v-else>{{ text }}</template></span
-    >
-  </span>
+    ></span
+  >
 </template>
 
 <script>

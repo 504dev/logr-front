@@ -267,10 +267,13 @@ table {
       margin-left: -10px;
       transform: rotate(-90deg);
     }
-    /*&.up {
-      margin-top: -30px;
-      transform: rotate(90deg);
-    }*/
+    &.up {
+      &::before {
+        content: '\00a0❯';
+      }
+      //margin-top: -30px;
+      //transform: rotate(90deg);
+    }
   }
 
   a {
