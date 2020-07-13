@@ -26,7 +26,7 @@ const store = new Vuex.Store({
   },
   getters: {
     isExpired(state, getters) {
-      return getters.jwtPayload.exp * 1000 < Date.now()
+      return getters.jwtPayload ? getters.jwtPayload.exp * 1000 < Date.now() : true
     },
     restUrl() {
       return process.env.VUE_APP_REST || location.origin
@@ -49,7 +49,7 @@ const store = new Vuex.Store({
       return { own, shared }
     },
     jwtPayload(state) {
-      return jwtDecode(state.jwt)
+      return state.jwt && jwtDecode(state.jwt)
     },
     api: (state, getters, a, b) => (path, options = {}) => {
       if (getters.isExpired) {
