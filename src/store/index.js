@@ -51,7 +51,7 @@ const store = new Vuex.Store({
     jwtPayload(state) {
       return state.jwt && jwtDecode(state.jwt)
     },
-    api: (state, getters, a, b) => (path, options = {}) => {
+    api: (state, getters) => (path, options = {}) => {
       if (getters.isExpired) {
         location.href = '/login'
       }

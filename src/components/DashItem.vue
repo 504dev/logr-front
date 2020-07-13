@@ -115,10 +115,13 @@ export default {
     },
     async onDelete(dash) {
       const confirm = prompt('Enter dash name for delete:')
+      if (confirm === null) {
+        return
+      }
       if (confirm === dash.name) {
         await this.$store.dispatch(ACTIONS.DELETE_DASHBOARD, dash.id)
       } else {
-        alert('Wrong name.')
+        alert('Canceled.')
       }
     },
     onKeys(dash) {
@@ -132,7 +135,7 @@ export default {
 .container {
   display: inline-block;
   position: relative;
-  margin: 10px 20px 0 0;
+  margin: 20px 20px 0 0;
 }
 .dashboard {
   box-sizing: border-box;
