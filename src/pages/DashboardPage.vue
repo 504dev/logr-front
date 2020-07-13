@@ -36,9 +36,11 @@ export default {
   components: {
     DashItem
   },
-  created() {
+  async created() {
     this.$store.dispatch(ACTIONS.LOAD_ME)
     this.$store.dispatch(ACTIONS.LOAD_DASHBOARDS)
+    const version = await this.$store.dispatch(ACTIONS.VERSION)
+    console.log({ version })
   },
   data() {
     return {

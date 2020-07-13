@@ -172,6 +172,10 @@ const store = new Vuex.Store({
     async [ACTIONS.LOAD_COUNTS_STATS]({ getters }, dashId) {
       const { data } = await getters.api(`/counts/stats/${dashId}`)
       return data
+    },
+    async [ACTIONS.VERSION]({ getters }) {
+      const { data } = await getters.api('/version')
+      return data
     }
   }
 })
