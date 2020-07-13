@@ -24,7 +24,7 @@ export default {
   props: {
     value: String,
     filter: String,
-    timestamp: Number
+    timestamp: String
   },
   data() {
     return {

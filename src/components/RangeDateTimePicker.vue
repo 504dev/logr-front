@@ -20,7 +20,7 @@ export default {
   },
   methods: {
     onInput(since, to) {
-      this.$emit('input', [since * 1e6, to * 1e6])
+      this.$emit('input', [String(since * 1e6), String(to * 1e6)])
     }
   }
 }

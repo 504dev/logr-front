@@ -241,8 +241,7 @@ export default {
       }
       timestamp = []
         .concat(timestamp)
-        .map(t => +t || 0)
-        .concat([0, 0])
+        .concat(['', ''])
         .slice(0, 2)
 
       this.paused = parseInt(paused) || 0
@@ -306,7 +305,7 @@ export default {
     },
     updateLocation() {
       let query = { ...this.filters, paused: this.paused }
-      if (query.timestamp[0] === 0 && query.timestamp[1] === 0) {
+      if (query.timestamp[0] === '' && query.timestamp[1] === '') {
         delete query.timestamp
       }
       query = _.pickBy(query)

@@ -35,7 +35,7 @@ export default {
   methods: {
     onClear() {
       if (this.pattern) {
-        this.$emit('input', [0, 0])
+        this.$emit('input', ['', ''])
         const target = this.$refs.pattern
         this.$el.dispatchEvent(new Event('change', { target, bubbles: true }))
       }
@@ -48,7 +48,7 @@ export default {
       }
       this.$emit(
         'input',
-        timestamps.map(v => v * 1e6)
+        timestamps.map(v => String(v * 1e6))
       )
     },
     range2text(range) {
