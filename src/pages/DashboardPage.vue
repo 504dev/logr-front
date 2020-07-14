@@ -1,7 +1,12 @@
 <template>
   <div class="wrapper" v-if="this.user && this.dashboards">
     <div class="hello">
-      <img class="avatar" :src="`https://avatars0.githubusercontent.com/u/${jwtPayload.github_id}`" />
+      <img
+        class="avatar"
+        :class="{ child: !!org }"
+        :src="`https://avatars.githubusercontent.com/u/${jwtPayload.github_id}`"
+      />
+      <img class="avatar" :class="{ org: !!org }" :src="`https://github.com/${org}.png`" v-if="org" />
       <span>
         <strong>{{ jwtPayload.username }}</strong>
         |
@@ -39,8 +44,7 @@ export default {
   async created() {
     this.$store.dispatch(ACTIONS.LOAD_ME)
     this.$store.dispatch(ACTIONS.LOAD_DASHBOARDS)
-    const version = await this.$store.dispatch(ACTIONS.VERSION)
-    console.log({ version })
+    this.$store.dispatch(ACTIONS.LOAD_GLOBALS)
   },
   data() {
     return {
@@ -48,8 +52,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['jwtPayload', 'dashgroups']),
-    ...mapState(['user', 'dashboards'])
+    ...mapState(['user', 'dashboards', 'org']),
+    ...mapGetters(['jwtPayload', 'dashgroups'])
   },
   methods: {
     async onAddDashboard() {
@@ -74,6 +78,17 @@ export default {
       width: 64px;
       height: 64px;
       border-radius: 32px;
+      border: solid 1px black;
+      &.child {
+        position: absolute;
+        top: 32px;
+        left: 32px;
+        width: 32px;
+        height: 32px;
+      }
+      &.org {
+        border-color: #666;
+      }
     }
   }
   h1 {

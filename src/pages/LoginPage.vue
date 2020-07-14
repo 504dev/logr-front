@@ -4,7 +4,7 @@
     <template v-if="loginers.length">
       <p v-for="info in loginers" :key="info.username">
         <a :href="url({ login: info.username })">
-          by <img class="avatar" :src="`https://avatars0.githubusercontent.com/u/${info.github_id}`" />
+          by <img class="avatar" :src="`https://avatars.githubusercontent.com/u/${info.github_id}`" />
           {{ info.username }}
         </a>
       </p>
@@ -42,9 +42,11 @@ a {
   color: #111111;
 }
 .center {
-  position: absolute;
+  white-space: nowrap;
+  position: relative;
+  display: block;
+  width: 100px;
   margin: auto;
-  left: 45%;
   top: 45%;
   text-align: left;
   > p:first-child {

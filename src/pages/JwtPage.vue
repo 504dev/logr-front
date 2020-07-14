@@ -1,5 +1,5 @@
 <template>
-  <div></div>
+  <p class="error" v-if="error"><span>Error:</span> {{ error }}<br /></p>
 </template>
 
 <script>
@@ -10,7 +10,12 @@ import { mapGetters } from 'vuex'
 const ls = store.namespace('login.loginers')
 
 export default {
-  created () {
+  created() {
+    if (this.error) {
+      console.error(this.error)
+      setTimeout(() => (location.href = '/login'), 3 * 1000)
+      return
+    }
     this.$store.commit(MUTATIONS.SET_JWT, this.token)
     ls.set(this.jwtPayload.username, {
       github_id: this.jwtPayload.github_id,
@@ -21,9 +26,22 @@ export default {
   },
   computed: {
     ...mapGetters(['jwtPayload']),
-    token () {
+    token() {
       return this.$route.params.token
+    },
+    error() {
+      return this.token === 'error' && this.$route.query.msg
     }
   }
 }
 </script>
+<style scoped lang="scss">
+.error {
+  position: relative;
+  text-align: center;
+  top: 45%;
+  span {
+    color: red;
+  }
+}
+</style>

@@ -22,12 +22,11 @@ const store = new Vuex.Store({
     sock: null,
     mode: ls.get('mode', 0),
     orient: ls.get('orient', 0),
-    fullscreen: 0
+    fullscreen: 0,
+    version: null,
+    org: null
   },
   getters: {
-    isExpired(state, getters) {
-      return getters.jwtPayload ? getters.jwtPayload.exp * 1000 < Date.now() : true
-    },
     restUrl() {
       return process.env.VUE_APP_REST || location.origin
     },
@@ -49,7 +48,18 @@ const store = new Vuex.Store({
       return { own, shared }
     },
     jwtPayload(state) {
-      return state.jwt && jwtDecode(state.jwt)
+      if (!state.jwt) {
+        return null
+      }
+      try {
+        return jwtDecode(state.jwt)
+      } catch (e) {
+        console.error(e)
+        return null
+      }
+    },
+    isExpired(state, getters) {
+      return getters.jwtPayload ? getters.jwtPayload.exp * 1000 < Date.now() : true
     },
     api: (state, getters) => (path, options = {}) => {
       if (getters.isExpired) {
@@ -173,8 +183,11 @@ const store = new Vuex.Store({
       const { data } = await getters.api(`/counts/stats/${dashId}`)
       return data
     },
-    async [ACTIONS.VERSION]({ getters }) {
-      const { data } = await getters.api('/version')
+    async [ACTIONS.LOAD_GLOBALS]({ state, getters }) {
+      const { data } = await getters.api('/globals')
+      console.log(data)
+      state.version = data.version
+      state.org = data.org
       return data
     }
   }

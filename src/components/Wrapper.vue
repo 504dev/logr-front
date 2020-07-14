@@ -2,7 +2,7 @@
   <div class="wrapper" v-if="this.user && this.dash" :class="{ fullscreen }">
     <div class="lefter">
       <router-link to="/dashboards"
-        ><img class="avatar" :src="`https://avatars0.githubusercontent.com/u/${user.github_id}`"
+        ><img class="avatar" :src="`https://avatars.githubusercontent.com/u/${user.github_id}`"
       /></router-link>
       <!--      <h3><router-link to="/dashboards">..</router-link>/{{ dash.name }}</h3>-->
       <div class="filters">

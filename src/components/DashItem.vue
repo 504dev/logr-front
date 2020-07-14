@@ -7,12 +7,12 @@
       <span class="team">
         <a :href="`https://github.com/${dash.owner.username}`">
           <img
-            :src="`https://avatars0.githubusercontent.com/u/${dash.owner.github_id}`"
+            :src="`https://avatars.githubusercontent.com/u/${dash.owner.github_id}`"
             :title="dash.owner.username"
             class="owner"/></a
         ><a v-for="member in dash.members" :key="member.id" :href="`https://github.com/${member.user.username}`"
           ><img
-            :src="`https://avatars0.githubusercontent.com/u/${member.user.github_id}`"
+            :src="`https://avatars.githubusercontent.com/u/${member.user.github_id}`"
             :title="member.user.username"
             :key="member.user_id"
             class="member"
@@ -206,25 +206,30 @@ export default {
       display: none;
     }
     &:hover {
-      opacity: 1;
       span {
         display: inline-block;
       }
     }
     &.window-logs {
-      opacity: 0.7;
       font-size: 28px;
       margin-right: 8px;
       background-color: #444;
       background-image: url('/static/logs.jpg');
       background-size: 90px;
+      opacity: 0.7;
+      &:hover {
+        opacity: 0.8;
+      }
     }
     &.window-counts {
-      opacity: 0.8;
       font-size: 24px;
       background-image: url('/static/counts.jpg');
       background-size: 95px;
       background-position-y: -15px;
+      opacity: 0.8;
+      &:hover {
+        opacity: 1;
+      }
     }
     &.x2 {
       width: 100%;

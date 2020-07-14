@@ -3,32 +3,29 @@
     <tr v-show="orient && !fullscreen">
       <td class="header">
         <router-link to="/dashboards"
-          ><img class="avatar" :src="`https://avatars0.githubusercontent.com/u/${user.github_id}`"
+          ><img class="avatar" :src="`https://avatars.githubusercontent.com/u/${user.github_id}`"
         /></router-link>
-        <span class="name">{{ dash.name }}</span>
+        <div class="name">{{ dash.name }}</div>
         <div class="filters">
           <slot name="filters" />
         </div>
-        <small class="goto">
-          <slot name="goto" />
-        </small>
         <div class="kinds">
           <slot name="kinds" />
         </div>
         <div class="customs">
           <slot name="customs" />
+        </div>
+        <div class="goto">
+          <slot name="goto" />
         </div>
       </td>
     </tr>
     <tr>
       <td class="lefter" v-show="!orient && !fullscreen">
         <router-link to="/dashboards"
-          ><img class="avatar" :src="`https://avatars0.githubusercontent.com/u/${user.github_id}`"
+          ><img class="avatar" :src="`https://avatars.githubusercontent.com/u/${user.github_id}`"
         /></router-link>
         <div class="name">{{ dash.name }}</div>
-        <small class="goto">
-          <slot name="goto" />
-        </small>
         <div class="filters">
           <slot name="filters" />
         </div>
@@ -37,6 +34,9 @@
         </div>
         <div class="customs">
           <slot name="customs" />
+        </div>
+        <div class="goto">
+          <slot name="goto" />
         </div>
       </td>
       <td>
@@ -128,6 +128,7 @@ table {
           padding-bottom: 15px;
         }
         .goto {
+          font-size: smaller;
           position: absolute;
           right: 0;
           bottom: 0;
@@ -154,6 +155,7 @@ table {
           top: 15px;
         }
         .goto {
+          font-size: smaller;
           position: absolute;
           right: 75px;
           top: 17px;
@@ -282,14 +284,16 @@ table {
 
   .avatar {
     position: absolute;
-    top: 13px;
-    left: 11px;
+    top: 12px;
+    left: 10px;
     width: 24px;
     height: 24px;
     border-radius: 24px;
+    border: solid 1px black;
+    /*box-shadow: 0 0 0 1px #000;*/
 
     &:hover {
-      box-shadow: 0 0 0 1px green;
+      box-shadow: 0 0 0 1px #9e9;
     }
   }
 
