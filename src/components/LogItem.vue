@@ -129,14 +129,29 @@ export default {
     text-align: center;
     color: grey;
     width: 60px;
-    &.log-level-info {
-      color: green;
+    &.log-level-emerg,
+    &.log-level-emergency {
+      color: darkred;
     }
-    &.log-level-error {
+    &.log-level-alert {
+      color: darkred;
+    }
+    &.log-level-crit,
+    &.log-level-critical {
       color: red;
     }
-    &.log-level-warn {
+    &.log-level-error {
+      color: orangered;
+    }
+    &.log-level-warn,
+    &.log-level-warning {
       color: orange;
+    }
+    &.log-level-notice {
+      color: yellow;
+    }
+    &.log-level-info {
+      color: green;
     }
     &.log-level-debug {
       color: blue;
