@@ -19,7 +19,7 @@
           />
         </a>
       </span>
-      <div>
+      <div v-if="loaded">
         <router-link
           :to="`/dashboard/${dash.id}/logs`"
           class="window list window-logs"
@@ -67,21 +67,27 @@ export default {
   props: {
     dash: Object
   },
+  async created() {
+    const [logs, counts] = await Promise.all([
+      this.$store.dispatch(ACTIONS.LOAD_LOGS_LOGNAMES, this.dash.id),
+      this.$store.dispatch(ACTIONS.LOAD_COUNTS_LOGNAMES, this.dash.id)
+    ])
+    this.stats = { logs, counts }
+    this.loaded = true
+  },
   data() {
     return {
-      //
+      stats: null,
+      loaded: false
     }
   },
   computed: {
     ...mapState(['user']),
-    stats() {
-      return this.dash.stats || {}
-    },
     hasLogs() {
-      return !!this.stats.logs
+      return this.stats && this.stats.logs.length
     },
     hasCounts() {
-      return !!this.stats.counts
+      return this.stats && this.stats.counts.length
     },
     isEmpty() {
       return !this.hasLogs && !this.hasCounts

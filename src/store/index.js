@@ -183,6 +183,14 @@ const store = new Vuex.Store({
       const { data } = await getters.api(`/counts/stats/${dashId}`)
       return data
     },
+    async [ACTIONS.LOAD_LOGS_LOGNAMES]({ getters }, dashId) {
+      const { data } = await getters.api(`/logs/lognames/${dashId}`)
+      return data
+    },
+    async [ACTIONS.LOAD_COUNTS_LOGNAMES]({ getters }, dashId) {
+      const { data } = await getters.api(`/counts/lognames/${dashId}`)
+      return data
+    },
     async [ACTIONS.LOAD_GLOBALS]({ state, getters }) {
       const { data } = await getters.api('/globals')
       console.log(data)
