@@ -74,14 +74,14 @@ export default {
   },
   computed: {
     ...mapState(['user']),
-    lognames() {
-      return this.dash.lognames || {}
+    stats() {
+      return this.dash.stats || {}
     },
     hasLogs() {
-      return !!this.lognames.logs
+      return !!this.stats.logs
     },
     hasCounts() {
-      return !!this.lognames.counts
+      return !!this.stats.counts
     },
     isEmpty() {
       return !this.hasLogs && !this.hasCounts
