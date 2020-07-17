@@ -315,11 +315,15 @@ export default {
       this.loading = true
       this.logs.live = []
       this.logs.deep = []
-      this.logs.history = await this.$store.dispatch(ACTIONS.LOAD_LOGS, {
-        ...this.filters,
-        dash_id: this.dash.id,
-        sock_id: this.sock.id
-      })
+      try {
+        this.logs.history = await this.$store.dispatch(ACTIONS.LOAD_LOGS, {
+          ...this.filters,
+          dash_id: this.dash.id,
+          sock_id: this.sock.id
+        })
+      } catch (e) {
+        this.logs.history = []
+      }
       this.loading = false
     },
     groupStatsBy(fieldname, sort = 'cnt') {
