@@ -55,6 +55,7 @@
           <slot v-else name="content"></slot>
         </div>
         <span class="arrow" :class="arrowDirection" @click="onFull"></span>
+        <slot name="pause" />
       </td>
     </tr>
   </table>
@@ -118,8 +119,9 @@ table {
         width: 180px;
         min-width: 180px;
         padding: 10px;
-        padding-bottom: 80px;
+        padding-bottom: 110px;
         /*border-right: solid 1px black;*/
+        box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.4);
         .name {
           color: #111;
           font-weight: bold;
@@ -138,6 +140,9 @@ table {
           bottom: 0;
           padding: 10px;
           padding-bottom: 15px;
+          a {
+            margin-right: 4px;
+          }
         }
         .goto {
           font-size: smaller;
@@ -153,6 +158,7 @@ table {
         padding-bottom: 5px;
         height: 30px;
         background-color: #ddd;
+        box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.4);
         /*border-bottom: solid 1px black;*/
         .name {
           color: #111;
@@ -161,10 +167,14 @@ table {
           line-height: 32px;
         }
         .customs {
-          display: inline-block;
           position: absolute;
           right: 15px;
           top: 15px;
+          display: flex;
+          flex-direction: row-reverse;
+          a {
+            margin-left: 4px;
+          }
         }
         .goto {
           font-size: smaller;
@@ -186,8 +196,7 @@ table {
         overflow: scroll;
         font-size: 14px;
         .spinner {
-          margin-top: 5px;
-          margin-left: 1px;
+          /*margin: 5px 1px;*/
         }
       }
     }
@@ -218,8 +227,7 @@ table {
   &.head-orient {
     .filters {
       padding-top: 7px;
-      /*padding-right: 60px;*/
-      /*padding-left: 35px;*/
+      padding-right: 80px;
       line-height: 35px;
       select,
       input {
@@ -260,7 +268,7 @@ table {
     }
     &.left,
     &.right {
-      top: 55%;
+      top: 50%;
       width: 20px;
       margin-top: -20px;
       border-radius: 20px 0 0 20px;

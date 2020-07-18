@@ -60,13 +60,11 @@
     </template>
 
     <template v-slot:customs>
-      <a href="#" @click.prevent="switchMode"><font-awesome-icon :icon="[theme ? 'fas' : 'far', 'moon']"/></a>
       <a href="#" @click.prevent="switchOrient"
-        ><font-awesome-icon :icon="['far', 'window-maximize']" :rotation="orient ? '270' : null"
-      /></a>
-      <a href="#" @click.prevent="switchDirection"
-        ><font-awesome-icon :icon="['fas', direction ? 'sort-amount-up-alt' : 'sort-amount-down']"
-      /></a>
+        ><font-awesome-icon :icon="['far', 'window-maximize']" :rotation="orient ? '270' : null"/></a
+      ><a href="#" @click.prevent="switchDirection"
+        ><font-awesome-icon :icon="['fas', direction ? 'sort-amount-up-alt' : 'sort-amount-down']"/></a
+      ><a href="#" @click.prevent="switchMode"><font-awesome-icon :icon="[theme ? 'fas' : 'far', 'moon']"/></a>
     </template>
 
     <template v-slot:content>
@@ -98,6 +96,8 @@
         <font-awesome-icon icon="compact-disc" spin v-if="deepLoading" />
         <font-awesome-icon icon="chevron-circle-down" v-else />
       </span>
+    </template>
+    <template v-slot:pause>
       <div class="pause" :class="{ 'pause-on': paused }" @click="onPause">
         <font-awesome-icon icon="pause" />
       </div>
@@ -408,7 +408,7 @@ input#filter-limit {
 
 .more {
   box-sizing: border-box;
-  width: 260px;
+  width: 190px;
   height: 25px;
   line-height: 25px;
   vertical-align: middle;
@@ -425,41 +425,55 @@ input#filter-limit {
     opacity: 1;
   }
 }
-
 .pause {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  position: fixed;
+  position: absolute;
   z-index: 900;
-  /*left: 50%;*/
-  right: 15px;
-  bottom: 0;
-  width: 80px;
-  height: 40px;
+  left: -190px;
+  bottom: 50px;
+  width: 180px;
+  height: 50px;
   line-height: 50px;
   font-size: 20px;
   color: white;
   text-align: center;
-  border-radius: 3px 3px 0 0;
-  /*border: solid 1px white;*/
-  border-bottom: none;
-  overflow: hidden;
+  border-radius: 3px;
   background-color: #088;
-  opacity: 0.7;
+  border: solid 1px #066;
+  opacity: 0.6;
   cursor: pointer;
-  margin-left: 70px;
+  box-sizing: border-box;
   &:hover {
-    /*opacity: 0.8;*/
-    height: 45px;
-    /*background-color: rgba(128, 128, 128, 0.5);*/
+    opacity: 0.7;
   }
   &.pause-on {
-    height: 45px;
     opacity: 1;
-    border-color: rgb(0, 128, 128);
-    /*zoom: 1.1;*/
-    background-color: rgb(0, 128, 128);
-    &:hover {
-      background-color: rgb(0, 128, 128);
+  }
+}
+
+.fullscreen {
+  .pause {
+    width: 25px;
+    left: -2px;
+    font-size: 14px;
+  }
+}
+
+.head-orient {
+  .pause {
+    border-radius: 3px 3px 0 0;
+    width: 55px;
+    height: 40px;
+    line-height: 40px;
+    top: -40px;
+    right: 15px;
+    left: auto;
+  }
+  &.fullscreen {
+    .pause {
+      top: 0;
+      border-radius: 0 0 3px 3px;
+      height: 25px;
+      line-height: 25px;
     }
   }
 }
@@ -469,13 +483,14 @@ input#filter-limit {
   border-top: dashed 1px #088;
   span {
     position: absolute;
-    top: -1px;
+    top: -9px;
     right: 0;
     color: #fff;
     font-size: 10px;
     background-color: #088;
-    padding: 2px 4px;
-    border-radius: 0 0 3px 3px;
+    border: solid 1px #066;
+    padding: 1px 4px;
+    border-radius: 3px;
     margin-right: 5px;
   }
 }
