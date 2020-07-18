@@ -54,7 +54,7 @@
     </template>
 
     <template v-slot:content>
-      <span v-if="nodata">No data</span>
+      <span v-if="nodata" class="nodata">No data</span>
       <div v-else>
         <div v-for="(group, kind) in charts" :key="kind">
           <a :name="`${kind}`"></a>
@@ -258,5 +258,11 @@ select#filter-agg {
   font-size: 18px;
   margin-left: 8px;
   text-align: left;
+}
+.nodata {
+  /*display: block;*/
+  /*position: relative;*/
+  /*top: 45%;*/
+  /*text-align: center;*/
 }
 </style>

@@ -59,7 +59,14 @@ export default {
       if (!this.filter) {
         return [{ text }]
       }
-      const regex = new RegExp(this.filter, 'g')
+      console.log(this.filter)
+      let regex
+      try {
+        regex = new RegExp(this.filter, 'g')
+      } catch (e) {
+        console.error(e)
+        return [{ text }]
+      }
       const parts = []
       let matches
       let lastIndex = 0

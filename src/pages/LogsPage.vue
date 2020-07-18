@@ -1,5 +1,5 @@
 <template>
-  <wrapper :loading="loading" :class="{ night: mode === 0 }" :orient="orient">
+  <wrapper :loading="loading" :class="{ night: !theme, reverse: !direction }">
     <template v-slot:goto>
       <router-link :to="`/dashboard/${dash.id}/counts`">switch to counts</router-link>
     </template>
@@ -60,14 +60,17 @@
     </template>
 
     <template v-slot:customs>
-      <a href="#" @click.prevent="switchMode"><font-awesome-icon :icon="[mode ? 'fas' : 'far', 'moon']"/></a>
+      <a href="#" @click.prevent="switchMode"><font-awesome-icon :icon="[theme ? 'fas' : 'far', 'moon']"/></a>
       <a href="#" @click.prevent="switchOrient"
         ><font-awesome-icon :icon="['far', 'window-maximize']" :rotation="orient ? '270' : null"
+      /></a>
+      <a href="#" @click.prevent="switchDirection"
+        ><font-awesome-icon :icon="['fas', direction ? 'sort-amount-up-alt' : 'sort-amount-down']"
       /></a>
     </template>
 
     <template v-slot:content>
-      <div class="block block-live reverse">
+      <div class="block block-live" :class="{ reverse: !!direction }">
         <template v-for="(log, key) in logs.live">
           <div v-if="log.hr" :key="key" class="pause-line">
             <span><font-awesome-icon icon="pause" /> {{ log.text }}</span>
@@ -75,7 +78,7 @@
           <log-item v-else :value="log" :filters="filters" :key="key" @tag="onTag" @hover="onHover" />
         </template>
       </div>
-      <div class="block block-history">
+      <div class="block block-history" :class="{ reverse: !direction }">
         <log-item
           v-for="(log, key) in logs.history"
           :value="log"
@@ -86,7 +89,7 @@
         />
         <span class="cnt" :title="`${logs.history.length}rows`">{{ logs.history.length }}<small>.</small></span>
       </div>
-      <div class="block block-deep" v-for="(deep, key) in logs.deep" :key="key">
+      <div class="block block-deep" :class="{ reverse: !direction }" v-for="(deep, key) in logs.deep" :key="key">
         <log-item v-for="(log, key) in deep" :value="log" :filters="filters" :key="key" @tag="onTag" @hover="onHover" />
         <span class="cnt" :title="`${deep.length}rows`">{{ deep.length }}<small>.</small></span>
       </div>
@@ -173,7 +176,7 @@ export default {
     //
   },
   computed: {
-    ...mapState(['user', 'dashboards', 'sock', 'mode', 'orient']),
+    ...mapState(['user', 'dashboards', 'sock', 'theme', 'orient', 'direction']),
     dash() {
       return (this.dashboards || []).find(dash => dash.id === +this.$route.params.id)
     },
@@ -322,6 +325,7 @@ export default {
           sock_id: this.sock.id
         })
       } catch (e) {
+        console.error(e.response)
         this.logs.history = []
       }
       this.loading = false
@@ -342,10 +346,13 @@ export default {
         .value()
     },
     switchMode() {
-      this.$store.commit(MUTATIONS.SWITCH_MODE)
+      this.$store.commit(MUTATIONS.SWITCH_THEME)
     },
     switchOrient() {
       this.$store.commit(MUTATIONS.SWITCH_ORIENT)
+    },
+    switchDirection() {
+      this.$store.commit(MUTATIONS.SWITCH_DIRECTION)
     }
   }
 }
@@ -368,15 +375,15 @@ input#filter-limit {
   padding: 0;
   margin: 0;
   &.block-live {
-    border-bottom: dashed 1px grey;
+    //border-bottom: dashed 1px grey;
   }
   &.block-history {
     opacity: 0.8;
   }
   &.block-deep {
-    border-top: 1px dashed grey;
+    //border-top: 1px dashed grey;
     opacity: 0.7;
-    margin-top: 5px;
+    margin: 5px 0;
   }
   &.reverse {
     display: flex;
@@ -400,17 +407,18 @@ input#filter-limit {
 }
 
 .more {
-  width: 250px;
+  box-sizing: border-box;
+  width: 260px;
   height: 25px;
   line-height: 25px;
   vertical-align: middle;
   display: inline-block;
-  margin: 5px 0 0 0;
+  margin: 5px 0;
   text-align: center;
   padding: 0 5px;
   background-color: green;
   color: white;
-  border-radius: 4px;
+  border-radius: 2px;
   opacity: 0.8;
   cursor: pointer;
   &:hover {
@@ -422,26 +430,31 @@ input#filter-limit {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   position: fixed;
   z-index: 900;
-  left: 50%;
+  /*left: 50%;*/
+  right: 15px;
   bottom: 0;
   width: 80px;
-  height: 50px;
+  height: 40px;
   line-height: 50px;
   font-size: 20px;
   color: white;
   text-align: center;
-  border-radius: 10px 10px 0 0;
-  border: solid 2px white;
+  border-radius: 3px 3px 0 0;
+  /*border: solid 1px white;*/
   border-bottom: none;
   overflow: hidden;
-  background-color: rgba(128, 128, 128, 0.5);
+  background-color: #088;
+  opacity: 0.7;
   cursor: pointer;
   margin-left: 70px;
   &:hover {
-    /*zoom: 1.1;*/
-    background-color: rgba(128, 128, 128, 0.5);
+    /*opacity: 0.8;*/
+    height: 45px;
+    /*background-color: rgba(128, 128, 128, 0.5);*/
   }
   &.pause-on {
+    height: 45px;
+    opacity: 1;
     border-color: rgb(0, 128, 128);
     /*zoom: 1.1;*/
     background-color: rgb(0, 128, 128);

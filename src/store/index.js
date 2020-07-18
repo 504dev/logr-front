@@ -20,8 +20,9 @@ const store = new Vuex.Store({
     shared: null,
     jwt: localStorage.getItem('jwt'),
     sock: null,
-    mode: ls.get('mode', 0),
+    theme: ls.get('theme', 0),
     orient: ls.get('orient', 0),
+    direction: ls.get('direction', 0),
     fullscreen: 0,
     version: null,
     org: null
@@ -82,9 +83,9 @@ const store = new Vuex.Store({
       localStorage.removeItem('jwt', token)
       state.jwt = null
     },
-    [MUTATIONS.SWITCH_MODE]: state => {
-      state.mode = 1 - state.mode
-      ls.set('mode', state.mode)
+    [MUTATIONS.SWITCH_THEME]: state => {
+      state.theme = 1 - state.theme
+      ls.set('theme', state.theme)
     },
     [MUTATIONS.SWITCH_ORIENT]: state => {
       state.orient = 1 - state.orient
@@ -98,6 +99,10 @@ const store = new Vuex.Store({
       Vue.nextTick(() => {
         window.dispatchEvent(new Event('resize'))
       })
+    },
+    [MUTATIONS.SWITCH_DIRECTION]: state => {
+      state.direction = 1 - state.direction
+      ls.set('direction', state.direction)
     }
   },
   actions: {

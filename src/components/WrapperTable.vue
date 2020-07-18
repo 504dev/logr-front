@@ -1,5 +1,12 @@
 <template>
-  <table :class="{ fullscreen, 'left-orient': !orient, 'head-orient': orient }" v-if="this.user && this.dash">
+  <table
+    :class="{
+      fullscreen,
+      'left-orient': !orient,
+      'head-orient': orient
+    }"
+    v-if="this.user && this.dash"
+  >
     <tr v-show="orient && !fullscreen">
       <td class="header">
         <router-link to="/dashboards"
@@ -59,11 +66,10 @@ import MUTATIONS from '@/store/mutations-types.js'
 
 export default {
   props: {
-    loading: Boolean,
-    orient: Number
+    loading: Boolean
   },
   computed: {
-    ...mapState(['user', 'dashboards', 'fullscreen']),
+    ...mapState(['user', 'dashboards', 'fullscreen', 'orient']),
     dash() {
       return (this.dashboards || []).find(dash => dash.id === +this.$route.params.id)
     },
@@ -94,6 +100,12 @@ table {
   &.night {
     background-color: #000;
     color: white;
+  }
+  &.reverse {
+    .content {
+      display: flex;
+      flex-direction: column-reverse;
+    }
   }
   tr {
     td {
@@ -157,7 +169,7 @@ table {
         .goto {
           font-size: smaller;
           position: absolute;
-          right: 75px;
+          right: 95px;
           top: 17px;
           /*display: none;*/
         }
