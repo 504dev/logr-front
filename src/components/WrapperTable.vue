@@ -120,8 +120,8 @@ table {
         min-width: 180px;
         padding: 10px;
         padding-bottom: 110px;
-        /*border-right: solid 1px black;*/
-        box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.4);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        z-index: 800;
         .name {
           color: #111;
           font-weight: bold;
@@ -158,8 +158,8 @@ table {
         padding-bottom: 5px;
         height: 30px;
         background-color: #ddd;
-        box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.4);
-        /*border-bottom: solid 1px black;*/
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        z-index: 800;
         .name {
           color: #111;
           font-weight: bold;
@@ -249,6 +249,7 @@ table {
   .arrow {
     color: #fff;
     position: absolute;
+    z-index: 900;
     top: 0;
     left: 0;
     display: block;
@@ -348,7 +349,7 @@ table {
       /*margin-left: 26px;*/
       .kindblock {
         display: inline-block;
-        margin: 5px 15px;
+        margin: 8px 15px;
         margin-left: 5px;
         .kindname {
           a:hover {
