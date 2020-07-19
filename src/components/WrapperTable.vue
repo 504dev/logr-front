@@ -154,8 +154,7 @@ table {
         }
       }
       &.header {
-        padding: 10px;
-        padding-bottom: 5px;
+        padding: 10px 75px 5px 10px;
         height: 30px;
         background-color: #ddd;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -227,7 +226,6 @@ table {
   &.head-orient {
     .filters {
       padding-top: 7px;
-      padding-right: 80px;
       line-height: 35px;
       select,
       input {

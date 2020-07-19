@@ -431,22 +431,23 @@ input#filter-limit {
   left: -190px;
   bottom: 50px;
   width: 180px;
-  height: 50px;
-  line-height: 50px;
+  height: 40px;
+  line-height: 40px;
   font-size: 20px;
   color: white;
   text-align: center;
   border-radius: 3px;
-  background-color: #088;
-  border: solid 1px #066;
-  opacity: 0.6;
+  background-color: #aaa;
+  border: solid 1px rgba(0, 0, 0, 0.2);
+  opacity: 0.9;
   cursor: pointer;
   box-sizing: border-box;
   &:hover {
-    opacity: 0.7;
+    opacity: 1;
   }
   &.pause-on {
     opacity: 1;
+    background-color: #088;
   }
 }
 
@@ -461,15 +462,21 @@ input#filter-limit {
 .head-orient {
   .pause {
     border-radius: 3px 3px 0 0;
-    width: 55px;
     height: 40px;
     line-height: 40px;
     top: -40px;
     right: 15px;
     left: auto;
+    width: 55px;
   }
+  /*@media screen and (max-width: 600px) {*/
+  /*  .pause {*/
+  /*    width: 55px;*/
+  /*  }*/
+  /*}*/
   &.fullscreen {
     .pause {
+      width: 55px;
       top: 0;
       border-radius: 0 0 3px 3px;
       height: 25px;

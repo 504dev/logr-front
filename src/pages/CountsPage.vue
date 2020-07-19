@@ -27,7 +27,7 @@
             {{ version }}
           </option> </select
         ><select v-model="filters.agg" id="filter-agg" :class="{ selected: filters.agg }">
-          <option v-for="agg in ['m', 'h', 'd']" :value="agg" :key="agg">
+          <option v-for="agg in ['m', '5m', 'h', 'd']" :value="agg" :key="agg">
             {{ agg }}
           </option>
         </select>
@@ -115,7 +115,8 @@ export default {
         hostname: '',
         logname: '',
         pid: '',
-        version: ''
+        version: '',
+        agg: ''
       },
       counts: null,
       stats: [],
@@ -174,6 +175,7 @@ export default {
       const last = Date.now() //_.last(list)[0]
       const delta = {
         m: 1000 * 60,
+        '5m': 1000 * 60 * 5,
         h: 1000 * 60 * 60,
         d: 1000 * 60 * 60 * 24
       }[this.filters.agg]
