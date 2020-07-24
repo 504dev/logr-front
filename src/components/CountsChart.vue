@@ -13,7 +13,8 @@ export default {
     series: Array,
     volumes: Array,
     title: String,
-    subtitle: String
+    subtitle: String,
+    kind: String
   },
   data() {
     const id = 'container_' + Math.random()
@@ -24,7 +25,7 @@ export default {
   },
   methods: {
     render() {
-      const { title, subtitle } = this
+      const { title, subtitle, kind } = this
       Highcharts.chart(this.id, {
         chart: {
           type: 'area',
@@ -41,7 +42,7 @@ export default {
         },
         plotOptions: {
           area: {
-            stacking: 'normal'
+            stacking: kind === 'inc' ? 'normal' : undefined
           }
         },
         xAxis: {

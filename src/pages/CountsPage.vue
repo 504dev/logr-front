@@ -64,7 +64,7 @@
                 ><b>{{ kind }}:</b>{{ keyname }}</a
               >
             </p>
-            <counts-chart :series="series" class="chart" />
+            <counts-chart :series="series" class="chart" :kind="kind" />
           </div>
         </div>
       </div>
