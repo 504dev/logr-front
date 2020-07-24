@@ -155,6 +155,7 @@ export default {
                   data = this.filled(data.map(([x, y]) => [x * 1000, y]).reverse())
                   return { name: hostname, data }
                 })
+                .sortBy('name')
                 .value()
             })
             .value()
