@@ -76,7 +76,7 @@
           <log-item v-else :value="log" :filters="filters" :key="key" @tag="onTag" @hover="onHover" />
         </template>
       </div>
-      <div class="block block-history" :class="{ reverse: !direction }">
+      <div class="block block-history dashed" :class="{ reverse: !direction }">
         <log-item
           v-for="(log, key) in logs.history"
           :value="log"
@@ -87,7 +87,7 @@
         />
         <span class="cnt" :title="`${logs.history.length}rows`">{{ logs.history.length }}<small>.</small></span>
       </div>
-      <div class="block block-deep" :class="{ reverse: !direction }" v-for="(deep, key) in logs.deep" :key="key">
+      <div class="block block-deep dashed" :class="{ reverse: !direction }" v-for="(deep, key) in logs.deep" :key="key">
         <log-item v-for="(log, key) in deep" :value="log" :filters="filters" :key="key" @tag="onTag" @hover="onHover" />
         <span class="cnt" :title="`${deep.length}rows`">{{ deep.length }}<small>.</small></span>
       </div>
@@ -389,16 +389,22 @@ input#filter-limit {
   position: relative;
   padding: 0;
   margin: 0;
+  border: dashed 0 grey;
   &.block-live {
-    //border-bottom: dashed 1px grey;
+    //
   }
   &.block-history {
     opacity: 0.8;
   }
   &.block-deep {
-    //border-top: 1px dashed grey;
     opacity: 0.7;
     margin: 5px 0;
+  }
+  &.dashed {
+    border-width: 1px 0 0 0;
+    &.reverse {
+      border-width: 0 0 1px 0;
+    }
   }
   &.reverse {
     display: flex;
