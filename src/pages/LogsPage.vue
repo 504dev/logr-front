@@ -145,6 +145,10 @@ export default {
   },
   destroyed() {
     this.sock.unsubscribe('/log', this.logHandler)
+    if (this.pausedTimer) {
+      clearInterval(this.pausedTimer)
+    }
+    clearInterval(this.buffer.timer)
   },
   data() {
     return {
@@ -166,7 +170,11 @@ export default {
         history: [],
         deep: []
       },
-      buffer: { timestamp: 0, data: [] },
+      buffer: {
+        maxlen: 10000,
+        data: [],
+        timer: setInterval(() => this.flushLive(), 200)
+      },
       stats: [],
       loading: true,
       deepLoading: false,
@@ -266,19 +274,17 @@ export default {
       if (this.loading || this.paused) {
         return
       }
-      this.pushLive(data.payload)
+      this.buffer.data.push(data.payload)
     },
-    pushLive(data) {
-      const throttle = 200
-      const maxlen = 10000
-      const { live } = this.logs
-      this.buffer.data.push(data)
-      if (Date.now() - this.buffer.timestamp > throttle) {
+    flushLive() {
+      const { maxlen } = this.buffer
+      if (this.buffer.data.length > 0) {
+        const { live } = this.logs
         live.push(...this.buffer.data)
         if (live.length > maxlen) {
           live.splice(0, live.length - maxlen)
         }
-        this.buffer = { timestamp: Date.now(), data: [] }
+        this.buffer.data = []
       }
     },
     async onMore(e) {
@@ -310,7 +316,8 @@ export default {
         this.pausedTimer = setInterval(() => {
           hr.text = new Date(Date.now() - hr.timestamp).toISOString().slice(14, 19)
         }, 1000)
-        this.logs.live.push(hr)
+        this.buffer.data.push(hr)
+        this.flushLive()
       }
     },
     async onChangeFilters(e) {
@@ -330,7 +337,7 @@ export default {
     },
     async updateLogs() {
       this.loading = true
-      this.buffer = { timestamp: 0, data: [] }
+      this.buffer.data = []
       this.logs.live = []
       this.logs.deep = []
       try {
