@@ -166,6 +166,7 @@ export default {
         history: [],
         deep: []
       },
+      buffer: { timestamp: 0, data: [] },
       stats: [],
       loading: true,
       deepLoading: false,
@@ -265,7 +266,20 @@ export default {
       if (this.loading || this.paused) {
         return
       }
-      this.logs.live.push(data.payload)
+      this.pushLive(data.payload)
+    },
+    pushLive(data) {
+      const throttle = 200
+      const maxlen = 10000
+      const { live } = this.logs
+      this.buffer.data.push(data)
+      if (Date.now() - this.buffer.timestamp > throttle) {
+        live.push(...this.buffer.data)
+        if (live.length > maxlen) {
+          live.splice(0, live.length - maxlen)
+        }
+        this.buffer = { timestamp: Date.now(), data: [] }
+      }
     },
     async onMore(e) {
       console.log('onMore', e)
@@ -316,6 +330,7 @@ export default {
     },
     async updateLogs() {
       this.loading = true
+      this.buffer = { timestamp: 0, data: [] }
       this.logs.live = []
       this.logs.deep = []
       try {
