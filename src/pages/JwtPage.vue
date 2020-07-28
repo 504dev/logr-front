@@ -22,12 +22,19 @@ export default {
       username: this.jwtPayload.username,
       login_at: Date.now()
     })
+    if (this.redirectUrl) {
+      location.href = this.redirectUrl
+      return
+    }
     this.$router.push('/')
   },
   computed: {
     ...mapGetters(['jwtPayload']),
     token() {
       return this.$route.params.token
+    },
+    redirectUrl() {
+      return this.$route.query.redirect_url
     },
     error() {
       return this.token === 'error' && this.$route.query.msg

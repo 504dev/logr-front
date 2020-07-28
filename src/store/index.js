@@ -68,7 +68,7 @@ const store = new Vuex.Store({
       }
       return axios({
         method: 'GET',
-        url: getters.restUrl + '/api' + path,
+        url: `${getters.restUrl}/api/${path}`,
         headers: { Authorization: `Bearer ${state.jwt}` },
         ...options
       })
@@ -201,6 +201,11 @@ const store = new Vuex.Store({
       console.log(data)
       state.version = data.version
       state.org = data.org
+      return data
+    },
+    async [ACTIONS.LOAD_FREE_TOKEN]({ getters }) {
+      const url = `${getters.restUrl}/api/free-token`
+      const { data } = await axios({ method: 'GET', url })
       return data
     }
   }

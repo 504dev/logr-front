@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import LoginPage from '@/pages/LoginPage'
 import DashboardPage from '@/pages/DashboardPage'
+import DemoPage from '@/pages/DemoPage'
 import LogsPage from '@/pages/LogsPage'
 import CountsPage from '@/pages/CountsPage'
 import JwtPage from '@/pages/JwtPage'
@@ -14,6 +15,11 @@ export default new Router({
     {
       path: '/',
       redirect: '/dashboards'
+    },
+    {
+      path: '/demo',
+      name: 'demo',
+      component: DemoPage
     },
     {
       path: '/dashboards',
