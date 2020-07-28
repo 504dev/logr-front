@@ -484,6 +484,11 @@ input#filter-limit {
     width: 25px;
     left: -2px;
     font-size: 14px;
+    border: none;
+    background-color: rgba(128, 128, 128, 0.6);
+    &.pause-on {
+      background-color: #088;
+    }
   }
 }
 

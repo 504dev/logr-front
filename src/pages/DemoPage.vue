@@ -34,7 +34,7 @@ export default {
 .window {
   position: relative;
   display: block;
-  width: 1200px;
+  width: 1280px;
   height: 560px;
   margin: auto;
   border-radius: 4px;
