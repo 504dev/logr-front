@@ -15,7 +15,7 @@
         </a>
       </span>
     </div>
-    <div>
+    <div v-if="user.role < RoleViewer">
       <h1>Own</h1>
       <template v-for="dash in dashgroups.own">
         <dash-item :dash="dash" :key="dash.id" />
@@ -35,6 +35,7 @@
 <script>
 import DashItem from '../components/DashItem'
 import ACTIONS from '../store/action-types'
+import { RoleViewer } from '../../constants/roles'
 import { mapState, mapGetters } from 'vuex'
 
 export default {
@@ -48,7 +49,8 @@ export default {
   },
   data() {
     return {
-      ACTIONS
+      ACTIONS,
+      RoleViewer
     }
   },
   computed: {
