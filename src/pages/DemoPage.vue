@@ -34,8 +34,7 @@ export default {
 .container {
   box-sizing: border-box;
   position: absolute;
-  padding: 140px 100px 50px 100px;
-  outline: dashed 1px red;
+  padding: 130px 80px 40px 80px;
   height: 100%;
   width: 100%;
   bottom: 0;
