@@ -25,7 +25,7 @@ export default {
     hostname: String,
     kind: String,
     keyname: String,
-    timestamp: Number,
+    timestamp: String,
     limit: Number
   },
   data() {
