@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <h1>logr</h1>
+  <div class="container">
+    <div class="title"><span>logr</span></div>
     <div class="window" v-if="token">
       <iframe :src="url"></iframe>
     </div>
@@ -31,12 +31,29 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.container {
+  box-sizing: border-box;
+  position: absolute;
+  padding: 140px 100px 50px 100px;
+  outline: dashed 1px red;
+  height: 100%;
+  width: 100%;
+  bottom: 0;
+}
+@media screen and (max-width: 800px) {
+  .container {
+    padding: 120px 20px 20px 20px;
+  }
+}
+@media screen and (max-width: 400px) {
+  .container {
+    padding: 120px 0 0 0;
+  }
+}
 .window {
-  position: relative;
-  display: block;
-  width: 1280px;
-  height: 560px;
-  margin: auto;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
   border-radius: 4px;
   overflow: hidden;
   border: solid 1px black;
@@ -46,8 +63,14 @@ iframe {
   height: 100%;
   width: 100%;
 }
-h1 {
+.title {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
   text-align: center;
   font-size: 64px;
+  line-height: 128px;
+  font-weight: bold;
 }
 </style>
