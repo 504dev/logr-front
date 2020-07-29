@@ -2,7 +2,7 @@
   <div class="container">
     <div class="title"><span>logr</span></div>
     <div class="window" v-if="token">
-      <iframe :src="url"></iframe>
+      <iframe :src="url" @load="onLoad" ref="iframe"></iframe>
     </div>
   </div>
 </template>
@@ -10,7 +10,7 @@
 <script>
 import ACTIONS from '../store/action-types'
 export default {
-  async created() {
+  async mounted() {
     this.token = await this.$store.dispatch(ACTIONS.LOAD_FREE_TOKEN)
   },
   data() {
@@ -25,6 +25,18 @@ export default {
       }
       const redirectUrl = encodeURIComponent('/dashboard/2/logs')
       return `/jwt/${this.token}?redirect_url=${redirectUrl}`
+    }
+  },
+  methods: {
+    async onLoad({ target }) {
+      try {
+        const { href } = target.contentWindow.location
+        console.log({ href })
+      } catch (err) {
+        console.error(err)
+        this.token = await this.$store.dispatch(ACTIONS.LOAD_FREE_TOKEN)
+        target.src = this.url
+      }
     }
   }
 }

@@ -54,6 +54,9 @@
           </span>
           <slot v-else name="content"></slot>
         </div>
+        <router-link to="/dashboards" v-if="fullscreen && !orient"
+          ><img class="avatar" :src="`https://avatars.githubusercontent.com/u/${user.github_id}`"
+        /></router-link>
         <span class="arrow" :class="arrowDirection" @click="onFull"></span>
         <slot name="pause" />
       </td>
@@ -313,6 +316,12 @@ table {
 
     &:hover {
       box-shadow: 0 0 0 1px #9e9;
+    }
+  }
+
+  &.fullscreen {
+    .avatar {
+      margin-left: -16px;
     }
   }
 
