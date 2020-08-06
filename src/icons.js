@@ -3,6 +3,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { far } from '@fortawesome/free-regular-svg-icons'
+import { fab } from '@fortawesome/free-brands-svg-icons'
 library.add(fas.faSignOutAlt)
 library.add(fas.faPlusSquare)
 library.add(fas.faMoon)
@@ -22,6 +23,7 @@ library.add(fas.faChartLine)
 library.add(fas.faExclamationTriangle)
 library.add(fas.faSortAmountUpAlt)
 library.add(fas.faSortAmountDown)
+library.add(fab.faGithub)
 library.add(far.faMoon)
 library.add(far.faWindowMaximize)
 Vue.component('font-awesome-icon', FontAwesomeIcon)

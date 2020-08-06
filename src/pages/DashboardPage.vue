@@ -70,7 +70,9 @@ export default {
 
 <style scoped lang="scss">
 .wrapper {
+  box-sizing: border-box;
   padding: 20px;
+  height: 100%;
   .hello {
     position: relative;
     top: -32px;

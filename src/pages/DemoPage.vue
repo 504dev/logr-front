@@ -1,6 +1,11 @@
 <template>
   <div class="container">
-    <div class="title"><span>logr</span></div>
+    <div class="title">
+      <span>logr</span>
+      <a href="https://github.com/504dev/logr" class="github">
+        <font-awesome-icon :icon="['fab', 'github']" />
+      </a>
+    </div>
     <div class="window" v-if="token">
       <iframe :src="url" @load="onLoad" ref="iframe"></iframe>
     </div>
@@ -83,5 +88,9 @@ iframe {
   font-size: 64px;
   line-height: 128px;
   font-weight: bold;
+}
+.github {
+  /*zoom: 0.7;*/
+  /*display: none;*/
 }
 </style>

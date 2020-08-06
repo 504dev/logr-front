@@ -153,7 +153,8 @@ export default {
                 .keyBy('hostname')
                 .map(({ data }, hostname) => {
                   data = this.filled(data.map(([x, y]) => [x * 1000, y]).reverse())
-                  return { name: hostname, data }
+                  const color = '#' + this.convertToHex(hostname).slice(0, 6)
+                  return { name: hostname, data, color }
                 })
                 .sortBy('name')
                 .value()
@@ -167,6 +168,13 @@ export default {
     }
   },
   methods: {
+    convertToHex(str) {
+      var hex = ''
+      for (var i = 0; i < str.length; i++) {
+        hex += '' + str.charCodeAt(i).toString(16)
+      }
+      return hex
+    },
     filled(list) {
       if (list.length < 2) {
         return list

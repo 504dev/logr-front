@@ -54,7 +54,7 @@
           </span>
           <slot v-else name="content"></slot>
         </div>
-        <router-link to="/dashboards" v-if="fullscreen && !orient"
+        <router-link to="/dashboards" v-if="fullscreen"
           ><img class="avatar" :src="`https://avatars.githubusercontent.com/u/${user.github_id}`"
         /></router-link>
         <span class="arrow" :class="arrowDirection" @click="onFull"></span>
@@ -198,7 +198,7 @@ table {
         overflow: scroll;
         font-size: 14px;
         .spinner {
-          /*margin: 5px 1px;*/
+          margin: 3px 1px;
         }
       }
     }
@@ -208,7 +208,7 @@ table {
       padding-left: 30px;
     }
     &.head-orient .content {
-      padding-top: 20px;
+      padding-top: 25px;
     }
   }
   &.left-orient {
@@ -320,8 +320,15 @@ table {
   }
 
   &.fullscreen {
-    .avatar {
-      margin-left: -16px;
+    &.left-orient {
+      .avatar {
+        margin-left: -16px;
+      }
+    }
+    &.head-orient {
+      .avatar {
+        margin-top: -18px;
+      }
     }
   }
 
