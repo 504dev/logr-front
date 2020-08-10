@@ -52,7 +52,7 @@ export default {
           title: {
             text: ''
           },
-          max: 100
+          max: kind === 'per' ? 100 : undefined
         },
         tooltip: {
           split: true,
