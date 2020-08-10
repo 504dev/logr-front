@@ -153,7 +153,8 @@ export default {
                 .keyBy('hostname')
                 .map(({ data }, hostname) => {
                   data = this.filled(data.map(([x, y]) => [x * 1000, y]).reverse())
-                  const color = '#' + this.convertToHex(hostname).slice(0, 6)
+                  const hex = this.convertToHex(hostname)
+                  const color = '#' + hex.slice(0, 3) + hex.slice(-3)
                   return { name: hostname, data, color }
                 })
                 .sortBy('name')
