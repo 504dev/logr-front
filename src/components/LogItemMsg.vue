@@ -59,7 +59,6 @@ export default {
       if (!this.filter) {
         return [{ text }]
       }
-      console.log(this.filter)
       let regex
       try {
         regex = new RegExp(this.filter, 'g')

@@ -51,7 +51,8 @@ export default {
         yAxis: {
           title: {
             text: ''
-          }
+          },
+          max: 100
         },
         tooltip: {
           split: true,

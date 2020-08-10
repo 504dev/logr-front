@@ -33,7 +33,7 @@
     <span
       class="log-level ellipsis"
       :class="`log-level-${value.level}`"
-      @click="$emit('tag', { level: value.level })"
+      @click="$emit('tag', { level: $attrs.filters.level === value.level ? '' : value.level })"
       >{{ value.level }}</span
     >
     <log-item-msg
