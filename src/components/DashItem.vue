@@ -32,7 +32,7 @@
           :class="{ x2: !hasLogs }"
           v-if="hasCounts"
         >
-          <span>counts</span>
+          <span>cnts</span>
         </router-link>
         <div class="empty" v-if="isEmpty">empty yet.</div>
       </div>
@@ -152,7 +152,8 @@ export default {
   background-color: #eee;
   padding: 10px;
   border-radius: 4px;
-  border: solid 1px black;
+  /*border: solid 1px #000;*/
+  border: solid 1px #ccc;
   border-bottom-width: 2px;
   vertical-align: top;
   .title {
@@ -202,7 +203,7 @@ export default {
     margin-top: 20px;
     border-radius: 3px;
     background-color: #ddd;
-    border: dashed 1px #000;
+    /*border: dashed 1px #000;*/
     cursor: pointer;
     line-height: 60px;
     color: #fff;
@@ -217,7 +218,7 @@ export default {
       }
     }
     &.window-logs {
-      font-size: 28px;
+      /*font-size: 20px;*/
       margin-right: 8px;
       background-color: #444;
       background-image: url('/static/logs.jpg');
@@ -228,10 +229,11 @@ export default {
       }
     }
     &.window-counts {
-      font-size: 24px;
+      /*font-size: 20px;*/
       background-image: url('/static/counts.jpg');
-      background-size: 95px;
-      background-position-y: -15px;
+      background-size: 112px;
+      background-position-y: -32px;
+      background-position-x: -10px;
       opacity: 0.8;
       &:hover {
         opacity: 1;

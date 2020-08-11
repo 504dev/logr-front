@@ -280,11 +280,13 @@ export default {
       const { maxlen } = this.buffer
       if (this.buffer.data.length > 0) {
         const { live } = this.logs
-        live.push(...this.buffer.data)
+        let chunk = this.buffer.data.splice(0)
+        chunk = _.sortBy(chunk, 'timestamp')
+        console.log(chunk.length)
+        live.push(...chunk)
         if (live.length > maxlen) {
           live.splice(0, live.length - maxlen)
         }
-        this.buffer.data = []
       }
     },
     async onMore(e) {
