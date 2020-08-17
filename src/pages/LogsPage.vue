@@ -178,7 +178,8 @@ export default {
       stats: [],
       loading: true,
       deepLoading: false,
-      placeholderRe: ''
+      placeholderRe: '',
+      updateTs: 0
     }
   },
   watch: {
@@ -338,16 +339,22 @@ export default {
       this.$router.replace({ query })
     },
     async updateLogs() {
+      const updateTs = this.updateTs = Date.now()
       this.loading = true
       this.buffer.data = []
       this.logs.live = []
       this.logs.deep = []
       try {
-        this.logs.history = await this.$store.dispatch(ACTIONS.LOAD_LOGS, {
+        const data = await this.$store.dispatch(ACTIONS.LOAD_LOGS, {
           ...this.filters,
           dash_id: this.dash.id,
           sock_id: this.sock.id
         })
+        if (this.updateTs !== updateTs) {
+          console.error('Different updateTs')
+          return
+        }
+        this.logs.history = data
       } catch (e) {
         console.error(e.response)
         this.logs.history = []
