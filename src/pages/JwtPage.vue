@@ -23,8 +23,8 @@ export default {
       login_at: Date.now()
     })
     if (this.redirectUrl) {
-      this.$store.commit(MUTATIONS.FLUSH_REDIRECT)
       location.href = this.redirectUrl
+      this.$store.commit(MUTATIONS.FLUSH_REDIRECT)
       return
     }
     this.$router.push('/')
