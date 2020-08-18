@@ -23,6 +23,7 @@ export default {
       login_at: Date.now()
     })
     if (this.redirectUrl) {
+      this.$store.commit(MUTATIONS.FLUSH_REDIRECT)
       location.href = this.redirectUrl
       return
     }
@@ -34,7 +35,7 @@ export default {
       return this.$route.params.token
     },
     redirectUrl() {
-      return this.$route.query.redirect_url
+      return this.$route.query.redirect_url || this.$store.state.redirectUrl
     },
     error() {
       return this.token === 'error' && this.$route.query.msg

@@ -1,4 +1,5 @@
 export default {
+  API_CALL: 'API_CALL',
   WS_CONNECT: 'WS_CONNECT',
   LOGOUT: 'LOGOUT',
   LOAD_ME: 'LOAD_ME',

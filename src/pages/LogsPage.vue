@@ -283,7 +283,6 @@ export default {
         const { live } = this.logs
         let chunk = this.buffer.data.splice(0)
         chunk = _.sortBy(chunk, 'timestamp')
-        console.log(chunk.length)
         live.push(...chunk)
         if (live.length > maxlen) {
           live.splice(0, live.length - maxlen)

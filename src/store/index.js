@@ -5,7 +5,6 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import jwtDecode from 'jwt-decode'
 import Sock from '../libs/sock'
-import router from '../router'
 import ACTIONS from './action-types.js'
 import MUTATIONS from './mutations-types.js'
 
@@ -18,14 +17,15 @@ const store = new Vuex.Store({
     user: null,
     dashboards: null,
     shared: null,
-    jwt: localStorage.getItem('jwt'),
+    jwt: ls.get('jwt'),
     sock: null,
     theme: ls.get('theme', 0),
     orient: ls.get('orient', 0),
     direction: ls.get('direction', 0),
     fullscreen: 0,
     version: null,
-    org: null
+    org: null,
+    redirectUrl: ls.get('redirect_url')
   },
   getters: {
     restUrl() {
@@ -61,26 +61,15 @@ const store = new Vuex.Store({
     },
     isExpired(state, getters) {
       return getters.jwtPayload ? getters.jwtPayload.exp * 1000 < Date.now() : true
-    },
-    api: (state, getters) => (path, options = {}) => {
-      if (getters.isExpired) {
-        location.href = '/login'
-      }
-      return axios({
-        method: 'GET',
-        url: `${getters.restUrl}/api/${path}`,
-        headers: { Authorization: `Bearer ${state.jwt}` },
-        ...options
-      })
     }
   },
   mutations: {
     [MUTATIONS.SET_JWT]: (state, token) => {
-      localStorage.setItem('jwt', token)
+      ls.set('jwt', token)
       state.jwt = token
     },
     [MUTATIONS.UNSET_JWT]: (state, token) => {
-      localStorage.removeItem('jwt', token)
+      ls.remove('jwt', token)
       state.jwt = null
     },
     [MUTATIONS.SWITCH_THEME]: state => {
@@ -103,11 +92,22 @@ const store = new Vuex.Store({
     [MUTATIONS.SWITCH_DIRECTION]: state => {
       state.direction = 1 - state.direction
       ls.set('direction', state.direction)
+    },
+    [MUTATIONS.SET_REDIRECT]: (state, url) => {
+      state.redirectUrl = url
+      ls.set('redirect_url', url)
+    },
+    [MUTATIONS.FLUSH_REDIRECT]: state => {
+      state.redirectUrl = ''
+      ls.remove('redirect_url')
     }
   },
   actions: {
-    [ACTIONS.LOGOUT]() {
-      localStorage.removeItem('jwt')
+    [ACTIONS.LOGOUT]({ state, commit }, redirectUrl) {
+      if (redirectUrl) {
+        commit(MUTATIONS.SET_REDIRECT, location.href)
+      }
+      commit(MUTATIONS.UNSET_JWT)
       location.href = '/login'
     },
     async [ACTIONS.WS_CONNECT]({ state, getters }) {
@@ -118,86 +118,86 @@ const store = new Vuex.Store({
       }
       return this.sock
     },
-    async [ACTIONS.LOAD_DASHBOARDS]({ state, getters }) {
-      const { data } = await getters.api('/me/dashboards')
+    async [ACTIONS.LOAD_DASHBOARDS]({ state, dispatch }) {
+      const { data } = await api('/me/dashboards')
       state.dashboards = data
     },
-    async [ACTIONS.LOAD_SHARED]({ state, getters }) {
-      const { data } = await getters.api('/me/dashboards/shared')
+    async [ACTIONS.LOAD_SHARED]({ state, dispatch }) {
+      const { data } = await api('/me/dashboards/shared')
       state.shared = data
     },
-    async [ACTIONS.ADD_DASHBOARD]({ state, getters }, name) {
-      const { data } = await getters.api('/me/dashboard', {
+    async [ACTIONS.ADD_DASHBOARD]({ state, dispatch }, name) {
+      const { data } = await api('/me/dashboard', {
         method: 'POST',
         data: { name }
       })
       state.dashboards.push(data)
     },
-    async [ACTIONS.EDIT_DASHBOARD]({ state, getters }, { id, name }) {
-      const { data } = await getters.api(`/me/dashboard/${id}`, {
+    async [ACTIONS.EDIT_DASHBOARD]({ state, dispatch }, { id, name }) {
+      const { data } = await api(`/me/dashboard/${id}`, {
         method: 'PUT',
         data: { name }
       })
       const dash = _.find(state.dashboards, { id })
       dash.name = data.name
     },
-    async [ACTIONS.DELETE_DASHBOARD]({ state, getters }, id) {
-      const { data } = await getters.api(`/me/dashboard/${id}`, {
+    async [ACTIONS.DELETE_DASHBOARD]({ state, dispatch }, id) {
+      const { data } = await api(`/me/dashboard/${id}`, {
         method: 'DELETE'
       })
       const index = _.findIndex(state.dashboards, { id })
       state.dashboards.splice(index, 1)
       console.log(data)
     },
-    async [ACTIONS.SHARE_DASHBOARD]({ state, getters }, { dashId, username }) {
-      return getters.api(`/me/dashboard/share/${dashId}/to/${username}`, {
+    async [ACTIONS.SHARE_DASHBOARD]({ state, dispatch }, { dashId, username }) {
+      return api(`/me/dashboard/share/${dashId}/to/${username}`, {
         method: 'POST'
       })
     },
-    async [ACTIONS.LOAD_ME]({ state, getters, dispatch }) {
+    async [ACTIONS.LOAD_ME]({ state, dispatch }) {
       try {
-        const { data } = await getters.api('/me')
+        const { data } = await api('/me')
         state.user = data
       } catch (err) {
         console.error(err)
         if (err.response && err.response.status === 401) {
-          dispatch(ACTIONS.LOGOUT)
+          dispatch(ACTIONS.LOGOUT, location.href)
         }
       }
     },
-    async [ACTIONS.LOAD_LOGS]({ state, getters }, params) {
-      const { data } = await getters.api('/logs', { params })
+    async [ACTIONS.LOAD_LOGS]({ dispatch }, params) {
+      const { data } = await api('/logs', { params })
       return data
     },
-    async [ACTIONS.LOAD_COUNTS]({ state, getters }, params) {
-      const { data } = await getters.api('/counts', { params })
+    async [ACTIONS.LOAD_COUNTS]({ dispatch }, params) {
+      const { data } = await api('/counts', { params })
       return data
     },
-    async [ACTIONS.LOAD_COUNTS_SNIPPET]({ state, getters }, params) {
-      const { data } = await getters.api('/counts/snippet', { params })
+    async [ACTIONS.LOAD_COUNTS_SNIPPET]({ dispatch }, params) {
+      const { data } = await api('/counts/snippet', { params })
       return data
     },
     async [ACTIONS.PAUSE_LOGS]({ state }, paused) {
       return state.sock.pause(!!paused)
     },
-    async [ACTIONS.LOAD_LOGS_STATS]({ getters }, dashId) {
-      const { data } = await getters.api(`/logs/stats/${dashId}`)
+    async [ACTIONS.LOAD_LOGS_STATS]({ dispatch }, dashId) {
+      const { data } = await api(`/logs/stats/${dashId}`)
       return data
     },
-    async [ACTIONS.LOAD_COUNTS_STATS]({ getters }, dashId) {
-      const { data } = await getters.api(`/counts/stats/${dashId}`)
+    async [ACTIONS.LOAD_COUNTS_STATS]({ dispatch }, dashId) {
+      const { data } = await api(`/counts/stats/${dashId}`)
       return data
     },
-    async [ACTIONS.LOAD_LOGS_LOGNAMES]({ getters }, dashId) {
-      const { data } = await getters.api(`/logs/lognames/${dashId}`)
+    async [ACTIONS.LOAD_LOGS_LOGNAMES]({ dispatch }, dashId) {
+      const { data } = await api(`/logs/lognames/${dashId}`)
       return data
     },
-    async [ACTIONS.LOAD_COUNTS_LOGNAMES]({ getters }, dashId) {
-      const { data } = await getters.api(`/counts/lognames/${dashId}`)
+    async [ACTIONS.LOAD_COUNTS_LOGNAMES]({ dispatch }, dashId) {
+      const { data } = await api(`/counts/lognames/${dashId}`)
       return data
     },
-    async [ACTIONS.LOAD_GLOBALS]({ state, getters }) {
-      const { data } = await getters.api('/globals')
+    async [ACTIONS.LOAD_GLOBALS]({ state, dispatch }) {
+      const { data } = await api('/globals')
       console.log(data)
       state.version = data.version
       state.org = data.org
@@ -210,5 +210,19 @@ const store = new Vuex.Store({
     }
   }
 })
+
+function api(path, options = {}) {
+  const { state, getters, dispatch } = store;
+  if (getters.isExpired) {
+    dispatch(ACTIONS.LOGOUT, location.href)
+    return
+  }
+  return axios({
+    method: 'GET',
+    url: `${getters.restUrl}/api${path}`,
+    headers: {Authorization: `Bearer ${state.jwt}`},
+    ...options
+  })
+}
 
 export default store
