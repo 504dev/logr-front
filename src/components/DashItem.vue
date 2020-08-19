@@ -203,7 +203,7 @@ export default {
     margin-top: 20px;
     border-radius: 3px;
     background-color: #ddd;
-    border: dashed 1px #000;
+    border: solid 1px #000;
     cursor: pointer;
     line-height: 60px;
     color: #fff;
@@ -224,6 +224,7 @@ export default {
       background-image: url('/static/logs.jpg');
       background-size: 90px;
       opacity: 0.7;
+      width: 120px;
       &:hover {
         opacity: 0.8;
       }
@@ -233,8 +234,9 @@ export default {
       background-image: url('/static/counts.jpg');
       background-size: 112px;
       background-position-y: -32px;
-      background-position-x: -10px;
+      background-position-x: -1px;
       opacity: 0.8;
+      width: 70px;
       &:hover {
         opacity: 1;
       }
