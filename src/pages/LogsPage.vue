@@ -93,7 +93,7 @@
       </div>
       <span class="more" @click="onMore" v-if="offset">
         more
-        <font-awesome-icon icon="compact-disc" spin v-if="deepLoading" />
+        <font-awesome-icon icon="cog" spin v-if="deepLoading" />
         <font-awesome-icon icon="chevron-circle-down" v-else />
       </span>
     </template>

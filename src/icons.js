@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { far } from '@fortawesome/free-regular-svg-icons'
 import { fab } from '@fortawesome/free-brands-svg-icons'
+library.add(fas.faCog)
 library.add(fas.faSignOutAlt)
 library.add(fas.faPlusSquare)
 library.add(fas.faMoon)
