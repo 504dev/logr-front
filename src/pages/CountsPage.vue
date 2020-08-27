@@ -154,7 +154,7 @@ export default {
                 .map(({ data }, hostname) => {
                   data = this.filled(data.map(([x, y]) => [x * 1000, y]).reverse())
                   const hex = this.convertToHex(hostname)
-                  const color = '#' + hex.slice(0, 4) + hex.slice(-2)
+                  const color = '#' + hex.slice(0, 6)
                   return { name: hostname, data, color }
                 })
                 .sortBy('name')
