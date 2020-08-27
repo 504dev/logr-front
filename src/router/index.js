@@ -19,6 +19,7 @@ export default new Router({
     {
       path: '/demo',
       name: 'demo',
+      title: 'Logr • Demo',
       component: DemoPage
     },
     {

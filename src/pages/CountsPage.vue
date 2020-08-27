@@ -154,7 +154,7 @@ export default {
                 .map(({ data }, hostname) => {
                   data = this.filled(data.map(([x, y]) => [x * 1000, y]).reverse())
                   const hex = this.convertToHex(hostname)
-                  const color = '#' + hex.slice(0, 4) + hex.slice(-2)
+                  const color = '#' + hex.slice(0, 6)
                   return { name: hostname, data, color }
                 })
                 .sortBy('name')
@@ -170,11 +170,18 @@ export default {
   },
   methods: {
     convertToHex(str) {
-      var hex = ''
-      for (var i = 0; i < str.length; i++) {
-        hex += '' + str.charCodeAt(i).toString(16)
+      let hash = 0
+      if (str.length === 0) {
+        return ''
       }
-      return hex
+
+      for (let i = 0; i < str.length; i++) {
+        let char = str.charCodeAt(i)
+        hash = (hash << 5) - hash + char
+        hash = hash & hash // Convert to 32bit integer
+      }
+
+      return Math.abs(hash).toString(16)
     },
     filled(list) {
       if (list.length < 2) {
