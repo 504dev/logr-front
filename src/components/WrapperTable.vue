@@ -12,7 +12,11 @@
         <router-link to="/dashboards"
           ><img class="avatar" :src="`https://avatars.githubusercontent.com/u/${user.github_id}`"
         /></router-link>
-        <div class="name">{{ dash.name }}</div>
+        <select :value="dashId" class="dashname" @change="onDashChange">
+          <option v-for="dashboard in dashboards" :value="dashboard.id" :key="dashboard.id">
+            {{ dashboard.name }}
+          </option>
+        </select>
         <div class="filters">
           <slot name="filters" />
         </div>
@@ -32,7 +36,11 @@
         <router-link to="/dashboards"
           ><img class="avatar" :src="`https://avatars.githubusercontent.com/u/${user.github_id}`"
         /></router-link>
-        <div class="name">{{ dash.name }}</div>
+        <select :value="dashId" class="dashname" @change="onDashChange">
+          <option v-for="dashboard in dashboards" :value="dashboard.id" :key="dashboard.id">
+            {{ dashboard.name }}
+          </option>
+        </select>
         <div class="filters">
           <slot name="filters" />
         </div>
@@ -74,8 +82,11 @@ export default {
   },
   computed: {
     ...mapState(['user', 'dashboards', 'fullscreen', 'orient']),
+    dashId() {
+      return +this.$route.params.id
+    },
     dash() {
-      return (this.dashboards || []).find(dash => dash.id === +this.$route.params.id)
+      return (this.dashboards || []).find(dash => dash.id === this.dashId)
     },
     arrowDirection() {
       return this.orient ? (this.fullscreen ? 'down' : 'up') : this.fullscreen ? 'right' : 'left'
@@ -84,6 +95,11 @@ export default {
   methods: {
     onFull() {
       this.$store.commit(MUTATIONS.SWITCH_FULL)
+    },
+    onDashChange(e) {
+      const id = e.target.value
+      this.$router.push({ params: { ...this.$route.params, id } })
+      location.reload()
     }
   }
 }
@@ -101,22 +117,26 @@ table {
   margin: 0;
   padding: 0;
   border-spacing: 0;
+
   &.night {
     background-color: #000;
     color: white;
   }
+
   &.reverse {
     .content {
       display: flex;
       flex-direction: column-reverse;
     }
   }
+
   tr {
     td {
       vertical-align: top;
       position: relative;
       margin: 0;
       padding: 0;
+
       &.lefter {
         background-color: #ddd;
         width: 180px;
@@ -125,17 +145,7 @@ table {
         padding-bottom: 110px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         z-index: 800;
-        .name {
-          color: #111;
-          font-weight: bold;
-          text-align: center;
-          /*margin-left: 36px;*/
-          margin-top: 6px;
-          margin-bottom: 14px;
-          max-width: 180px;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
+
         .customs {
           display: inline-block;
           position: absolute;
@@ -143,10 +153,12 @@ table {
           bottom: 0;
           padding: 10px;
           padding-bottom: 15px;
+
           a {
             margin-right: 4px;
           }
         }
+
         .goto {
           font-size: smaller;
           position: absolute;
@@ -156,28 +168,26 @@ table {
           margin-bottom: 17px;
         }
       }
+
       &.header {
         padding: 10px 75px 5px 10px;
         height: 30px;
         background-color: #ddd;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         z-index: 800;
-        .name {
-          color: #111;
-          font-weight: bold;
-          margin-left: 36px;
-          line-height: 32px;
-        }
+
         .customs {
           position: absolute;
           right: 15px;
           top: 15px;
           display: flex;
           flex-direction: row-reverse;
+
           a {
             margin-left: 4px;
           }
         }
+
         .goto {
           font-size: smaller;
           position: absolute;
@@ -186,6 +196,7 @@ table {
           /*display: none;*/
         }
       }
+
       .content {
         font-family: Courier;
         position: absolute;
@@ -197,49 +208,65 @@ table {
         padding: 5px 10px;
         overflow: scroll;
         font-size: 14px;
+
         .spinner {
           margin: 3px 1px;
         }
       }
     }
   }
+
   &.fullscreen {
     &.left-orient .content {
       padding-left: 30px;
     }
+
     &.head-orient .content {
       padding-top: 25px;
     }
   }
+
   &.left-orient {
     .filters {
       select,
       input {
         margin-bottom: 10px;
       }
+
       #filter-regexp {
         margin-bottom: 10px;
       }
+
       #filter-message {
         height: 50px;
         font-size: 20px;
       }
     }
+    select.dashname {
+      text-align-last: center;
+      padding-left: 24px;
+      margin-bottom: 7px;
+    }
   }
+
   &.head-orient {
     .filters {
       padding-top: 7px;
       line-height: 35px;
+
       select,
       input {
         margin-right: 8px;
       }
+
       #filter-version {
         float: inherit;
       }
+
       #filter-agg {
         float: inherit;
       }
+
       #filter-regexp {
         display: inline-block;
         margin-right: 8px;
@@ -247,6 +274,17 @@ table {
       }
     }
   }
+
+  select.dashname {
+    margin-top: 2px;
+    border: none;
+    background: none;
+    color: #111;
+    font-weight: bold;
+    font-size: 16px;
+    padding-left: 32px;
+  }
+
   .arrow {
     color: #fff;
     position: absolute;
@@ -262,26 +300,32 @@ table {
     text-align: center;
     line-height: 40px;
     cursor: pointer;
+
     &::before {
       content: '\00a0❮';
     }
+
     &:hover {
       zoom: 1.1;
     }
+
     &.left,
     &.right {
       top: 50%;
       width: 20px;
       margin-top: -20px;
       border-radius: 20px 0 0 20px;
+
       &.left {
         margin-left: -20px;
       }
+
       &.right {
         margin-left: 0;
         transform: scale(-1, 1);
       }
     }
+
     &.up,
     &.down {
       left: 50%;
@@ -291,10 +335,12 @@ table {
       margin-left: -10px;
       transform: rotate(-90deg);
     }
+
     &.up {
       &::before {
         content: '\00a0❯';
       }
+
       //margin-top: -30px;
       //transform: rotate(90deg);
     }
@@ -325,6 +371,7 @@ table {
         margin-left: -16px;
       }
     }
+
     &.head-orient {
       .avatar {
         margin-top: -18px;
@@ -334,21 +381,26 @@ table {
 
   .kinds {
     font-size: 13px;
+
     .kindblock {
       margin-top: 10px;
       vertical-align: top;
       text-align: left;
+
       .kindname {
         a {
           font-weight: bold;
           text-decoration: none;
         }
       }
+
       .keynames {
         vertical-align: top;
         text-align: left;
+
         a {
           text-decoration: none;
+
           &:hover {
             text-decoration: underline;
           }
@@ -365,11 +417,13 @@ table {
         display: inline-block;
         margin: 8px 15px;
         margin-left: 5px;
+
         .kindname {
           a:hover {
             text-decoration: underline;
           }
         }
+
         .keynames {
           display: none;
         }
