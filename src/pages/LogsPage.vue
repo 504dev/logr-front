@@ -249,7 +249,7 @@ export default {
         paused
       } = this.$route.query
       if (logname === '') {
-        logname = _.find(this.sortedLognames, { logname: ls.get(`dash${this.dash.id}.filters.logname`) })
+        logname = _.find(this.sortedLognames, ls.get(`dash${this.dash.id}.filters.logname`))
         logname = logname || this.sortedLognames[0] || ''
       }
       timestamp = []
@@ -338,7 +338,7 @@ export default {
       this.$router.replace({ query })
     },
     async updateLogs() {
-      const updateTs = this.updateTs = Date.now()
+      const updateTs = (this.updateTs = Date.now())
       this.loading = true
       this.buffer.data = []
       this.logs.live = []
