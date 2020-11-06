@@ -249,8 +249,8 @@ export default {
         paused
       } = this.$route.query
       if (logname === '') {
-        logname = _.find(this.sortedLognames, ls.get(`dash${this.dash.id}.filters.logname`))
-        logname = logname || this.sortedLognames[0] || ''
+        logname = ls.get(`dash${this.dash.id}.filters.logname`)
+        logname = this.sortedLognames.includes(logname) ? logname : _.first(this.sortedLognames) || ''
       }
       timestamp = []
         .concat(timestamp)

@@ -94,8 +94,8 @@ export default {
 
     let { hostname = '', logname = '', pid = '', version = '', agg = 'm' } = this.$route.query
     if (logname === '') {
-      logname = _.find(this.sortedLognames, ls.get(`dash${this.dash.id}.filters.logname`))
-      logname = logname || _.first(this.sortedLognames) || ''
+      logname = ls.get(`dash${this.dash.id}.filters.logname`)
+      logname = this.sortedLognames.includes(logname) ? logname : _.first(this.sortedLognames) || ''
     }
     this.filters = {
       logname,
