@@ -21,7 +21,7 @@ const store = new Vuex.Store({
     sock: null,
     theme: ls.get('theme', 0),
     orient: ls.get('orient', 0),
-    direction: ls.get('direction', 0),
+    direction: ls.get('direction', 1),
     fullscreen: 0,
     version: null,
     org: null,

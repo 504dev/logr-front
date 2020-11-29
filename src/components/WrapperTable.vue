@@ -13,9 +13,16 @@
           ><img class="avatar" :src="`https://avatars.githubusercontent.com/u/${user.github_id}`"
         /></router-link>
         <select :value="dashId" class="dashname" @change="onDashChange">
-          <option v-for="dashboard in dashboards" :value="dashboard.id" :key="dashboard.id">
-            {{ dashboard.name }}
-          </option>
+          <optgroup label="Own" v-if="dashgroups.own.length">
+            <option v-for="dashboard in dashgroups.own" :value="dashboard.id" :key="dashboard.id"
+              >{{ dashboard.name }}
+            </option>
+          </optgroup>
+          <optgroup label="Shared" v-if="dashgroups.shared.length">
+            <option v-for="dashboard in dashgroups.shared" :value="dashboard.id" :key="dashboard.id">{{
+              dashboard.name
+            }}</option>
+          </optgroup>
         </select>
         <div class="filters">
           <slot name="filters" />
@@ -37,9 +44,16 @@
           ><img class="avatar" :src="`https://avatars.githubusercontent.com/u/${user.github_id}`"
         /></router-link>
         <select :value="dashId" class="dashname" @change="onDashChange">
-          <option v-for="dashboard in dashboards" :value="dashboard.id" :key="dashboard.id">
-            {{ dashboard.name }}
-          </option>
+          <optgroup label="Own" v-if="dashgroups.own.length">
+            <option v-for="dashboard in dashgroups.own" :value="dashboard.id" :key="dashboard.id"
+              >{{ dashboard.name }}
+            </option>
+          </optgroup>
+          <optgroup label="Shared" v-if="dashgroups.shared.length">
+            <option v-for="dashboard in dashgroups.shared" :value="dashboard.id" :key="dashboard.id">{{
+              dashboard.name
+            }}</option>
+          </optgroup>
         </select>
         <div class="filters">
           <slot name="filters" />
@@ -73,7 +87,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import MUTATIONS from '@/store/mutations-types.js'
 
 export default {
@@ -82,6 +96,7 @@ export default {
   },
   computed: {
     ...mapState(['user', 'dashboards', 'fullscreen', 'orient']),
+    ...mapGetters(['dashgroups']),
     dashId() {
       return +this.$route.params.id
     },

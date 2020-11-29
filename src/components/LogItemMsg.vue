@@ -135,6 +135,7 @@ export default {
 }
 .match {
   background-color: #dc0 !important;
+  color: black;
 }
 .json {
   border-bottom: 1px dotted mediumpurple;
