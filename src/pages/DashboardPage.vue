@@ -1,12 +1,12 @@
 <template>
-  <div class="wrapper" v-if="this.user && this.dashboards">
+  <div class="wrapper" v-if="this.user && this.dashboards && this.globals">
     <div class="hello">
       <img
         class="avatar"
-        :class="{ child: !!org }"
+        :class="{ child: !!globals.org }"
         :src="`https://avatars.githubusercontent.com/u/${jwtPayload.github_id}`"
       />
-      <img class="avatar" :class="{ org: !!org }" :src="`https://github.com/${org}.png`" v-if="org" />
+      <img class="avatar" :class="{ org: !!globals.org }" :src="`https://github.com/${globals.org}.png`" v-if="globals.org" />
       <span>
         <strong>{{ jwtPayload.username }}</strong>
         |
@@ -54,7 +54,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['user', 'dashboards', 'org']),
+    ...mapState(['user', 'dashboards', 'globals']),
     ...mapGetters(['jwtPayload', 'dashgroups'])
   },
   methods: {

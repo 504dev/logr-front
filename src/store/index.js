@@ -23,8 +23,7 @@ const store = new Vuex.Store({
     orient: ls.get('orient', 0),
     direction: ls.get('direction', 1),
     fullscreen: 0,
-    version: null,
-    org: null,
+    globals: null,
     redirectUrl: ls.get('redirect_url')
   },
   getters: {
@@ -196,11 +195,10 @@ const store = new Vuex.Store({
       const { data } = await api(`/counts/lognames/${dashId}`)
       return data
     },
-    async [ACTIONS.LOAD_GLOBALS]({ state, dispatch }) {
-      const { data } = await api('/globals')
+    async [ACTIONS.LOAD_GLOBALS]({ state }) {
+      const { data } = await api('/globals', {}, false)
       console.log(data)
-      state.version = data.version
-      state.org = data.org
+      state.globals = data
       return data
     },
     async [ACTIONS.LOAD_FREE_TOKEN]({ getters }) {
@@ -211,16 +209,16 @@ const store = new Vuex.Store({
   }
 })
 
-function api(path, options = {}) {
-  const { state, getters, dispatch } = store;
-  if (getters.isExpired) {
+function api(path, options = {}, useAuth = true) {
+  const { state, getters, dispatch } = store
+  if (useAuth && getters.isExpired) {
     dispatch(ACTIONS.LOGOUT, location.href)
     return
   }
   return axios({
     method: 'GET',
     url: `${getters.restUrl}/api${path}`,
-    headers: {Authorization: `Bearer ${state.jwt}`},
+    headers: useAuth ? { Authorization: `Bearer ${state.jwt}` } : {},
     ...options
   })
 }
