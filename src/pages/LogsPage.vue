@@ -37,9 +37,7 @@
           placeholder="Message"
           id="filter-message"
           :class="{ selected: filters.message }"
-        /><span class="icon" v-if="filters.message" @click="filters.message = ''"
-          ><font-awesome-icon icon="times-circle" style="position: relative"/></span
-        ><input
+        /><input
           type="number"
           v-model="filters.pid"
           placeholder="Pid"
