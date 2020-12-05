@@ -24,7 +24,8 @@ const store = new Vuex.Store({
     direction: ls.get('direction', 1),
     fullscreen: 0,
     globals: null,
-    redirectUrl: ls.get('redirect_url')
+    redirectUrl: ls.get('redirect_url'),
+    lognames: { logs: {}, counts: {} }
   },
   getters: {
     restUrl() {
@@ -117,22 +118,22 @@ const store = new Vuex.Store({
       }
       return this.sock
     },
-    async [ACTIONS.LOAD_DASHBOARDS]({ state, dispatch }) {
+    async [ACTIONS.LOAD_DASHBOARDS]({ state }) {
       const { data } = await api('/me/dashboards')
       state.dashboards = data
     },
-    async [ACTIONS.LOAD_SHARED]({ state, dispatch }) {
+    async [ACTIONS.LOAD_SHARED]({ state }) {
       const { data } = await api('/me/dashboards/shared')
       state.shared = data
     },
-    async [ACTIONS.ADD_DASHBOARD]({ state, dispatch }, name) {
+    async [ACTIONS.ADD_DASHBOARD]({ state }, name) {
       const { data } = await api('/me/dashboard', {
         method: 'POST',
         data: { name }
       })
       state.dashboards.push(data)
     },
-    async [ACTIONS.EDIT_DASHBOARD]({ state, dispatch }, { id, name }) {
+    async [ACTIONS.EDIT_DASHBOARD]({ state }, { id, name }) {
       const { data } = await api(`/me/dashboard/${id}`, {
         method: 'PUT',
         data: { name }
@@ -140,7 +141,7 @@ const store = new Vuex.Store({
       const dash = _.find(state.dashboards, { id })
       dash.name = data.name
     },
-    async [ACTIONS.DELETE_DASHBOARD]({ state, dispatch }, id) {
+    async [ACTIONS.DELETE_DASHBOARD]({ state }, id) {
       const { data } = await api(`/me/dashboard/${id}`, {
         method: 'DELETE'
       })
@@ -148,7 +149,7 @@ const store = new Vuex.Store({
       state.dashboards.splice(index, 1)
       console.log(data)
     },
-    async [ACTIONS.SHARE_DASHBOARD]({ state, dispatch }, { dashId, username }) {
+    async [ACTIONS.SHARE_DASHBOARD]({ state }, { dashId, username }) {
       return api(`/me/dashboard/share/${dashId}/to/${username}`, {
         method: 'POST'
       })
@@ -164,35 +165,48 @@ const store = new Vuex.Store({
         }
       }
     },
-    async [ACTIONS.LOAD_LOGS]({ dispatch }, params) {
+    async [ACTIONS.LOAD_LOGS]({}, params) {
       const { data } = await api('/logs', { params })
       return data
     },
-    async [ACTIONS.LOAD_COUNTS]({ dispatch }, params) {
+    async [ACTIONS.LOAD_COUNTS]({}, params) {
       const { data } = await api('/counts', { params })
       return data
     },
-    async [ACTIONS.LOAD_COUNTS_SNIPPET]({ dispatch }, params) {
-      const { data } = await api('/counts/snippet', { params })
+    async [ACTIONS.LOAD_COUNTS_SNIPPET]({}, params) {
+      const dashId = params.dash_id
+      params = _.omit(params, 'dash_id')
+      const { data } = await api(`/counts/${dashId}/snippet`, { params })
       return data
     },
     async [ACTIONS.PAUSE_LOGS]({ state }, paused) {
       return state.sock.pause(!!paused)
     },
-    async [ACTIONS.LOAD_LOGS_STATS]({ dispatch }, dashId) {
-      const { data } = await api(`/logs/stats/${dashId}`)
+    async [ACTIONS.LOAD_LOGS_LOGNAMES]({ state }, dashId) {
+      const cached = state.lognames.logs[dashId]
+      if (cached) {
+        return cached
+      }
+      const { data } = await api(`/logs/${dashId}/lognames`)
+      state.lognames.logs[dashId] = data
       return data
     },
-    async [ACTIONS.LOAD_COUNTS_STATS]({ dispatch }, dashId) {
-      const { data } = await api(`/counts/stats/${dashId}`)
+    async [ACTIONS.LOAD_LOGS_STATS]({}, { dashId, logname }) {
+      const { data } = await api(`/logs/${dashId}/stats`, { params: { logname } })
+      console.log(ACTIONS.LOAD_LOGS_STATS, logname, data)
       return data
     },
-    async [ACTIONS.LOAD_LOGS_LOGNAMES]({ dispatch }, dashId) {
-      const { data } = await api(`/logs/lognames/${dashId}`)
+    async [ACTIONS.LOAD_COUNTS_LOGNAMES]({ state }, dashId) {
+      const cached = state.lognames.counts[dashId]
+      if (cached) {
+        return cached
+      }
+      const { data } = await api(`/counts/${dashId}/lognames`)
+      state.lognames.counts[dashId] = data
       return data
     },
-    async [ACTIONS.LOAD_COUNTS_LOGNAMES]({ dispatch }, dashId) {
-      const { data } = await api(`/counts/lognames/${dashId}`)
+    async [ACTIONS.LOAD_COUNTS_STATS]({}, { dashId, logname }) {
+      const { data } = await api(`/counts/${dashId}/stats`, { params: { logname } })
       return data
     },
     async [ACTIONS.LOAD_GLOBALS]({ state }) {

@@ -90,27 +90,17 @@ export default {
   },
   async created() {
     await Promise.all([this.$store.dispatch(ACTIONS.LOAD_ME), this.$store.dispatch(ACTIONS.LOAD_DASHBOARDS)])
-    this.stats = await this.$store.dispatch(ACTIONS.LOAD_COUNTS_STATS, this.dash.id)
+    this.lognames = await this.$store.dispatch(ACTIONS.LOAD_COUNTS_LOGNAMES, this.dash.id)
 
-    let { hostname = '', logname = '', pid = '', version = '', agg = 'm' } = this.$route.query
-    if (logname === '') {
-      logname = ls.get(`dash${this.dash.id}.filters.logname`)
-      logname = this.sortedLognames.includes(logname) ? logname : _.first(this.sortedLognames) || ''
-    }
-    this.filters = {
-      logname,
-      hostname,
-      pid,
-      version,
-      agg
-    }
+    this.parseLocation()
     this.updateLocation()
 
     await this.updateCounts()
   },
   data() {
     return {
-      paused: false,
+      lognames: [],
+      stats: [],
       filters: {
         hostname: '',
         logname: '',
@@ -118,9 +108,18 @@ export default {
         version: '',
         agg: ''
       },
-      counts: null,
-      stats: [],
-      loading: true
+      loading: true,
+      paused: false,
+      counts: null
+    }
+  },
+  watch: {
+    ['filters.logname']() {
+      Object.assign(this.filters, {
+        hostname: '',
+        version: ''
+      })
+      this.updateStats()
     }
   },
   computed: {
@@ -128,11 +127,15 @@ export default {
     dash() {
       return (this.dashboards || []).find(dash => dash.id === +this.$route.params.id)
     },
+    sortedLognames() {
+      return _.chain(this.lognames)
+        .sortBy('cnt')
+        .reverse()
+        .map('logname')
+        .value()
+    },
     sortedHostnames() {
       return this.groupStatsBy('hostname')
-    },
-    sortedLognames() {
-      return this.groupStatsBy('logname')
     },
     sortedVersions() {
       return this.groupStatsBy('version', 'updated')
@@ -169,6 +172,20 @@ export default {
     }
   },
   methods: {
+    parseLocation() {
+      let { hostname = '', logname = '', pid = '', version = '', agg = 'm' } = this.$route.query
+      if (logname === '') {
+        logname = ls.get(`dash${this.dash.id}.filters.logname`)
+        logname = this.sortedLognames.includes(logname) ? logname : _.first(this.sortedLognames) || ''
+      }
+      this.filters = {
+        logname,
+        hostname,
+        pid,
+        version,
+        agg
+      }
+    },
     convertToHex(str) {
       let hash = 0
       if (str.length === 0) {
@@ -218,6 +235,15 @@ export default {
       let query = { ...this.filters }
       query = _.pickBy(query)
       this.$router.replace({ query })
+    },
+    async updateStats() {
+      if (this.stats.length) {
+        this.stats = []
+      }
+      this.stats = await this.$store.dispatch(ACTIONS.LOAD_COUNTS_STATS, {
+        dashId: this.dash.id,
+        logname: this.filters.logname
+      })
     },
     async updateCounts() {
       this.loading = true

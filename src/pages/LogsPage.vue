@@ -133,8 +133,8 @@ export default {
       this.$store.dispatch(ACTIONS.LOAD_ME),
       this.$store.dispatch(ACTIONS.LOAD_DASHBOARDS)
     ])
-    this.stats = await this.$store.dispatch(ACTIONS.LOAD_LOGS_STATS, this.dash.id)
 
+    this.lognames = await this.$store.dispatch(ACTIONS.LOAD_LOGS_LOGNAMES, this.dash.id)
     this.parseLocation()
     this.updateLocation()
 
@@ -176,6 +176,7 @@ export default {
         timer: setInterval(() => this.flushLive(), 200)
       },
       stats: [],
+      lognames: [],
       loading: true,
       deepLoading: false,
       placeholderRe: '',
@@ -183,18 +184,30 @@ export default {
     }
   },
   watch: {
-    //
+    ['filters.logname']() {
+      Object.assign(this.filters, {
+        hostname: '',
+        level: '',
+        version: '',
+        message: ''
+      })
+      this.updateStats()
+    }
   },
   computed: {
     ...mapState(['user', 'dashboards', 'sock', 'theme', 'orient', 'direction']),
     dash() {
       return (this.dashboards || []).find(dash => dash.id === +this.$route.params.id)
     },
+    sortedLognames() {
+      return _.chain(this.lognames)
+        .sortBy('cnt')
+        .reverse()
+        .map('logname')
+        .value()
+    },
     sortedHostnames() {
       return this.groupStatsBy('hostname')
-    },
-    sortedLognames() {
-      return this.groupStatsBy('logname')
     },
     sortedLevels() {
       return this.groupStatsBy('level')
@@ -259,8 +272,8 @@ export default {
 
       this.paused = parseInt(paused) || 0
       this.filters = {
-        hostname,
         logname,
+        hostname,
         level,
         pid,
         version,
@@ -336,6 +349,15 @@ export default {
       }
       query = _.pickBy(query)
       this.$router.replace({ query })
+    },
+    async updateStats() {
+      if (this.stats.length) {
+        this.stats = []
+      }
+      this.stats = await this.$store.dispatch(ACTIONS.LOAD_LOGS_STATS, {
+        dashId: this.dash.id,
+        logname: this.filters.logname
+      })
     },
     async updateLogs() {
       const updateTs = (this.updateTs = Date.now())
