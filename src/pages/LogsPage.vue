@@ -31,12 +31,12 @@
           <option v-for="version in sortedVersions" :value="version" :key="version" v-if="version">
             {{ version }}
           </option> </select
-        ><input
-          type="text"
+        ><input-x
+          id="filter-message"
           v-model="filters.message"
           placeholder="Message"
-          id="filter-message"
           :class="{ selected: filters.message }"
+          :x2="!orient"
         /><input
           type="number"
           v-model="filters.pid"
@@ -44,17 +44,23 @@
           id="filter-pid"
           maxlength="6"
           v-if="false"
-        /><range-date-time-picker v-model="filters.timestamp" id="filter-timestamp" v-if="false" /><date-time-pattern
-          ref="date-time-pattern"
+        /><range-date-time-picker
+          id="filter-timestamp"
+          v-model="filters.timestamp"
+          v-if="false"
+        ></range-date-time-picker
+        ><date-time-iso
+          id="filter-iso"
+          ref="date-time-iso"
           v-model="filters.timestamp"
           :class="{ selected: filters.timestamp.some(v => v) }"
           v-if="false"
-        /><date-time-regexp
+        /><input-x
           id="filter-regexp"
           ref="date-time-regexp"
           v-model="filters.pattern"
           :class="{ selected: filters.pattern }"
-          :placeholder="placeholderRe"
+          :placeholder="placeholderRe || `0000-00-00T00:00:00`"
         /><input type="text" v-model="filters.limit" placeholder="Limit" id="filter-limit" />
       </form>
     </template>
@@ -84,7 +90,7 @@
           :key="key"
           @tag="onTag"
           @hover="onHover"
-        />
+        ></log-item>
         <span class="cnt" :title="`${logs.history.length}rows`">{{ logs.history.length }}<small>.</small></span>
       </div>
       <div class="block block-deep dashed" :class="{ reverse: !direction }" v-for="(deep, key) in logs.deep" :key="key">
@@ -109,12 +115,13 @@
 import _ from 'lodash'
 import store from 'store2'
 import ACTIONS from '@/store/action-types'
-import MUTATIONS from '@/store/mutations-types.js'
+import MUTATIONS from '@/store/mutations-types'
 import LogItem from '@/components/LogItem'
 import RangeDateTimePicker from '@/components/RangeDateTimePicker'
-import DateTimePattern from '@/components/DateTimePattern'
+import DateTimeIso from '@/components/DateTimeIso'
 import DateTimeRegexp from '@/components/DateTimeRegexp'
 import Wrapper from '@/components/WrapperTable'
+import InputX from '@/components/InputX'
 import { mapState } from 'vuex'
 
 const ls = store.namespace('logs')
@@ -125,7 +132,8 @@ export default {
     Wrapper,
     LogItem,
     RangeDateTimePicker,
-    DateTimePattern
+    DateTimeIso,
+    InputX
   },
   async created() {
     await Promise.all([
@@ -234,17 +242,16 @@ export default {
     onTag(value) {
       console.log('onTag', value)
       if (value.pattern) {
-        if (this.$refs['date-time-pattern']) {
-          const $pattern = this.$refs['date-time-pattern'].$el.firstChild
+        if (this.$refs['date-time-iso']) {
+          const $pattern = this.$refs['date-time-iso'].$el.firstChild
           $pattern.value = value.pattern
           $pattern.dispatchEvent(new Event('change', { bubbles: true }))
         }
         if (this.$refs['date-time-regexp']) {
-          const $regexp = this.$refs['date-time-regexp'].$el.firstChild
-          $regexp.value = value.pattern
-          $regexp.dispatchEvent(new Event('change', { bubbles: true }))
-          $regexp.focus()
+          this.filters.pattern = value.pattern
           this.placeholderRe = ''
+          this.onChangeFilters()
+          this.$refs['date-time-regexp'].$el.querySelector('input').focus()
         }
         return
       }

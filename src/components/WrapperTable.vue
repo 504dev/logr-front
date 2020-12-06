@@ -249,12 +249,13 @@ table {
       }
 
       #filter-regexp {
+        width: 180px;
         margin-bottom: 10px;
       }
 
       #filter-message {
-        height: 50px;
-        font-size: 20px;
+        width: 180px;
+        margin-bottom: 10px;
       }
     }
     select.dashname {
@@ -282,8 +283,12 @@ table {
         float: inherit;
       }
 
+      #filter-message {
+        margin-right: 8px;
+        width: 200px;
+      }
+
       #filter-regexp {
-        display: inline-block;
         margin-right: 8px;
         width: 200px;
       }
