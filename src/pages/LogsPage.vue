@@ -184,13 +184,15 @@ export default {
     }
   },
   watch: {
-    ['filters.logname']() {
-      Object.assign(this.filters, {
-        hostname: '',
-        level: '',
-        version: '',
-        message: ''
-      })
+    ['filters.logname'](v, prev) {
+      if (prev !== '') {
+        Object.assign(this.filters, {
+          hostname: '',
+          level: '',
+          version: '',
+          message: ''
+        })
+      }
       this.updateStats()
     }
   },
@@ -242,6 +244,7 @@ export default {
           $regexp.value = value.pattern
           $regexp.dispatchEvent(new Event('change', { bubbles: true }))
           $regexp.focus()
+          this.placeholderRe = ''
         }
         return
       }

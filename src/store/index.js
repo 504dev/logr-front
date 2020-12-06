@@ -193,7 +193,6 @@ const store = new Vuex.Store({
     },
     async [ACTIONS.LOAD_LOGS_STATS]({}, { dashId, logname }) {
       const { data } = await api(`/logs/${dashId}/stats`, { params: { logname } })
-      console.log(ACTIONS.LOAD_LOGS_STATS, logname, data)
       return data
     },
     async [ACTIONS.LOAD_COUNTS_LOGNAMES]({ state }, dashId) {

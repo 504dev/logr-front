@@ -114,11 +114,13 @@ export default {
     }
   },
   watch: {
-    ['filters.logname']() {
-      Object.assign(this.filters, {
-        hostname: '',
-        version: ''
-      })
+    ['filters.logname'](v, prev) {
+      if (prev !== '') {
+        Object.assign(this.filters, {
+          hostname: '',
+          version: ''
+        })
+      }
       this.updateStats()
     }
   },
