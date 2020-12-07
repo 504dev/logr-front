@@ -29,9 +29,13 @@ span.wrapper {
   display: inline-block;
   position: relative;
 
+  input {
+    padding-right: 26px;
+  }
+
   span.icon {
     position: absolute;
-    top: 7px;
+    top: 6px;
     right: 9px;
     display: inline-block;
     cursor: pointer;
@@ -54,7 +58,7 @@ span.wrapper {
       font-size: 20px;
     }
     > span.icon {
-      top: 17px;
+      top: 18px;
     }
   }
 }
