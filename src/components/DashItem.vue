@@ -201,12 +201,12 @@ export default {
     display: inline-block;
     vertical-align: top;
     width: 95px;
-    height: 60px;
-    margin-top: 20px;
+    height: 80px;
+    margin-top: 15px;
+    padding-top: 38px;
     background-color: #ddd;
     border: solid 1px #000;
     cursor: pointer;
-    line-height: 60px;
     color: #fff;
     text-align: center;
     text-decoration: none;
@@ -235,7 +235,7 @@ export default {
       /*font-size: 18px;*/
       background-image: url('/static/counts.jpg');
       background-size: 112px;
-      background-position-y: -32px;
+      background-position-y: -15px;
       background-position-x: -1px;
       opacity: 0.8;
       width: 78px;
