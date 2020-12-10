@@ -34,7 +34,7 @@
         >
           <span>cnts</span>
         </router-link>
-        <div class="empty" v-if="isEmpty">empty yet.</div>
+        <div class="empty" v-if="isEmpty">(empty)</div>
       </div>
       <div class="tools">
         <span @click="onEdit(dash)">
@@ -162,7 +162,8 @@ export default {
     font-size: 16px;
     text-decoration: none;
     &:hover {
-      color: red;
+      /*color: red;*/
+      text-decoration: underline;
     }
   }
   .team {
@@ -183,9 +184,10 @@ export default {
       }
       &.owner {
         margin-right: 0;
+        z-index: 2;
       }
       &:hover {
-        z-index: 2;
+        z-index: 3;
       }
     }
   }
@@ -201,7 +203,6 @@ export default {
     width: 95px;
     height: 60px;
     margin-top: 20px;
-    border-radius: 3px;
     background-color: #ddd;
     border: solid 1px #000;
     cursor: pointer;
@@ -219,12 +220,13 @@ export default {
     }
     &.window-logs {
       /*font-size: 20px;*/
-      margin-right: 8px;
+      /*margin-right: 8px;*/
       background-color: #444;
       background-image: url('/static/logs.jpg');
       background-size: 90px;
       opacity: 0.7;
       width: 120px;
+      border-radius: 4px 0 0 4px;
       &:hover {
         opacity: 0.8;
       }
@@ -236,13 +238,16 @@ export default {
       background-position-y: -32px;
       background-position-x: -1px;
       opacity: 0.8;
-      width: 70px;
+      width: 78px;
+      border-radius: 0 4px 4px 0;
+      border-left: 0;
       &:hover {
         opacity: 1;
       }
     }
     &.x2 {
       width: 100%;
+      border-radius: 4px;
     }
     &.--no--list {
       margin-top: 7px;

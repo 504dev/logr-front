@@ -6,9 +6,14 @@
         :class="{ child: !!globals.org }"
         :src="`https://avatars.githubusercontent.com/u/${jwtPayload.github_id}`"
       />
-      <img class="avatar" :class="{ org: !!globals.org }" :src="`https://github.com/${globals.org}.png`" v-if="globals.org" />
+      <img
+        class="avatar"
+        :class="{ org: !!globals.org }"
+        :src="`https://github.com/${globals.org}.png`"
+        v-if="globals.org"
+      />
       <span>
-        <strong>{{ jwtPayload.username }}</strong>
+        <span class="username">{{ jwtPayload.username }}</span>
         |
         <a href="#" @click.prevent="$store.dispatch(ACTIONS.LOGOUT)">
           <font-awesome-icon icon="sign-out-alt" />
@@ -73,10 +78,16 @@ export default {
   box-sizing: border-box;
   padding: 20px;
   height: 100%;
+  a {
+    color: #111;
+    &:hover {
+      color: black;
+    }
+  }
   .hello {
     position: relative;
-    top: -32px;
-    left: -32px;
+    top: -30px;
+    left: -30px;
     margin-bottom: -20px;
     .avatar {
       width: 64px;
@@ -91,9 +102,12 @@ export default {
         height: 32px;
       }
       &.org {
-        border-color: #666;
+        border-color: black;
       }
     }
+  }
+  .username {
+    font-weight: 500;
   }
   h1 {
     color: #eee;

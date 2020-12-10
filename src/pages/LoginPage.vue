@@ -1,5 +1,5 @@
 <template>
-  <div class="center" v-if="globals">
+  <div class="center" :class="{ setup: globals.setup }" v-if="globals">
     <form :action="setupUrl()" method="post" v-if="globals.setup" ref="setup">
       <input type="hidden" name="manifest" id="manifest" :value="manifest" /><br />
       <a href="#" @click.prevent="$refs.setup.submit()" class="zoom">Create a GitHub App</a>
@@ -72,6 +72,10 @@ export default {
 <style scoped lang="scss">
 a {
   color: #111111;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
 }
 .center {
   white-space: nowrap;
@@ -81,13 +85,19 @@ a {
   margin: auto;
   top: 45%;
   text-align: left;
+  /*outline: dashed 1px black;*/
+  &.setup {
+    width: 220px;
+  }
 }
 .zoom {
   zoom: 1.5;
 }
 .avatar {
-  width: 16px;
-  height: 16px;
-  border-radius: 16px;
+  width: 20px;
+  height: 20px;
+  border-radius: 20px;
+  border: solid 1px #111;
+  margin-bottom: -4px;
 }
 </style>
