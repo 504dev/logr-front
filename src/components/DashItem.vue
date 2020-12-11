@@ -172,18 +172,18 @@ export default {
     top: 10px;
     right: 10px;
     img {
+      box-shadow: 0 0 1px 0 black;
       position: relative;
       width: 16px;
       height: 16px;
       border-radius: 16px;
       margin: 0;
-      margin-right: -4px;
+      margin-left: -2px;
       z-index: 1;
       &.member {
-        //
+        float: right;
       }
       &.owner {
-        margin-right: 0;
         z-index: 2;
       }
       &:hover {
