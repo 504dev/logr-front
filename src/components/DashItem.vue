@@ -240,7 +240,9 @@ export default {
       opacity: 0.8;
       width: 78px;
       border-radius: 0 4px 4px 0;
-      border-left: 0;
+      &:not(.x2) {
+        border-left: 0;
+      }
       &:hover {
         opacity: 1;
       }
