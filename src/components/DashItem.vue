@@ -234,9 +234,9 @@ export default {
     &.window-counts {
       /*font-size: 18px;*/
       background-image: url('/static/counts.jpg');
-      background-size: 112px;
-      background-position-y: -15px;
-      background-position-x: -1px;
+      background-size: 110px;
+      background-position-y: -5px;
+      background-position-x: 0;
       opacity: 0.8;
       width: 78px;
       border-radius: 0 4px 4px 0;
