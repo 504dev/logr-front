@@ -88,6 +88,7 @@ iframe {
   font-size: 64px;
   line-height: 128px;
   font-weight: bold;
+  letter-spacing: -5px;
 }
 .github {
   /*zoom: 0.7;*/
