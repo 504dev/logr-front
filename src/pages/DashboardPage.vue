@@ -77,7 +77,6 @@ export default {
 .wrapper {
   box-sizing: border-box;
   padding: 20px;
-  height: 100%;
   a {
     color: #111;
     &:hover {
