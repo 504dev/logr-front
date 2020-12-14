@@ -1,7 +1,9 @@
 <template>
   <div class="container">
     <div class="title">
-      <span>logr</span>
+      <span class="logo">
+        <img src="/static/logr.svg">
+      </span>
       <a href="https://github.com/504dev/logr" class="github">
         <font-awesome-icon :icon="['fab', 'github']" />
       </a>
@@ -89,6 +91,19 @@ iframe {
   line-height: 128px;
   font-weight: bold;
   letter-spacing: -5px;
+  .logo {
+    display: inline-block;
+    vertical-align: top;
+    width: 128px;
+    height: 128px;
+    overflow: hidden;
+    img {
+      margin-top: -32px;
+      margin-left: -34px;
+      width: 192px;
+      height: 192px;
+    }
+  }
 }
 .github {
   /*zoom: 0.7;*/
