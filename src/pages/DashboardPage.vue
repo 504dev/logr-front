@@ -53,7 +53,7 @@ export default {
       this.$store.dispatch(ACTIONS.LOAD_DASHBOARDS),
       this.$store.dispatch(ACTIONS.LOAD_GLOBALS)
     ])
-    document.title = this.user.username
+    document.title = this.user.username + (this.globals.org ? ` (${this.globals.org})` : '')
   },
   data() {
     return {

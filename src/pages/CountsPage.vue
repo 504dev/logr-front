@@ -115,7 +115,7 @@ export default {
   },
   watch: {
     ['filters.logname'](v, prev) {
-      document.title = v
+      document.title = this.dash.name + ' • ' + v
       if (prev !== '') {
         Object.assign(this.filters, {
           hostname: '',
