@@ -1,20 +1,16 @@
 <template>
   <div class="wrapper" v-if="this.user && this.dashboards && this.globals">
-    <div class="hello">
+    <div class="hello" :class="{ single: !globals.org }">
+      <logo :pattern="globals.org ? 'og' : 'g'" class="og" />
+      <img class="avatar org" :src="`https://github.com/${globals.org}.png`" :title="globals.org" v-if="globals.org" />
       <img
-        class="avatar"
-        :class="{ child: !!globals.org }"
+        class="avatar usr"
         :src="`https://avatars.githubusercontent.com/u/${jwtPayload.github_id}`"
+        :title="user.username"
       />
-      <img
-        class="avatar"
-        :class="{ org: !!globals.org }"
-        :src="`https://github.com/${globals.org}.png`"
-        v-if="globals.org"
-      />
-      <span>
+      <span class="nav">
         <span class="username">{{ jwtPayload.username }}</span>
-        |
+        <span>|</span>
         <a href="#" @click.prevent="$store.dispatch(ACTIONS.LOGOUT)">
           <font-awesome-icon icon="sign-out-alt" />
         </a>
@@ -39,13 +35,15 @@
 
 <script>
 import DashItem from '../components/DashItem'
+import Logo from '../components/Logo'
 import ACTIONS from '../store/action-types'
 import { RoleViewer } from '../../constants/roles'
 import { mapState, mapGetters } from 'vuex'
 
 export default {
   components: {
-    DashItem
+    DashItem,
+    Logo
   },
   async created() {
     await Promise.all([
@@ -88,33 +86,44 @@ export default {
   }
   .hello {
     position: relative;
-    top: -30px;
-    left: -30px;
-    margin-bottom: -20px;
+    margin-bottom: 96px;
+    &.single {
+      margin-left: -42px;
+    }
     .avatar {
-      width: 64px;
-      height: 64px;
-      border-radius: 32px;
+      position: absolute;
       border: solid 1px black;
-      &.child {
-        position: absolute;
-        top: 32px;
-        left: 32px;
-        width: 32px;
-        height: 32px;
-      }
+      top: -9px;
+      width: 50px;
+      height: 50px;
+      border-radius: 32px;
       &.org {
-        border-color: black;
+        left: -9px;
+      }
+      &.usr {
+        left: 34px;
       }
     }
-  }
-  .username {
-    font-weight: 500;
+    .og {
+      position: absolute;
+      top: -48px;
+      left: -26px;
+      z-index: -1;
+    }
+    .nav {
+      position: absolute;
+      display: inline-block;
+      top: 8px;
+      left: 96px;
+      .username {
+        font-weight: 500;
+      }
+    }
   }
   h1 {
     color: #eee;
     /*border-bottom: dashed 1px black;*/
-    margin: 30px 0 0 -15px;
+    margin: 32px 0 0 -10px;
   }
   .ghost {
     display: inline-block;

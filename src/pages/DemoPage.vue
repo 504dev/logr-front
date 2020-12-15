@@ -1,9 +1,7 @@
 <template>
   <div class="container">
     <div class="title">
-      <span class="logo">
-        <img src="/static/logr.png" />
-      </span>
+      <logo class="logo" />
       <a href="https://github.com/504dev/logr" class="github">
         <font-awesome-icon :icon="['fab', 'github']" />
       </a>
@@ -16,7 +14,12 @@
 
 <script>
 import ACTIONS from '../store/action-types'
+import Logo from '../components/Logo'
+
 export default {
+  components: {
+    Logo
+  },
   async mounted() {
     document.title = 'Demo'
     this.token = await this.$store.dispatch(ACTIONS.LOAD_FREE_TOKEN)
@@ -98,10 +101,6 @@ iframe {
     width: 128px;
     height: 128px;
     overflow: hidden;
-    img {
-      width: 100%;
-      height: 100%;
-    }
   }
 }
 .github {
