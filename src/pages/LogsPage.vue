@@ -37,7 +37,8 @@
           placeholder="Message"
           :class="{ selected: filters.message }"
           :x2="!orient"
-        /><input
+        ></input-x
+        ><input
           type="number"
           v-model="filters.pid"
           placeholder="Pid"
@@ -193,6 +194,7 @@ export default {
   },
   watch: {
     ['filters.logname'](v, prev) {
+      document.title = v
       if (prev !== '') {
         Object.assign(this.filters, {
           hostname: '',

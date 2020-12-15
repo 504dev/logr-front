@@ -115,6 +115,7 @@ export default {
   },
   watch: {
     ['filters.logname'](v, prev) {
+      document.title = v
       if (prev !== '') {
         Object.assign(this.filters, {
           hostname: '',

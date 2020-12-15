@@ -20,13 +20,7 @@ export default new Router({
     {
       path: '/demo',
       name: 'demo',
-      title: 'Logr • Demo',
       component: DemoPage
-    },
-    {
-      path: '/logos',
-      name: 'logos',
-      component: LogosPage
     },
     {
       path: '/dashboards',
@@ -52,6 +46,11 @@ export default new Router({
       path: '/jwt/:token',
       name: 'jwt',
       component: JwtPage
+    },
+    {
+      path: '/logos',
+      name: 'logos',
+      component: LogosPage
     }
   ]
 })

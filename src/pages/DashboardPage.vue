@@ -48,9 +48,12 @@ export default {
     DashItem
   },
   async created() {
-    this.$store.dispatch(ACTIONS.LOAD_ME)
-    this.$store.dispatch(ACTIONS.LOAD_DASHBOARDS)
-    this.$store.dispatch(ACTIONS.LOAD_GLOBALS)
+    await Promise.all([
+      this.$store.dispatch(ACTIONS.LOAD_ME),
+      this.$store.dispatch(ACTIONS.LOAD_DASHBOARDS),
+      this.$store.dispatch(ACTIONS.LOAD_GLOBALS)
+    ])
+    document.title = this.user.username
   },
   data() {
     return {

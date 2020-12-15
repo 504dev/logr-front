@@ -30,6 +30,7 @@ const ls = store.namespace('login.loginers')
 export default {
   async created() {
     await this.$store.dispatch(ACTIONS.LOAD_GLOBALS)
+    document.title = this.globals.setup ? 'Setup logr' : 'Sign in'
   },
   computed: {
     ...mapGetters(['restUrl']),
