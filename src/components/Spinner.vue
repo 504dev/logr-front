@@ -1,7 +1,5 @@
 <template>
-  <span class="spinner rotating">
-    <font-awesome-icon icon="cog" v-bind="$attrs"/>
-  </span>
+    <font-awesome-icon icon="cog" class="rotating" v-bind="$attrs"/>
 </template>
 
 <style scoped lang="scss">
@@ -15,8 +13,5 @@
 }
 .rotating {
   animation: rotating 1s linear infinite;
-}
-.spinner {
-  display: inline-block;
 }
 </style>

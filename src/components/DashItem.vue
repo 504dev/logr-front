@@ -78,11 +78,11 @@ export default {
     this.loaded = true
   },
   data() {
-    const options = ['javascript', 'golang', 'python', 'php']
+    const options = ['plain', 'javascript', 'golang', 'python', 'php']
     return {
       stats: null,
       options,
-      lang: options[0],
+      lang: options[1],
       loaded: false
     }
   },
@@ -99,6 +99,13 @@ export default {
     },
     code() {
       const key = this.dash.keys[0]
+      const plain = `\
+/* public key */
+${key.public_key}
+
+/* private key */
+${key.private_key}
+`
       const javascript = `\
 const { Logr } = require('logr-node-client');
 
@@ -146,7 +153,7 @@ $conf = new Logr(
 $logr = $conf->getLogger('hello.log');
 
 $logr->info('Hello, Logr!');`
-      return { javascript, golang, python, php }
+      return { plain, javascript, golang, python, php }
     }
   },
   methods: {
@@ -368,7 +375,7 @@ $logr->info('Hello, Logr!');`
       background-color: #bdf;
     }
     &.php {
-      background-color: #dbf;
+      background-color: #fbd;
     }
   }
 }
