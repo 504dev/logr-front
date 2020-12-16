@@ -70,17 +70,13 @@
       </td>
       <td>
         <div class="content">
-          <span v-if="loading">
-            <!--            <span>Loading...</span>-->
-            <font-awesome-icon icon="cog" spin size="2x" class="spinner" />
-          </span>
+          <spinner size="2x" v-if="loading" />
           <slot v-else name="content"></slot>
         </div>
         <router-link to="/dashboards" v-if="fullscreen"
           ><img class="avatar" :src="`https://avatars.githubusercontent.com/u/${user.github_id}`"
         /></router-link>
         <span class="arrow" :class="arrowDirection" @click="onFull"></span>
-        <slot name="pause" />
       </td>
     </tr>
   </table>
@@ -88,11 +84,15 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import MUTATIONS from '@/store/mutations-types.js'
+import MUTATIONS from '../store/mutations-types.js'
+import Spinner from '../components/Spinner'
 
 export default {
+  components: {
+    Spinner
+  },
   props: {
-    loading: Boolean
+    loading: Boolean,
   },
   computed: {
     ...mapState(['user', 'dashboards', 'fullscreen', 'orient']),
@@ -206,14 +206,13 @@ table {
         .goto {
           font-size: smaller;
           position: absolute;
-          right: 95px;
-          top: 17px;
-          /*display: none;*/
+          right: 15px;
+          top: 55px;
         }
       }
 
       .content {
-        font-family: Courier;
+        font-family: Courier, monospace;
         position: absolute;
         top: 0;
         bottom: 0;
@@ -223,10 +222,6 @@ table {
         padding: 5px 10px;
         overflow: scroll;
         font-size: 14px;
-
-        .spinner {
-          margin: 3px 1px;
-        }
       }
     }
   }
@@ -237,7 +232,7 @@ table {
     }
 
     &.head-orient .content {
-      padding-top: 25px;
+      padding-top: 30px;
     }
   }
 
@@ -306,12 +301,12 @@ table {
   }
 
   .arrow {
+    display: block;
     color: #fff;
     position: absolute;
     z-index: 900;
     top: 0;
     left: 0;
-    display: block;
     width: 40px;
     height: 40px;
     margin: 0;
@@ -391,10 +386,9 @@ table {
         margin-left: -16px;
       }
     }
-
     &.head-orient {
       .avatar {
-        margin-top: -18px;
+        margin-top: -16px;
       }
     }
   }

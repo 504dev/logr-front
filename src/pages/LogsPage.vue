@@ -62,7 +62,15 @@
           v-model="filters.pattern"
           :class="{ selected: filters.pattern }"
           :placeholder="placeholderRe || `0000-00-00T00:00:00`"
-        /><input type="text" v-model="filters.limit" placeholder="Limit" id="filter-limit" />
+        /><input
+          type="text"
+          v-model="filters.limit"
+          placeholder="Limit"
+          id="filter-limit"
+          :class="{ selected: filters.limit }"
+        /><button class="pause selected" :class="{ 'pause-on': paused }" @mouseup.prevent="onPause">
+          <font-awesome-icon icon="pause" /> {{ paused ? 'paused' : 'pause' }}
+        </button>
       </form>
     </template>
 
@@ -77,7 +85,7 @@
     <template v-slot:content>
       <div class="block block-live" :class="{ reverse: !!direction }">
         <template v-for="(log, key) in logs.live">
-          <div v-if="log.hr" :key="key" class="pause-line">
+          <div v-if="log.hr" :key="key" class="separator-pause">
             <span><font-awesome-icon icon="pause" /> {{ log.text }}</span>
           </div>
           <log-item v-else :value="log" :filters="filters" :key="key" @tag="onTag" @hover="onHover" />
@@ -100,14 +108,9 @@
       </div>
       <span class="more" @click="onMore" v-if="offset">
         more
-        <font-awesome-icon icon="cog" spin v-if="deepLoading" />
+        <spinner v-if="deepLoading" />
         <font-awesome-icon icon="chevron-circle-down" v-else />
       </span>
-    </template>
-    <template v-slot:pause>
-      <div class="pause" :class="{ 'pause-on': paused }" @click="onPause">
-        <font-awesome-icon icon="pause" />
-      </div>
     </template>
   </wrapper>
 </template>
@@ -123,6 +126,7 @@ import DateTimeIso from '@/components/DateTimeIso'
 import DateTimeRegexp from '@/components/DateTimeRegexp'
 import Wrapper from '@/components/WrapperTable'
 import InputX from '@/components/InputX'
+import Spinner from '@/components/Spinner'
 import { mapState } from 'vuex'
 
 const ls = store.namespace('logs')
@@ -134,7 +138,8 @@ export default {
     LogItem,
     RangeDateTimePicker,
     DateTimeIso,
-    InputX
+    InputX,
+    Spinner
   },
   async created() {
     await Promise.all([
@@ -432,6 +437,7 @@ select#filter-version {
 }
 input#filter-limit {
   width: 60px;
+  margin-right: 10px;
 }
 
 .block {
@@ -440,14 +446,16 @@ input#filter-limit {
   margin: 0;
   border: dashed 0 grey;
   &.block-live {
-    //
+    z-index: 100;
   }
   &.block-history {
     opacity: 0.8;
+    z-index: 99;
   }
   &.block-deep {
     opacity: 0.7;
     margin: 5px 0;
+    z-index: 98;
   }
   &.dashed {
     border-width: 1px 0 0 0;
@@ -495,72 +503,22 @@ input#filter-limit {
     opacity: 1;
   }
 }
+
 .pause {
-  position: absolute;
-  z-index: 900;
-  left: -190px;
-  bottom: 50px;
-  width: 180px;
-  height: 40px;
-  line-height: 40px;
-  font-size: 20px;
-  color: white;
-  text-align: center;
-  border-radius: 3px;
-  background-color: #aaa;
-  border: solid 1px rgba(0, 0, 0, 0.2);
-  opacity: 0.9;
   cursor: pointer;
-  box-sizing: border-box;
-  &:hover {
-    opacity: 1;
+  width: 110px;
+  background-color: #eee;
+  svg {
+    zoom: 0.8;
   }
   &.pause-on {
-    opacity: 1;
     background-color: #088;
+    border-color: #044;
+    color: white;
   }
 }
 
-.fullscreen {
-  .pause {
-    width: 25px;
-    left: -2px;
-    font-size: 14px;
-    border: none;
-    background-color: rgba(128, 128, 128, 0.6);
-    &.pause-on {
-      background-color: #088;
-    }
-  }
-}
-
-.head-orient {
-  .pause {
-    border-radius: 3px 3px 0 0;
-    height: 40px;
-    line-height: 40px;
-    top: -40px;
-    right: 15px;
-    left: auto;
-    width: 55px;
-  }
-  /*@media screen and (max-width: 600px) {*/
-  /*  .pause {*/
-  /*    width: 55px;*/
-  /*  }*/
-  /*}*/
-  &.fullscreen {
-    .pause {
-      width: 55px;
-      top: 0;
-      border-radius: 0 0 3px 3px;
-      height: 25px;
-      line-height: 25px;
-    }
-  }
-}
-
-.pause-line {
+.separator-pause {
   position: relative;
   border-top: dashed 1px #088;
   span {

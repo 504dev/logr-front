@@ -109,6 +109,7 @@ export default {
       top: -48px;
       left: -26px;
       z-index: -1;
+      opacity: 0.9;
     }
     .nav {
       position: absolute;

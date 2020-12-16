@@ -51,10 +51,12 @@
         </span>
       </div>
     </div>
-    <modal :name="`keys-${dash.id}`" width="320">
-      <div v-for="key in dash.keys" :key="key.public_key" class="keys">
-        <p><label>Public:</label><br />{{ key.public_key }}</p>
-        <p><label>Private:</label><br />{{ key.private_key }}</p>
+    <modal :name="`keys-${dash.id}`" width="480" height="330">
+      <div class="modal">
+        <select v-model="lang" class="selected">
+          <option :value="opt" v-for="opt in options" :key="opt">{{ opt }}</option>
+        </select>
+        <div v-for="key in dash.keys" :key="key.public_key" class="keys" :class="lang">{{ code[lang] }}</div>
       </div>
     </modal>
   </div>
@@ -76,8 +78,11 @@ export default {
     this.loaded = true
   },
   data() {
+    const options = ['javascript', 'golang', 'python', 'php']
     return {
       stats: null,
+      options,
+      lang: options[0],
       loaded: false
     }
   },
@@ -91,6 +96,57 @@ export default {
     },
     isEmpty() {
       return !this.hasLogs && !this.hasCounts
+    },
+    code() {
+      const key = this.dash.keys[0]
+      const javascript = `\
+const { Logr } = require('logr-node-client');
+
+const conf = new Logr({
+  udp: ':7776',
+  publicKey: '${key.public_key}',
+  privateKey: '${key.private_key}',
+});
+
+const logr = conf.newLogger('hello.log');
+
+logr.info('Hello, Logr!');`
+      const golang = `\
+import logrc "github.com/504dev/logr-go-client"
+
+func main() {
+    conf := logrc.Config{
+        Udp:        ":7776",
+        PublicKey:  "${key.public_key}",
+        PrivateKey: "${key.private_key}",
+    }
+    logr, _ = conf.NewLogger("hello.log")
+
+    logr.Info("Hello, Logr!")
+}`
+      const python = `\
+from logrpy import Logr
+
+conf = Logr(
+    ('127.0.0.1', 7776),
+    '${key.public_key}',
+    '${key.private_key}',
+)
+
+logr = conf.getlogger('hello.log')
+
+logr.info('Hello, Logr!')`
+      const php = `\
+$conf = new Logr(
+    ':7776',
+    '${key.public_key}',
+    '${key.private_key}
+);
+
+$logr = $conf->getLogger('hello.log');
+
+$logr->info('Hello, Logr!');`
+      return { javascript, golang, python, php }
     }
   },
   methods: {
@@ -289,11 +345,31 @@ export default {
     }
   }
 }
-.keys {
+.modal {
   padding: 10px;
-  word-wrap: break-word;
-  label {
-    color: grey;
+  .keys {
+    border: solid 1px #111;
+    background-color: #eee;
+    font-family: 'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace;
+    font-size: 14px;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 4px;
+    white-space: pre;
+    overflow: scroll;
+    height: 245px;
+    &.javascript {
+      background-color: #fdb;
+    }
+    &.golang {
+      background-color: #bfd;
+    }
+    &.python {
+      background-color: #bdf;
+    }
+    &.php {
+      background-color: #dbf;
+    }
   }
 }
 </style>

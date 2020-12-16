@@ -29,7 +29,8 @@ html {
 }
 
 select,
-input {
+input,
+button {
   display: inline-block;
   box-sizing: border-box;
   vertical-align: top;
