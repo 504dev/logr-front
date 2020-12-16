@@ -68,7 +68,7 @@
           placeholder="Limit"
           id="filter-limit"
           :class="{ selected: filters.limit }"
-        /><button class="pause selected" :class="{ 'pause-on': paused }" @mouseup.prevent="onPause">
+        /><button class="pause" :class="{ 'pause-on': paused }" @mouseup.prevent="onPause">
           <font-awesome-icon icon="pause" /> {{ paused ? 'paused' : 'pause' }}
         </button>
       </form>
@@ -106,11 +106,11 @@
         <log-item v-for="(log, key) in deep" :value="log" :filters="filters" :key="key" @tag="onTag" @hover="onHover" />
         <span class="cnt" :title="`${deep.length}rows`">{{ deep.length }}<small>.</small></span>
       </div>
-      <span class="more" @click="onMore" v-if="offset">
+      <button class="more" @click="onMore" v-if="offset">
         more
         <spinner v-if="deepLoading" />
         <font-awesome-icon icon="chevron-circle-down" v-else />
-      </span>
+      </button>
     </template>
   </wrapper>
 </template>
@@ -485,19 +485,12 @@ input#filter-limit {
 }
 
 .more {
-  box-sizing: border-box;
-  width: 190px;
-  height: 25px;
-  line-height: 25px;
-  vertical-align: middle;
-  display: inline-block;
-  margin: 5px 0;
-  text-align: center;
+  border-color: #040;
+  color: white;
+  width: 180px;
   padding: 0 5px;
   background-color: green;
-  color: white;
-  border-radius: 2px;
-  opacity: 0.8;
+  opacity: 0.9;
   cursor: pointer;
   &:hover {
     opacity: 1;
@@ -508,6 +501,7 @@ input#filter-limit {
   cursor: pointer;
   width: 110px;
   background-color: #eee;
+  border-color: black;
   svg {
     zoom: 0.8;
   }
