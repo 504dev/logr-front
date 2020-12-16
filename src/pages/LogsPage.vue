@@ -488,7 +488,7 @@ input#filter-limit {
   border-color: #040;
   color: white;
   width: 180px;
-  padding: 0 5px;
+  margin: 5px 0;
   background-color: green;
   opacity: 0.9;
   cursor: pointer;
