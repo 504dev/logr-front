@@ -287,11 +287,11 @@ $logr->info('Hello, Logr!');`
       background-color: #444;
       background-image: url('/static/logs.jpg');
       background-size: 90px;
-      opacity: 0.7;
+      opacity: 0.88;
       width: 120px;
       border-radius: 4px 0 0 4px;
       &:hover {
-        opacity: 0.8;
+        opacity: 0.99;
       }
     }
     &.window-counts {

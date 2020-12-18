@@ -85,7 +85,7 @@
     <template v-slot:content>
       <div class="block block-live" :class="{ reverse: !!direction }">
         <template v-for="(log, key) in logs.live">
-          <div v-if="log.hr" :key="key" class="separator-pause">
+          <div v-if="log.hr" :key="key" class="separator-pause" :class="{ active: log.timer }">
             <span><font-awesome-icon icon="pause" /> {{ log.text }}</span>
           </div>
           <log-item v-else :value="log" :filters="filters" :key="key" @tag="onTag" @hover="onHover" />
@@ -159,15 +159,15 @@ export default {
   },
   destroyed() {
     this.sock.unsubscribe('/log', this.logHandler)
-    if (this.pausedTimer) {
-      clearInterval(this.pausedTimer)
+    if (this.pausedLine) {
+      clearInterval(this.pausedLine.timer)
     }
     clearInterval(this.buffer.timer)
   },
   data() {
     return {
       paused: false,
-      pausedTimer: null,
+      pausedLine: null,
       filters: {
         hostname: '',
         logname: '',
@@ -336,18 +336,20 @@ export default {
       this.paused = 1 - this.paused
       await this.$store.dispatch(ACTIONS.PAUSE_LOGS, this.paused)
       this.updateLocation()
-      if (this.pausedTimer) {
-        clearInterval(this.pausedTimer)
+      if (this.pausedLine) {
+        clearInterval(this.pausedLine.timer)
+        delete this.pausedLine.timer
       }
       if (this.paused) {
         const hr = {
           hr: true,
           timestamp: Date.now(),
-          text: '00:00'
+          text: '00:00',
+          timer: setInterval(() => {
+            hr.text = new Date(Date.now() - hr.timestamp).toISOString().slice(14, 19)
+          }, 1000)
         }
-        this.pausedTimer = setInterval(() => {
-          hr.text = new Date(Date.now() - hr.timestamp).toISOString().slice(14, 19)
-        }, 1000)
+        this.pausedLine = hr
         this.buffer.data.push(hr)
         this.flushLive()
       }
@@ -514,18 +516,25 @@ input#filter-limit {
 
 .separator-pause {
   position: relative;
-  border-top: dashed 1px #088;
+  border-top: dashed 1px #888;
   span {
     position: absolute;
     top: -9px;
     right: 0;
     color: #fff;
     font-size: 10px;
-    background-color: #088;
-    border: solid 1px #066;
+    background-color: #888;
+    border: solid 1px #666;
     padding: 1px 4px;
     border-radius: 3px;
     margin-right: 5px;
+  }
+  &.active {
+    border-top: dashed 1px #088;
+    span {
+      background-color: #088;
+      border: solid 1px #066;
+    }
   }
 }
 </style>

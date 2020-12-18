@@ -1,7 +1,8 @@
 <template>
   <div class="container">
     <div class="title">
-      <logo class="logo" />
+      <span class="logr">logr</span>
+      <!--      <logo class="logo" />-->
       <a href="https://github.com/504dev/logr" class="github">
         <font-awesome-icon :icon="['fab', 'github']" />
       </a>
@@ -92,9 +93,12 @@ iframe {
   width: 100%;
   text-align: center;
   font-size: 64px;
-  line-height: 128px;
-  font-weight: bold;
-  letter-spacing: -5px;
+  line-height: 96px;
+  /*font-weight: bold;*/
+  .logr {
+    font-family: Logr;
+    font-size: 96px;
+  }
   .logo {
     display: inline-block;
     vertical-align: top;
@@ -102,9 +106,8 @@ iframe {
     height: 128px;
     overflow: hidden;
   }
-}
-.github {
-  /*zoom: 0.7;*/
-  /*display: none;*/
+  .github {
+    color: #551a8b;
+  }
 }
 </style>

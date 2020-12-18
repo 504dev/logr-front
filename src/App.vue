@@ -59,4 +59,9 @@ input:focus {
 select {
   color: #777;
 }
+
+@font-face {
+  font-family: "Logr";
+  src: url(../static/fonts/Logr.ttf) format("truetype");
+}
 </style>
