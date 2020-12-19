@@ -216,9 +216,9 @@ $logr->info('Hello, Logr!');`
   padding: 10px;
   border-radius: 4px;
   border: solid 1px #000;
-  /*border: solid 1px #ccc;*/
   border-bottom-width: 2px;
   vertical-align: top;
+  white-space: nowrap;
   .title {
     color: black;
     font-weight: bold;

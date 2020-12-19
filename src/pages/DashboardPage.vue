@@ -30,6 +30,7 @@
         <dash-item :dash="dash" :key="dash.id" />
       </template>
     </div>
+    <div class="watermark">logr</div>
   </div>
 </template>
 
@@ -76,8 +77,10 @@ export default {
 
 <style scoped lang="scss">
 .wrapper {
+  position: relative;
   box-sizing: border-box;
   padding: 20px;
+  min-width: 540px;
   a {
     color: #111;
     &:hover {
@@ -156,6 +159,17 @@ export default {
       font-size: 60px;
       zoom: 0.6;
     }
+  }
+  .watermark {
+    font-family: Logr;
+    /*text-transform: uppercase;*/
+    font-size: 24px;
+    display: inline-block;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    color: #eee;
+    padding: 10px 15px;
   }
 }
 </style>
