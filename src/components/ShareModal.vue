@@ -1,7 +1,7 @@
 <template>
   <modal v-bind="$attrs" width="480">
     <div class="modal-body">
-      <p class="title">«{{ dash.name }}»</p>
+      <p class="title">{{ dash.name }}</p>
       <div class="team">
         <div v-for="member in dash.members" :key="member.id" class="member">
           <span class="remove" @click="removeMember(member)">
@@ -17,9 +17,9 @@
         </div>
       </div>
       <form @submit.prevent="addMember()">
-        <input type="text" v-model="search" class="search selected" placeholder="type username" /><img
-          :src="`https://github.com/${search}.png?size=64`"
+        <input type="text" :value="search" @input="debounceSearch" class="search selected" placeholder="type username" /><img
           v-if="!disabled"
+          :src="`${match.avatar_url}?size=64`"
         /><button class="add selected" :disabled="disabled">
           Add member
         </button>
@@ -29,6 +29,8 @@
 </template>
 
 <script>
+import _ from 'lodash'
+import axios from 'axios'
 import { mapState } from 'vuex'
 import ACTIONS from '../store/action-types'
 
@@ -51,26 +53,29 @@ export default {
       if (this.search === this.user.username) {
         return true
       }
-      const already = this.dash.members.find(v => v.user.username === this.search)
-      if (already) {
+      if (this.dash.members.find(v => v.user.username === this.search)) {
         return true
       }
-      return false
+      return !this.match
     }
   },
   methods: {
+    debounceSearch: _.debounce(async function(e) {
+      this.search = e.target.value
+      const { data } = await axios(`https://api.github.com/users/${this.search}`).catch(() => ({ data: null }))
+      this.match = data
+    }, 500),
     async addMember() {
       let username = this.search
       try {
         const { data } = await this.$store.dispatch(ACTIONS.MEMBER_ADD, { dashId: this.dash.id, username })
-        console.log(data)
         this.dash.members.push(data)
         this.search = ''
       } catch (e) {
-        console.error(e.response)
+        console.error(e)
         switch (e.response.status) {
           case 404:
-            return alert(`User «${this.dash.name}» not found`)
+            return alert(`User ${this.dash.name} not found`)
           default:
             return alert(e)
         }
@@ -78,13 +83,12 @@ export default {
     },
     async removeMember(member) {
       console.log(member)
-      if (confirm(`Remove user «${member.user.username}» from «${this.dash.name}» members?`)) {
+      if (confirm(`Remove ${member.user.username} from members?`)) {
         try {
           const data = await this.$store.dispatch(ACTIONS.MEMBER_REMOVE, { dashId: this.dash.id, id: member.id })
           console.log(data)
         } catch (e) {
           console.error(e)
-          //
         }
         this.dash.members = this.dash.members.filter(v => v !== member)
       }

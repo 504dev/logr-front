@@ -1,7 +1,7 @@
 <template>
-  <modal v-bind="$attrs" width="480" height="380">
+  <modal v-bind="$attrs" width="480" height="340">
     <div class="modal-body">
-      <p class="title">«{{ dash.name }}»</p>
+      <p class="title">{{ dash.name }}</p>
       <select v-model="lang" class="selected">
         <option :value="opt" v-for="opt in options" :key="opt">{{ opt }}</option>
       </select>
@@ -100,7 +100,7 @@ $logr->info('Hello, Logr!');`
   select {
     position: absolute;
     right: 10px;
-    top: 20px;
+    top: 22px;
   }
   .keys {
     border: solid 1px #111;
