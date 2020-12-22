@@ -17,10 +17,16 @@
         </div>
       </div>
       <form @submit.prevent="addMember()">
-        <input type="text" :value="search" @input="debounceSearch" class="search selected" placeholder="type username" /><img
-          v-if="!disabled"
-          :src="`${match.avatar_url}?size=64`"
-        /><button class="add selected" :disabled="disabled">
+        <input
+          type="text"
+          :value="search"
+          @input="debounceSearch"
+          class="search selected"
+          placeholder="type username"
+        /><img v-if="!disabled" :src="`${match.avatar_url}?size=64`" /><button
+          class="add selected"
+          :disabled="disabled"
+        >
           Add member
         </button>
       </form>
@@ -68,9 +74,9 @@ export default {
     async addMember() {
       let username = this.search
       try {
-        const { data } = await this.$store.dispatch(ACTIONS.MEMBER_ADD, { dashId: this.dash.id, username })
-        this.dash.members.push(data)
+        const data = await this.$store.dispatch(ACTIONS.MEMBER_ADD, { dash: this.dash, username })
         this.search = ''
+        console.log('addMember', data)
       } catch (e) {
         console.error(e)
         switch (e.response.status) {
@@ -85,12 +91,11 @@ export default {
       console.log(member)
       if (confirm(`Remove ${member.user.username} from members?`)) {
         try {
-          const data = await this.$store.dispatch(ACTIONS.MEMBER_REMOVE, { dashId: this.dash.id, id: member.id })
-          console.log(data)
+          const data = await this.$store.dispatch(ACTIONS.MEMBER_REMOVE, { dash: this.dash, id: member.id })
+          console.log('removeMember', data)
         } catch (e) {
           console.error(e)
         }
-        this.dash.members = this.dash.members.filter(v => v !== member)
       }
     }
   }
@@ -165,6 +170,7 @@ export default {
       background-color: #080;
       border-color: #040;
       color: white;
+      cursor: pointer;
       &:disabled {
         cursor: not-allowed;
         background-color: #888;

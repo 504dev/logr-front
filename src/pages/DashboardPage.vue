@@ -2,7 +2,12 @@
   <div class="wrapper" v-if="this.user && this.dashboards && this.globals">
     <div class="hello" :class="{ single: !globals.org }">
       <logo :pattern="globals.org ? 'og' : 'g'" class="og" />
-      <img class="avatar org" :src="`https://github.com/${globals.org}.png?size=128`" :title="globals.org" v-if="globals.org" />
+      <img
+        class="avatar org"
+        :src="`https://github.com/${globals.org}.png?size=128`"
+        :title="globals.org"
+        v-if="globals.org"
+      />
       <img
         class="avatar usr"
         :src="`https://avatars.githubusercontent.com/u/${jwtPayload.github_id}`"
@@ -16,7 +21,7 @@
         </a>
       </span>
     </div>
-    <div v-if="user.role < RoleViewer">
+    <div v-if="user.role !== RoleViewer">
       <h1>Own</h1>
       <template v-for="dash in dashgroups.own">
         <dash-item :dash="dash" :key="dash.id" />
@@ -38,7 +43,7 @@
 import DashItem from '../components/DashItem'
 import Logo from '../components/Logo'
 import ACTIONS from '../store/action-types'
-import { RoleViewer } from '../../constants/roles'
+import { RoleViewer, RoleDemo } from '../../constants/roles'
 import { mapState, mapGetters } from 'vuex'
 
 export default {
@@ -66,6 +71,10 @@ export default {
   },
   methods: {
     async onAddDashboard() {
+      if (this.user.role === RoleDemo) {
+        alert('Not available in demo mode!')
+        return
+      }
       const name = prompt('Enter dashboard name:')
       if (name) {
         await this.$store.dispatch(ACTIONS.ADD_DASHBOARD, name)

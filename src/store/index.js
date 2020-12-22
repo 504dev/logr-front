@@ -149,17 +149,29 @@ const store = new Vuex.Store({
       state.dashboards.splice(index, 1)
       console.log(data)
     },
-    async [ACTIONS.MEMBER_ADD]({ state }, { dashId, username }) {
-      return api(`/me/dashboard/${dashId}/member`, {
-        params: { username },
-        method: 'POST'
-      })
+    async [ACTIONS.MEMBER_ADD]({ state }, { dash, username }) {
+      try {
+        const { data } = await api(`/me/dashboard/${dash.id}/member`, {
+          params: { username },
+          method: 'POST'
+        })
+        dash.members.push(data)
+        return data
+      } catch (e) {
+        throw e
+      }
     },
-    async [ACTIONS.MEMBER_REMOVE]({ state }, { dashId, id }) {
-      return api(`/me/dashboard/${dashId}/member`, {
-        params: { id },
-        method: 'DELETE'
-      })
+    async [ACTIONS.MEMBER_REMOVE]({ state }, { dash, id }) {
+      try {
+        const { data } = await api(`/me/dashboard/${dash.id}/member`, {
+          params: { id },
+          method: 'DELETE'
+        })
+        dash.members = dash.members.filter(v => v.id !== id)
+        return data
+      } catch (e) {
+        throw e
+      }
     },
     async [ACTIONS.LOAD_ME]({ state, dispatch }) {
       try {
