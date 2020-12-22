@@ -2,7 +2,7 @@
   <div class="wrapper" v-if="this.user && this.dashboards && this.globals">
     <div class="hello" :class="{ single: !globals.org }">
       <logo :pattern="globals.org ? 'og' : 'g'" class="og" />
-      <img class="avatar org" :src="`https://github.com/${globals.org}.png`" :title="globals.org" v-if="globals.org" />
+      <img class="avatar org" :src="`https://github.com/${globals.org}.png?size=128`" :title="globals.org" v-if="globals.org" />
       <img
         class="avatar usr"
         :src="`https://avatars.githubusercontent.com/u/${jwtPayload.github_id}`"
@@ -170,6 +170,8 @@ export default {
     right: 0;
     color: #eee;
     padding: 10px 15px;
+    z-index: -99;
+    pointer-events: none;
   }
 }
 </style>

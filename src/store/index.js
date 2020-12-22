@@ -149,9 +149,16 @@ const store = new Vuex.Store({
       state.dashboards.splice(index, 1)
       console.log(data)
     },
-    async [ACTIONS.SHARE_DASHBOARD]({ state }, { dashId, username }) {
-      return api(`/me/dashboard/share/${dashId}/to/${username}`, {
+    async [ACTIONS.MEMBER_ADD]({ state }, { dashId, username }) {
+      return api(`/me/dashboard/${dashId}/member`, {
+        params: { username },
         method: 'POST'
+      })
+    },
+    async [ACTIONS.MEMBER_REMOVE]({ state }, { dashId, id }) {
+      return api(`/me/dashboard/${dashId}/member`, {
+        params: { id },
+        method: 'DELETE'
       })
     },
     async [ACTIONS.LOAD_ME]({ state, dispatch }) {

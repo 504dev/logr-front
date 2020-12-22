@@ -37,35 +37,36 @@
         <div class="empty" v-if="isEmpty">(empty)</div>
       </div>
       <div class="tools">
-        <span @click="onEdit(dash)">
-          <font-awesome-icon class="icon" icon="edit" />
-        </span>
-        <span @click="onShare(dash)">
+        <span @click="onShare(dash)" title="share">
           <font-awesome-icon class="icon" icon="share" />
         </span>
+        <span @click="onEdit(dash)">
+          <font-awesome-icon class="icon" icon="edit" title="edit" />
+        </span>
         <span @click="onDelete(dash)">
-          <font-awesome-icon class="icon" icon="trash-alt" />
+          <font-awesome-icon class="icon" icon="trash-alt" title="remove" />
         </span>
         <span @click="onKeys(dash)">
-          <font-awesome-icon class="icon" icon="key" />
+          <font-awesome-icon class="icon" icon="key" title="keys" />
         </span>
       </div>
     </div>
-    <modal :name="`keys-${dash.id}`" width="480" height="330">
-      <div class="modal">
-        <select v-model="lang" class="selected">
-          <option :value="opt" v-for="opt in options" :key="opt">{{ opt }}</option>
-        </select>
-        <div v-for="key in dash.keys" :key="key.public_key" class="keys" :class="lang">{{ code[lang] }}</div>
-      </div>
-    </modal>
+    <share-modal :dash="dash" :name="`share-${dash.id}`" />
+    <keys-modal :dash="dash" :name="`keys-${dash.id}`" />
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
 import ACTIONS from '../store/action-types'
+import ShareModal from './ShareModal'
+import KeysModal from './KeysModal'
+
 export default {
+  components: {
+    ShareModal,
+    KeysModal
+  },
   props: {
     dash: Object
   },
@@ -78,11 +79,8 @@ export default {
     this.loaded = true
   },
   data() {
-    const options = ['plain', 'javascript', 'golang', 'python', 'php']
     return {
       stats: null,
-      options,
-      lang: options[1],
       loaded: false
     }
   },
@@ -96,84 +94,14 @@ export default {
     },
     isEmpty() {
       return !this.hasLogs && !this.hasCounts
-    },
-    code() {
-      const key = this.dash.keys[0]
-      const plain = `\
-/* public key */
-${key.public_key}
-
-/* private key */
-${key.private_key}
-`
-      const javascript = `\
-const { Logr } = require('logr-node-client');
-
-const conf = new Logr({
-  udp: ':7776',
-  publicKey: '${key.public_key}',
-  privateKey: '${key.private_key}',
-});
-
-const logr = conf.newLogger('hello.log');
-
-logr.info('Hello, Logr!');`
-      const golang = `\
-import logrc "github.com/504dev/logr-go-client"
-
-func main() {
-    conf := logrc.Config{
-        Udp:        ":7776",
-        PublicKey:  "${key.public_key}",
-        PrivateKey: "${key.private_key}",
-    }
-    logr, _ = conf.NewLogger("hello.log")
-
-    logr.Info("Hello, Logr!")
-}`
-      const python = `\
-from logrpy import Logr
-
-conf = Logr(
-    ('127.0.0.1', 7776),
-    '${key.public_key}',
-    '${key.private_key}',
-)
-
-logr = conf.getlogger('hello.log')
-
-logr.info('Hello, Logr!')`
-      const php = `\
-$conf = new Logr(
-    ':7776',
-    '${key.public_key}',
-    '${key.private_key}
-);
-
-$logr = $conf->getLogger('hello.log');
-
-$logr->info('Hello, Logr!');`
-      return { plain, javascript, golang, python, php }
     }
   },
   methods: {
-    async onShare(dash) {
-      const username = prompt('Enter @username to share:')
-      if (!username) {
-        return
-      }
-      try {
-        await this.$store.dispatch(ACTIONS.SHARE_DASHBOARD, { dashId: dash.id, username })
-        alert('Shared')
-      } catch (e) {
-        console.error(e.response)
-        switch (e.response.status) {
-          case 404:
-            return alert('User not found')
-          case 505:
-            return alert('Error')
-        }
-      }
+    onShare(dash) {
+      this.$modal.show(`share-${dash.id}`)
+    },
+    onKeys(dash) {
+      this.$modal.show(`keys-${dash.id}`)
     },
     async onEdit(dash) {
       const name = prompt('Edit dash name:', dash.name)
@@ -183,7 +111,7 @@ $logr->info('Hello, Logr!');`
       await this.$store.dispatch(ACTIONS.EDIT_DASHBOARD, { id: dash.id, name })
     },
     async onDelete(dash) {
-      const confirm = prompt('Enter dash name for delete:')
+      const confirm = prompt('Please type in the name of the dashboard to confirm:')
       if (confirm === null) {
         return
       }
@@ -193,9 +121,6 @@ $logr->info('Hello, Logr!');`
         alert('Canceled.')
       }
     },
-    onKeys(dash) {
-      this.$modal.show(`keys-${dash.id}`)
-    }
   }
 }
 </script>
@@ -206,6 +131,7 @@ $logr->info('Hello, Logr!');`
   position: relative;
   margin: 20px 20px 0 0;
 }
+
 .dashboard {
   box-sizing: border-box;
   display: inline-block;
@@ -254,6 +180,7 @@ $logr->info('Hello, Logr!');`
       }
     }
   }
+
   .empty {
     margin-top: 45px;
     color: grey;
@@ -349,33 +276,6 @@ $logr->info('Hello, Logr!');`
     .icon {
       cursor: pointer;
       margin: 5px;
-    }
-  }
-}
-.modal {
-  padding: 10px;
-  .keys {
-    border: solid 1px #111;
-    background-color: #eee;
-    font-family: 'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace;
-    font-size: 14px;
-    margin-top: 10px;
-    padding: 10px;
-    border-radius: 4px;
-    white-space: pre;
-    overflow: scroll;
-    height: 245px;
-    &.javascript {
-      background-color: #fdb;
-    }
-    &.golang {
-      background-color: #bfd;
-    }
-    &.python {
-      background-color: #bdf;
-    }
-    &.php {
-      background-color: #fbd;
     }
   }
 }
