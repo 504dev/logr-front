@@ -4,7 +4,6 @@ import LoginPage from '@/pages/LoginPage'
 import DashboardPage from '@/pages/DashboardPage'
 import DemoPage from '@/pages/DemoPage'
 import LogsPage from '@/pages/LogsPage'
-import LogosPage from '@/pages/LogosPage'
 import CountsPage from '@/pages/CountsPage'
 import JwtPage from '@/pages/JwtPage'
 
@@ -47,10 +46,5 @@ export default new Router({
       name: 'jwt',
       component: JwtPage
     },
-    {
-      path: '/logos',
-      name: 'logos',
-      component: LogosPage
-    }
   ]
 })
