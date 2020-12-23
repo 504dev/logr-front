@@ -35,7 +35,7 @@ export default {
       if (!this.token) {
         return null
       }
-      const redirectUrl = encodeURIComponent('/dashboard/2/logs')
+      const redirectUrl = encodeURIComponent(`${location.origin}/dashboard/2/logs`)
       return `/jwt/${this.token}?redirect_url=${redirectUrl}`
     }
   },
