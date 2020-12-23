@@ -47,7 +47,8 @@ export default {
       } catch (err) {
         console.error(err)
         this.token = await this.$store.dispatch(ACTIONS.LOAD_FREE_TOKEN)
-        target.src = this.url
+        // target.src = this.url
+        console.log(this.token, this.url)
       }
     }
   }
