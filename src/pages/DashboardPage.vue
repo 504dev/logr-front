@@ -26,7 +26,11 @@
       <template v-for="dash in dashgroups.own">
         <dash-item :dash="dash" :key="dash.id" />
       </template>
-      <div class="ghost" :class="{ mini: dashgroups.own.length > 0 }" @click="onAddDashboard"></div>
+      <div
+        class="ghost"
+        :class="{ mini: dashgroups.own.length > 0, demo: user.role === RoleDemo }"
+        @click="onAddDashboard"
+      ></div>
     </div>
     <div>
       <h1>Shared</h1>
@@ -62,7 +66,8 @@ export default {
   data() {
     return {
       ACTIONS,
-      RoleViewer
+      RoleViewer,
+      RoleDemo
     }
   },
   computed: {
@@ -71,10 +76,6 @@ export default {
   },
   methods: {
     async onAddDashboard() {
-      if (this.user.role === RoleDemo) {
-        alert('Not available in demo mode!')
-        return
-      }
       const name = prompt('Enter dashboard name:')
       if (name) {
         await this.$store.dispatch(ACTIONS.ADD_DASHBOARD, name)
@@ -154,6 +155,9 @@ export default {
     text-align: center;
     font-size: 100px;
     cursor: pointer;
+    &.demo {
+      pointer-events: none;
+    }
     &::before {
       content: '+';
     }

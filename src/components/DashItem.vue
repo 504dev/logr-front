@@ -4,21 +4,22 @@
       <router-link :to="`/dashboard/${dash.id}/logs`" class="title">
         <span>{{ dash.name }}</span>
       </router-link>
-      <span class="team">
+      <div class="team">
         <a :href="`https://github.com/${dash.owner.username}`">
           <img
             :src="`https://avatars.githubusercontent.com/u/${dash.owner.github_id}`"
             :title="dash.owner.username"
             class="owner"/></a
-        ><a v-for="member in dash.members" :key="member.id" :href="`https://github.com/${member.user.username}`"
+        ><a v-for="member in members" :key="member.id" :href="`https://github.com/${member.user.username}`"
           ><img
             :src="`https://avatars.githubusercontent.com/u/${member.user.github_id}`"
             :title="member.user.username"
             :key="member.user_id"
             class="member"
+            :style="{ marginLeft: -2 - members.length + 'px' }"
           />
         </a>
-      </span>
+      </div>
       <div v-if="loaded">
         <router-link
           :to="`/dashboard/${dash.id}/logs`"
@@ -94,6 +95,9 @@ export default {
     },
     isEmpty() {
       return !this.hasLogs && !this.hasCounts
+    },
+    members() {
+      return this.dash.members.slice(0, 9)
     }
   },
   methods: {
@@ -120,7 +124,7 @@ export default {
       } else {
         alert('Canceled.')
       }
-    },
+    }
   }
 }
 </script>
@@ -156,27 +160,32 @@ export default {
     }
   }
   .team {
+    text-align: right;
     display: inline-block;
     position: absolute;
     top: 10px;
     right: 10px;
-    img {
-      box-shadow: 0 0 1px 0 black;
-      position: relative;
-      width: 16px;
-      height: 16px;
-      border-radius: 16px;
-      margin: 0;
-      margin-left: -2px;
-      z-index: 1;
-      &.member {
-        float: right;
-      }
-      &.owner {
-        z-index: 2;
-      }
-      &:hover {
-        z-index: 3;
+    max-width: 80px;
+    height: 16px;
+    /*outline: dashed 1px red;*/
+    a {
+      img {
+        box-shadow: 0 0 1px 0 black;
+        position: relative;
+        width: 16px;
+        height: 16px;
+        border-radius: 16px;
+        margin: 0;
+        z-index: 1;
+        &.member {
+          float: right;
+        }
+        &.owner {
+          z-index: 2;
+        }
+        &:hover {
+          z-index: 3;
+        }
       }
     }
   }
