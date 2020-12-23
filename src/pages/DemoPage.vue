@@ -35,7 +35,7 @@ export default {
       if (!this.token) {
         return null
       }
-      const redirectUrl = encodeURIComponent(`${location.origin}/dashboard/2/logs`)
+      const redirectUrl = encodeURIComponent('/dashboard/2/logs')
       return `/jwt/${this.token}?redirect_url=${redirectUrl}`
     }
   },
@@ -47,8 +47,7 @@ export default {
       } catch (err) {
         console.error(err)
         this.token = await this.$store.dispatch(ACTIONS.LOAD_FREE_TOKEN)
-        // target.src = this.url
-        console.log(this.token, this.url)
+        target.src = this.url
       }
     }
   }
