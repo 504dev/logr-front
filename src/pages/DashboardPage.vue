@@ -27,6 +27,7 @@
         <dash-item :dash="dash" :key="dash.id" />
       </template>
       <div
+        title="Add dashboard"
         class="ghost"
         :class="{ mini: dashgroups.own.length > 0, demo: user.role === RoleDemo }"
         @click="onAddDashboard"
@@ -76,6 +77,9 @@ export default {
   },
   methods: {
     async onAddDashboard() {
+      if (this.user.role === RoleDemo) {
+        return alert('Disabled in demo mode.')
+      }
       const name = prompt('Enter dashboard name:')
       if (name) {
         await this.$store.dispatch(ACTIONS.ADD_DASHBOARD, name)
@@ -155,9 +159,6 @@ export default {
     text-align: center;
     font-size: 100px;
     cursor: pointer;
-    &.demo {
-      pointer-events: none;
-    }
     &::before {
       content: '+';
     }
