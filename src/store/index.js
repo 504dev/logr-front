@@ -131,7 +131,7 @@ const store = new Vuex.Store({
         method: 'POST',
         data: { name }
       })
-      state.dashboards.push(data)
+      state.dashboards.push({ ...data, members: [] })
     },
     async [ACTIONS.EDIT_DASHBOARD]({ state }, { id, name }) {
       const { data } = await api(`/me/dashboard/${id}`, {

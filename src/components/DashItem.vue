@@ -97,7 +97,7 @@ export default {
       return !this.hasLogs && !this.hasCounts
     },
     members() {
-      return (this.dash.members || []).slice(0, 9)
+      return this.dash.members.slice(0, 9)
     }
   },
   methods: {
