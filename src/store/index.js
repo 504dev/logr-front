@@ -59,8 +59,8 @@ const store = new Vuex.Store({
         return null
       }
     },
-    isExpired(state, getters) {
-      return getters.jwtPayload ? getters.jwtPayload.exp * 1000 < Date.now() : true
+    expiredAt(state, getters) {
+      return getters.jwtPayload ? getters.jwtPayload.exp * 1000 : 0
     }
   },
   mutations: {
@@ -103,10 +103,7 @@ const store = new Vuex.Store({
     }
   },
   actions: {
-    [ACTIONS.LOGOUT]({ state, commit }, redirectUrl) {
-      if (redirectUrl) {
-        commit(MUTATIONS.SET_REDIRECT, location.href)
-      }
+    [ACTIONS.LOGOUT]({ commit }) {
       commit(MUTATIONS.UNSET_JWT)
       location.href = '/login'
     },
@@ -173,15 +170,12 @@ const store = new Vuex.Store({
         throw e
       }
     },
-    async [ACTIONS.LOAD_ME]({ state, dispatch }) {
+    async [ACTIONS.LOAD_ME]({ state }) {
       try {
         const { data } = await api('/me')
         state.user = data
       } catch (err) {
         console.error(err)
-        if (err.response && err.response.status === 401) {
-          dispatch(ACTIONS.LOGOUT, location.href)
-        }
       }
     },
     async [ACTIONS.LOAD_LOGS]({}, params) {
@@ -242,9 +236,10 @@ const store = new Vuex.Store({
 })
 
 function api(path, options = {}, useAuth = true) {
-  const { state, getters, dispatch } = store
-  if (useAuth && getters.isExpired) {
-    dispatch(ACTIONS.LOGOUT, location.href)
+  const { state, getters, dispatch, commit } = store
+  if (useAuth && Date.now() > getters.expiredAt) {
+    commit(MUTATIONS.SET_REDIRECT, location.href)
+    dispatch(ACTIONS.LOGOUT)
     return
   }
   return axios({

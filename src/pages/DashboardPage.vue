@@ -171,7 +171,8 @@ export default {
       height: 80px;
       line-height: 40px;
       font-size: 60px;
-      zoom: 0.6;
+      /*zoom: 0.5;*/
+      /*border-width: 6px;*/
     }
   }
   .watermark {

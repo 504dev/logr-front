@@ -89,7 +89,7 @@ export default {
     },
     async removeMember(member) {
       console.log(member)
-      if (confirm(`Remove ${member.user.username} from members?`)) {
+      if (confirm(`Remove ${member.user.username} member?`)) {
         try {
           const data = await this.$store.dispatch(ACTIONS.MEMBER_REMOVE, { dash: this.dash, id: member.id })
           console.log('removeMember', data)
