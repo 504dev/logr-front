@@ -3,7 +3,12 @@
     <div class="modal-body">
       <p class="title">{{ dash.name }}</p>
       <div class="team">
-        <div v-for="member in dash.members" :key="member.id" class="member">
+        <div
+          v-for="member in membersSorted"
+          :key="member.id"
+          class="member"
+          :class="{ invited: !member.user.login_at }"
+        >
           <span class="remove" @click="removeMember(member)">
             <img
               :src="`https://avatars.githubusercontent.com/u/${member.user.github_id}`"
@@ -11,8 +16,12 @@
               :key="member.user_id"
               class="avatar"
             />
-            <font-awesome-icon icon="times-circle" title="remove" />
+            <font-awesome-icon
+              icon="times-circle"
+              :title="member.user.login_at ? 'remove membership' : 'remove invition'"
+            />
           </span>
+          <font-awesome-icon icon="envelope-open-text" title="invited" class="invition" />
           {{ member.user.username }}
         </div>
       </div>
@@ -63,6 +72,9 @@ export default {
         return true
       }
       return !this.match
+    },
+    membersSorted() {
+      return _.sortBy(this.dash.members, 'user.login_at')
     }
   },
   methods: {
@@ -89,7 +101,7 @@ export default {
     },
     async removeMember(member) {
       console.log(member)
-      if (confirm(`Remove ${member.user.username} member?`)) {
+      if (confirm(`Remove ${member.user.username} ${member.user.login_at ? 'membership' : 'invition'}?`)) {
         try {
           const data = await this.$store.dispatch(ACTIONS.MEMBER_REMOVE, { dash: this.dash, id: member.id })
           console.log('removeMember', data)
@@ -111,6 +123,7 @@ export default {
   .team {
     margin-top: 20px;
     .member {
+      position: relative;
       box-sizing: border-box;
       display: inline-block;
       width: 150px;
@@ -119,6 +132,22 @@ export default {
       white-space: nowrap;
       padding-right: 20px;
       line-height: 24px;
+      .invition {
+        display: none;
+        font-size: 10px;
+        position: absolute;
+        left: 12px;
+        bottom: 0;
+        background-color: white;
+        border-radius: 100%;
+        pointer-events: none;
+      }
+      &.invited {
+        opacity: 0.5;
+        .invition {
+          display: inline-block;
+        }
+      }
       .remove {
         display: inline-block;
         width: 20px;

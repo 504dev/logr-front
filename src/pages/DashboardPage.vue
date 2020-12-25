@@ -171,7 +171,7 @@ export default {
       height: 80px;
       line-height: 40px;
       font-size: 60px;
-      /*zoom: 0.5;*/
+      zoom: 0.8;
       /*border-width: 6px;*/
     }
   }
