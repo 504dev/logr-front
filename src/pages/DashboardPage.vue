@@ -21,7 +21,7 @@
         </a>
       </span>
     </div>
-    <div v-if="user.role !== RoleViewer">
+    <div v-if="user.role < RoleViewer">
       <h1>Own</h1>
       <template v-for="dash in dashgroups.own">
         <dash-item :dash="dash" :key="dash.id" />

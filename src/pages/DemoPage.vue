@@ -10,7 +10,7 @@
       <iframe :src="url" @load="onLoad" ref="iframe"></iframe>
     </div>
     <div class="examples">
-      <h2>Examples</h2>
+      <h2>Usage</h2>
       <codes :keys="keys" />
     </div>
   </div>
@@ -34,8 +34,8 @@ export default {
     return {
       token: null,
       keys: {
-        public_key: 'PUBLIC_KEY',
-        private_key: 'PRIVATE_KEY'
+        public_key: 'MDwwDQYJKoZIhvcNAQEBBQADKwAwKAIhAJs2zmsJINqe2jNB14TT0JSK0jnhhD+XrX6EwNCM3aGHAgMBAAE=',
+        private_key: 'MIGqAgEAAiEAmzbOawkg2p7aM0HXhNPQlIrSOeGEP5etfoTA0IzdoYcCAwEAAQIhAJFeb02IKyEWjj5beEK+HELLO:)1m6jbjutLpGglUi8VkgLm3hAhEAxJMa7O8UJPrA0qzZdR+MswIRAMoiz+SgegcoRh+f5s3Fqd0CEFQPN+9j2TBrDjPI+ICuSiMCEA4qjGlYedTglLGIslM/hB0CEEJ4rgmCV48AAuI/x2iNFp8='
       }
     }
   },
