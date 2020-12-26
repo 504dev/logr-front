@@ -2,7 +2,6 @@
   <div class="container">
     <div class="title">
       <span class="logr">logr</span>
-      <!--      <logo class="logo" />-->
       <a href="https://github.com/504dev/logr" class="github">
         <font-awesome-icon :icon="['fab', 'github']" />
       </a>
@@ -10,16 +9,22 @@
     <div class="window" v-if="token">
       <iframe :src="url" @load="onLoad" ref="iframe"></iframe>
     </div>
+    <div class="examples">
+      <h2>Examples</h2>
+      <codes :keys="keys" />
+    </div>
   </div>
 </template>
 
 <script>
 import ACTIONS from '../store/action-types'
 import Logo from '../components/Logo'
+import Codes from '../components/Codes'
 
 export default {
   components: {
-    Logo
+    Logo,
+    Codes
   },
   async mounted() {
     document.title = 'Demo'
@@ -27,7 +32,11 @@ export default {
   },
   data() {
     return {
-      token: null
+      token: null,
+      keys: {
+        public_key: 'PUBLIC_KEY',
+        private_key: 'PRIVATE_KEY'
+      }
     }
   },
   computed: {
@@ -56,58 +65,57 @@ export default {
 
 <style scoped lang="scss">
 .container {
+  min-width: 540px;
+  text-align: center;
   box-sizing: border-box;
-  position: absolute;
-  padding: 130px 80px 40px 80px;
-  height: 100%;
-  width: 100%;
-  bottom: 0;
+  padding: 0 80px;
+  padding-bottom: 40px;
+  border-top: solid 10px #eee;
 }
 @media screen and (max-width: 800px) {
   .container {
-    padding: 120px 20px 20px 20px;
+    padding: 0 20px;
   }
 }
 @media screen and (max-width: 400px) {
   .container {
-    padding: 120px 0 0 0;
+    padding: 0;
   }
 }
-.window {
-  box-sizing: border-box;
-  width: 100%;
-  height: 100%;
-  border-radius: 4px;
-  overflow: hidden;
-  border: solid 1px black;
-}
-iframe {
-  border: 0;
-  height: 100%;
-  width: 100%;
-}
 .title {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  text-align: center;
   font-size: 64px;
-  line-height: 96px;
-  /*font-weight: bold;*/
+  line-height: 150px;
   .logr {
     font-family: Logr;
     font-size: 96px;
   }
-  .logo {
-    display: inline-block;
-    vertical-align: top;
-    width: 128px;
-    height: 128px;
-    overflow: hidden;
-  }
   .github {
     color: #551a8b;
   }
+}
+.window {
+  display: inline-block;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1280px;
+  height: 480px;
+  border-radius: 4px;
+  overflow: hidden;
+  border: solid 1px black;
+  margin-bottom: 40px;
+  iframe {
+    border: 0;
+    height: 100%;
+    width: 100%;
+  }
+}
+.examples {
+  h2 {
+    text-align: center;
+    margin-bottom: -28px;
+  }
+  display: inline-block;
+  width: 540px;
+  text-align: right;
 }
 </style>
