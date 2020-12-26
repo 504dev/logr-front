@@ -20,10 +20,12 @@
     "axios": "0.19.2",
     "highcharts": "8.1.2",
     "jwt-decode": "2.2.0",
+    "prismjs": "^1.22.0",
     "store2": "2.11.2",
     "vue": "2.6.11",
     "vue-datetime": "1.0.0-beta.13",
     "vue-js-modal": "2.0.0-rc.6",
+    "vue-prism-component": "^1.2.0",
     "vue-router": "3.3.4",
     "vuex": "3.5.1"
   },

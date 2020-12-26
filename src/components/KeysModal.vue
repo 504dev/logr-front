@@ -5,7 +5,7 @@
       <select v-model="lang" class="selected">
         <option :value="opt" v-for="opt in options" :key="opt">{{ opt }}</option>
       </select>
-      <div v-for="key in dash.keys" :key="key.public_key" class="keys" :class="lang">{{ code[lang] }}</div>
+      <highlight v-for="key in dash.keys" :key="key.public_key" class="keys" :code="code[lang]" lang="javascript" />
     </div>
   </modal>
 </template>
@@ -13,8 +13,12 @@
 <script>
 import { mapState } from 'vuex'
 import ACTIONS from '../store/action-types'
+import Highlight from './Highlight'
 
 export default {
+  components: {
+    Highlight
+  },
   props: {
     dash: Object
   },
@@ -78,7 +82,7 @@ logr.info('Hello, Logr!')`
 $conf = new Logr(
     ':7776',
     '${key.public_key}',
-    '${key.private_key}
+    '${key.private_key}'
 );
 
 $logr = $conf->getLogger('hello.log');
@@ -103,28 +107,11 @@ $logr->info('Hello, Logr!');`
     top: 22px;
   }
   .keys {
-    border: solid 1px #111;
-    background-color: #eee;
-    font-family: 'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace;
-    font-size: 14px;
+    font-size: 13px;
     margin-top: 10px;
     padding: 10px;
     border-radius: 4px;
-    white-space: pre;
-    overflow: scroll;
     height: 245px;
-    &.javascript {
-      background-color: #fdb;
-    }
-    &.golang {
-      background-color: #bfd;
-    }
-    &.python {
-      background-color: #bdf;
-    }
-    &.php {
-      background-color: #fbd;
-    }
   }
 }
 </style>
