@@ -180,7 +180,7 @@ export default {
     /*text-transform: uppercase;*/
     font-size: 24px;
     display: inline-block;
-    position: absolute;
+    position: fixed;
     bottom: 0;
     right: 0;
     color: #eee;

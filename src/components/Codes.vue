@@ -1,9 +1,9 @@
 <template>
   <div class="codes">
-    <select v-model="lang" class="selected">
+    <select v-model="mutValue" class="selected" @change="onChange">
       <option :value="opt" v-for="opt in options" :key="opt">{{ opt }}</option>
     </select>
-    <prism class="keys" language="javascript">{{ code[lang] }}</prism>
+    <prism class="keys" language="javascript">{{ code[mutValue] }}</prism>
   </div>
 </template>
 
@@ -17,13 +17,19 @@ export default {
     Prism
   },
   props: {
-    keys: Object
+    keys: Object,
+    options: { type: Array, default: () => ['plain', 'javascript', 'golang', 'python', 'php'] },
+    value: { type: String, default: 'javascript' }
   },
   data() {
-    const options = ['plain', 'javascript', 'golang', 'python', 'php']
+    const mutValue = this.value
     return {
-      options,
-      lang: options[1]
+      mutValue
+    }
+  },
+  methods: {
+    onChange(e) {
+      this.$emit('input', e.target.value)
     }
   },
   computed: {

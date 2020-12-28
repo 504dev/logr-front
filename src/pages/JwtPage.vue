@@ -27,7 +27,7 @@ export default {
       this.$store.commit(MUTATIONS.FLUSH_REDIRECT)
       return
     }
-    this.$router.push('/')
+    this.$router.push('/dashboards')
   },
   computed: {
     ...mapGetters(['jwtPayload']),

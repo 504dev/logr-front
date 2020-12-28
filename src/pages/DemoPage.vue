@@ -11,7 +11,10 @@
     </div>
     <div class="examples">
       <h2>Usage</h2>
-      <codes :keys="keys" />
+      <codes :keys="keys" v-model="lang" />
+      <div class="link" v-if="link">
+        <a :href="link" target="_blank">{{ link }}</a>
+      </div>
     </div>
   </div>
 </template>
@@ -35,8 +38,10 @@ export default {
       token: null,
       keys: {
         public_key: 'MDwwDQYJKoZIhvcNAQEBBQADKwAwKAIhAJs2zmsJINqe2jNB14TT0JSK0jnhhD+XrX6EwNCM3aGHAgMBAAE=',
-        private_key: 'MIGqAgEAAiEAmzbOawkg2p7aM0HXhNPQlIrSOeGEP5etfoTA0IzdoYcCAwEAAQIhAJFeb02IKyEWjj5beEK+HELLO:)1m6jbjutLpGglUi8VkgLm3hAhEAxJMa7O8UJPrA0qzZdR+MswIRAMoiz+SgegcoRh+f5s3Fqd0CEFQPN+9j2TBrDjPI+ICuSiMCEA4qjGlYedTglLGIslM/hB0CEEJ4rgmCV48AAuI/x2iNFp8='
-      }
+        private_key:
+          'MIGqAgEAAiEAmzbOawkg2p7aM0HXhNPQlIrSOeGEP5etfoTA0IzdoYcCAwEAAQIhAJFeb02IKyEWjj5beEK+HELLO:)1m6jbjutLpGglUi8VkgLm3hAhEAxJMa7O8UJPrA0qzZdR+MswIRAMoiz+SgegcoRh+f5s3Fqd0CEFQPN+9j2TBrDjPI+ICuSiMCEA4qjGlYedTglLGIslM/hB0CEEJ4rgmCV48AAuI/x2iNFp8='
+      },
+      lang: 'javascript'
     }
   },
   computed: {
@@ -46,6 +51,14 @@ export default {
       }
       const redirectUrl = encodeURIComponent('/dashboard/2/logs')
       return `/jwt/${this.token}?redirect_url=${redirectUrl}`
+    },
+    link() {
+      return {
+        javascript: 'https://github.com/504dev/logr-node-client',
+        golang: 'https://github.com/504dev/logr-go-client',
+        python: 'https://github.com/504dev/logr-python-client',
+        php: 'https://github.com/504dev/logr-php-client'
+      }[this.lang]
     }
   },
   methods: {
@@ -103,6 +116,7 @@ export default {
   overflow: hidden;
   border: solid 1px black;
   margin-bottom: 40px;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.5);
   iframe {
     border: 0;
     height: 100%;
@@ -117,5 +131,9 @@ export default {
   display: inline-block;
   width: 540px;
   text-align: right;
+  .link a {
+    font-size: 10px;
+    color: black;
+  }
 }
 </style>
