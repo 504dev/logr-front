@@ -326,7 +326,7 @@ table {
 
     &.left,
     &.right {
-      top: 50%;
+      top: 60%;
       width: 20px;
       margin-top: -20px;
       border-radius: 20px 0 0 20px;

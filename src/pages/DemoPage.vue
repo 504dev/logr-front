@@ -81,20 +81,17 @@ export default {
   min-width: 540px;
   text-align: center;
   box-sizing: border-box;
-  padding: 0 80px;
-  padding-bottom: 40px;
+  padding: 40px 80px;
+  padding-top: 0;
   border-top: solid 10px #eee;
 }
 @media screen and (max-width: 800px) {
   .container {
-    padding: 0 20px;
+    padding: 20px 20px;
+    padding-top: 0;
   }
 }
-@media screen and (max-width: 400px) {
-  .container {
-    padding: 0;
-  }
-}
+
 .title {
   font-size: 64px;
   line-height: 150px;
@@ -129,7 +126,8 @@ export default {
     margin-bottom: -28px;
   }
   display: inline-block;
-  width: 540px;
+  width: 100%;
+  max-width: 540px;
   text-align: right;
   .link a {
     font-size: 10px;
