@@ -63,7 +63,7 @@ func main() {
         PublicKey:  "${public_key}",
         PrivateKey: "${private_key}",
     }
-    logr, _ = conf.NewLogger("hello.log")
+    logr, _ := conf.NewLogger("hello.log")
 
     logr.Info("Hello, Logr!")
 }`
