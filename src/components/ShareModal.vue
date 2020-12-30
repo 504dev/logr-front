@@ -1,5 +1,5 @@
 <template>
-  <modal v-bind="$attrs" width="480">
+  <modal v-bind="$attrs" width="480" @opened="focus">
     <div class="modal-body">
       <p class="title">{{ dash.name }}</p>
       <div class="team">
@@ -78,15 +78,17 @@ export default {
     }
   },
   methods: {
+    focus(e) {
+      e.ref.querySelector('input').focus()
+    },
     debounceSearch: _.debounce(async function(e) {
       this.search = e.target.value
       const { data } = await axios(`https://api.github.com/users/${this.search}`).catch(() => ({ data: null }))
       this.match = data
     }, 500),
     async addMember() {
-      let username = this.search
       try {
-        const data = await this.$store.dispatch(ACTIONS.MEMBER_ADD, { dash: this.dash, username })
+        const data = await this.$store.dispatch(ACTIONS.MEMBER_ADD, { dash: this.dash, member: this.match })
         this.search = ''
         console.log('addMember', data)
       } catch (e) {
@@ -143,7 +145,7 @@ export default {
         pointer-events: none;
       }
       &.invited {
-        opacity: 0.5;
+        opacity: 0.6;
         .invition {
           display: inline-block;
         }

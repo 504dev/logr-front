@@ -7,6 +7,8 @@ import jwtDecode from 'jwt-decode'
 import Sock from '../libs/sock'
 import ACTIONS from './action-types.js'
 import MUTATIONS from './mutations-types.js'
+import { RoleDemo } from '../../constants/roles'
+import demoStore from './demo'
 
 Vue.use(Vuex)
 
@@ -70,7 +72,7 @@ const store = new Vuex.Store({
     },
     [MUTATIONS.UNSET_JWT]: (state, token) => {
       ls.remove('jwt', token)
-      state.jwt = null
+      // state.jwt = null
     },
     [MUTATIONS.SWITCH_THEME]: state => {
       state.theme = 1 - state.theme
@@ -100,6 +102,22 @@ const store = new Vuex.Store({
     [MUTATIONS.FLUSH_REDIRECT]: state => {
       state.redirectUrl = ''
       ls.remove('redirect_url')
+    },
+    [MUTATIONS.DELETE_DASHBOARD]: (state, id) => {
+      const index = _.findIndex(state.dashboards, { id })
+      state.dashboards.splice(index, 1)
+    },
+    [MUTATIONS.EDIT_DASHBOARD]: (state, { id, name }) => {
+      const dash = _.find(state.dashboards, { id })
+      dash.name = name
+    },
+    [MUTATIONS.MEMBER_REMOVE]: (state, id) => {
+      for (const dash of state.dashboards) {
+        const deleted = _.find(dash.members, { id })
+        if (deleted) {
+          dash.members = _.filter(dash.members, m => m !== deleted)
+        }
+      }
     }
   },
   actions: {
@@ -115,7 +133,18 @@ const store = new Vuex.Store({
       }
       return this.sock
     },
+    async [ACTIONS.LOAD_ME]({ state }) {
+      try {
+        const { data } = await api('/me')
+        state.user = data
+      } catch (err) {
+        console.error(err)
+      }
+    },
     async [ACTIONS.LOAD_DASHBOARDS]({ state }) {
+      if (state.dashboards) {
+        return
+      }
       const { data } = await api('/me/dashboards')
       state.dashboards = data
     },
@@ -124,32 +153,39 @@ const store = new Vuex.Store({
       state.shared = data
     },
     async [ACTIONS.ADD_DASHBOARD]({ state }, name) {
+      if (state.user.role === RoleDemo) {
+        return demoStore.actions[ACTIONS.ADD_DASHBOARD](store, name)
+      }
       const { data } = await api('/me/dashboard', {
         method: 'POST',
         data: { name }
       })
       state.dashboards.push({ ...data, members: [] })
     },
-    async [ACTIONS.EDIT_DASHBOARD]({ state }, { id, name }) {
+    async [ACTIONS.EDIT_DASHBOARD]({ state, commit }, { id, name }) {
+      if (state.user.role === RoleDemo) {
+        return commit(MUTATIONS.EDIT_DASHBOARD, { id, name })
+      }
       const { data } = await api(`/me/dashboard/${id}`, {
         method: 'PUT',
         data: { name }
       })
-      const dash = _.find(state.dashboards, { id })
-      dash.name = data.name
+      commit(MUTATIONS.EDIT_DASHBOARD, data)
     },
-    async [ACTIONS.DELETE_DASHBOARD]({ state }, id) {
-      const { data } = await api(`/me/dashboard/${id}`, {
-        method: 'DELETE'
-      })
-      const index = _.findIndex(state.dashboards, { id })
-      state.dashboards.splice(index, 1)
-      console.log(data)
+    async [ACTIONS.DELETE_DASHBOARD]({ state, commit }, id) {
+      if (state.user.role === RoleDemo) {
+        return commit(MUTATIONS.DELETE_DASHBOARD, id)
+      }
+      await api(`/me/dashboard/${id}`, { method: 'DELETE' })
+      commit(MUTATIONS.DELETE_DASHBOARD, id)
     },
-    async [ACTIONS.MEMBER_ADD]({ state }, { dash, username }) {
+    async [ACTIONS.MEMBER_ADD]({ state }, { dash, member }) {
+      if (state.user.role === RoleDemo) {
+        return demoStore.actions[ACTIONS.MEMBER_ADD](store, { dash, member })
+      }
       try {
         const { data } = await api(`/me/dashboard/${dash.id}/member`, {
-          params: { username },
+          params: { username: member.login },
           method: 'POST'
         })
         dash.members.push(data)
@@ -158,24 +194,20 @@ const store = new Vuex.Store({
         throw e
       }
     },
-    async [ACTIONS.MEMBER_REMOVE]({ state }, { dash, id }) {
+    async [ACTIONS.MEMBER_REMOVE]({ state, commit }, { dash, id }) {
+      if (state.user.role === RoleDemo) {
+        commit(MUTATIONS.MEMBER_REMOVE, id)
+        return {}
+      }
       try {
         const { data } = await api(`/me/dashboard/${dash.id}/member`, {
           params: { id },
           method: 'DELETE'
         })
-        dash.members = dash.members.filter(v => v.id !== id)
+        commit(MUTATIONS.MEMBER_REMOVE, id)
         return data
       } catch (e) {
         throw e
-      }
-    },
-    async [ACTIONS.LOAD_ME]({ state }) {
-      try {
-        const { data } = await api('/me')
-        state.user = data
-      } catch (err) {
-        console.error(err)
       }
     },
     async [ACTIONS.LOAD_LOGS]({}, params) {
@@ -200,7 +232,7 @@ const store = new Vuex.Store({
       if (cached) {
         return cached
       }
-      const { data } = await api(`/logs/${dashId}/lognames`)
+      const { data } = await api(`/logs/${dashId}/lognames`).catch(() => ({ data: [] }))
       state.lognames.logs[dashId] = data
       return data
     },
@@ -213,7 +245,7 @@ const store = new Vuex.Store({
       if (cached) {
         return cached
       }
-      const { data } = await api(`/counts/${dashId}/lognames`)
+      const { data } = await api(`/counts/${dashId}/lognames`).catch(() => ({ data: [] }))
       state.lognames.counts[dashId] = data
       return data
     },

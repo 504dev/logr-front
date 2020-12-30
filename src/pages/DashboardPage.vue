@@ -21,7 +21,7 @@
         </a>
       </span>
     </div>
-    <div v-if="user.role < RoleViewer">
+    <div v-if="user.role !== RoleViewer">
       <h1>Own</h1>
       <template v-for="dash in dashgroups.own">
         <dash-item :dash="dash" :key="dash.id" />
@@ -29,7 +29,7 @@
       <div
         title="Add dashboard"
         class="ghost"
-        :class="{ mini: dashgroups.own.length > 0, demo: user.role === RoleDemo }"
+        :class="{ mini: dashgroups.own.length > 0 }"
         @click="onAddDashboard"
       ></div>
     </div>
@@ -48,7 +48,7 @@
 import DashItem from '../components/DashItem'
 import Logo from '../components/Logo'
 import ACTIONS from '../store/action-types'
-import { RoleViewer, RoleDemo } from '../../constants/roles'
+import { RoleViewer } from '../../constants/roles'
 import { mapState, mapGetters } from 'vuex'
 
 export default {
@@ -67,8 +67,7 @@ export default {
   data() {
     return {
       ACTIONS,
-      RoleViewer,
-      RoleDemo
+      RoleViewer
     }
   },
   computed: {
@@ -77,9 +76,6 @@ export default {
   },
   methods: {
     async onAddDashboard() {
-      if (this.user.role === RoleDemo) {
-        return alert('Disabled in demo mode.')
-      }
       const name = prompt('Enter dashboard name:')
       if (name) {
         await this.$store.dispatch(ACTIONS.ADD_DASHBOARD, name)
@@ -141,7 +137,7 @@ export default {
   h1 {
     color: #eee;
     /*border-bottom: dashed 1px black;*/
-    margin: 32px 0 0 -10px;
+    margin: 32px 0 -10px -10px;
   }
   .ghost {
     display: inline-block;
@@ -151,8 +147,7 @@ export default {
     height: 160px;
     border-radius: 4px;
     padding: 10px;
-    margin: 0;
-    margin-top: 10px;
+    margin: 20px 20px 0 0;
     border: dashed 4px #eee;
     color: #eee;
     line-height: 110px;

@@ -127,7 +127,7 @@ export default {
   }
   display: inline-block;
   width: 100%;
-  max-width: 540px;
+  max-width: 560px;
   text-align: right;
   .link a {
     font-size: 10px;
