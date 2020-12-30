@@ -108,7 +108,7 @@ export default {
   box-sizing: border-box;
   width: 100%;
   max-width: 1280px;
-  height: 480px;
+  height: 570px;
   border-radius: 4px;
   overflow: hidden;
   border: solid 1px black;

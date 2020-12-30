@@ -99,7 +99,7 @@ export default {
   }
   .hello {
     position: relative;
-    margin-bottom: 96px;
+    margin-bottom: 85px;
     &.single {
       margin-left: -42px;
     }
@@ -137,7 +137,7 @@ export default {
   h1 {
     color: #eee;
     /*border-bottom: dashed 1px black;*/
-    margin: 32px 0 -10px -10px;
+    margin: 25px 0 -10px -10px;
   }
   .ghost {
     display: inline-block;
