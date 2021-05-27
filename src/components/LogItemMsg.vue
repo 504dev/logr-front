@@ -139,7 +139,7 @@ export default {
 }
 .json {
   border-bottom: 1px dotted mediumpurple;
-  white-space: normal;
+  white-space: nowrap;
   outline: none;
   &:focus {
     white-space: pre;

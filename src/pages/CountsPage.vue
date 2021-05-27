@@ -35,13 +35,15 @@
     </template>
 
     <template v-slot:kinds>
-      <div v-for="(group, kind) in charts" :key="kind" class="kindblock">
+      <div v-for="(group, kind) in keynames" :key="kind" class="kindblock">
         <div class="kindname">
           <a :href="`#${kind}`">{{ kind }}</a>
         </div>
         <div class="keynames">
-          <div v-for="(series, keyname) in group" :key="keyname" class="keyname">
-            <a :href="`#${kind}:${keyname}`">{{ keyname }}</a>
+          <div v-for="(names, prefix) in group" :key="prefix" style="margin-top: 5px">
+            <div v-for="keyname in names" :key="keyname" class="keyname">
+              <a :href="`#${kind}:${keyname}`">{{ keyname }}</a>
+            </div>
           </div>
         </div>
       </div>
@@ -142,6 +144,14 @@ export default {
     },
     sortedVersions() {
       return this.groupStatsBy('version', 'updated')
+    },
+    keynames() {
+      return _.mapValues(this.charts, group => {
+        return _.chain(group)
+          .keys()
+          .groupBy(v => v.split(':')[0])
+          .value()
+      })
     },
     charts() {
       if (!this.counts) {
