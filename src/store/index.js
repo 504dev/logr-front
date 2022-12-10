@@ -72,7 +72,7 @@ const store = new Vuex.Store({
     },
     [MUTATIONS.UNSET_JWT]: (state, token) => {
       ls.remove('jwt', token)
-      // state.jwt = null
+      state.jwt = null
     },
     [MUTATIONS.SWITCH_THEME]: state => {
       state.theme = 1 - state.theme
@@ -133,9 +133,12 @@ const store = new Vuex.Store({
       }
       return this.sock
     },
-    async [ACTIONS.LOAD_ME]({ state }) {
+    async [ACTIONS.LOAD_ME]({ state, dispatch }) {
       try {
         const { data } = await api('/me')
+        if (!data) {
+          return dispatch(ACTIONS.LOGOUT)
+        }
         state.user = data
       } catch (err) {
         console.error(err)
