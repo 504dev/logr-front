@@ -5,9 +5,6 @@
 <script>
 import Highcharts from 'highcharts/highstock'
 
-let { colors } = Highcharts.getOptions()
-Highcharts.setOptions({ colors: colors.slice(1).concat(0) })
-
 export default {
   props: {
     series: Array,

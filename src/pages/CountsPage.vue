@@ -85,6 +85,7 @@ import Wrapper from '@/components/WrapperTable'
 
 const ls = store.namespace('counts')
 const DEFAULT_COLOR = '#434348'
+const COLORS = ['#434348', '#90ed7d', '#f7a35c', '#8085e9', '#f15c80', '#e4d354', '#2b908f', '#f45b5b', '#91e8e1', '#7cb5ec']
 
 export default {
   components: {
@@ -158,7 +159,9 @@ export default {
       if (!this.counts) {
         return null
       }
-      const isMultiHost = _.chain(this.counts).keyBy('hostname').size() > 1
+      // const isMultiHost = _.chain(this.counts).keyBy('hostname').size() > 1
+      const colorsMap = _.chain(this.counts).keyBy('hostname').keys().zipObject(COLORS).value()
+      console.log(colorsMap)
       return _.chain(this.counts)
         .groupBy('kind')
         .pick(['inc', 'avg', 'max', 'min', 'per', 'time'])
@@ -171,11 +174,12 @@ export default {
                 .keyBy('hostname')
                 .map(({ data }, hostname) => {
                   data = this.filled(data.map(([x, y]) => [x * 1000, y]).reverse())
-                  let color = DEFAULT_COLOR
-                  if (isMultiHost) {
-                    const hex = this.convertToHex(hostname)
-                    color = '#' + hex.slice(0, 6)
-                  }
+                  // let color = DEFAULT_COLOR
+                  // if (isMultiHost) {
+                  //   const hex = this.convertToHex(hostname)
+                  //   color = '#' + hex.slice(0, 6)
+                  // }
+                  const color = colorsMap[hostname]
                   return { name: hostname, data, color }
                 })
                 .sortBy('name')
