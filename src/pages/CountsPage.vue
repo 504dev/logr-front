@@ -84,6 +84,7 @@ import CountsChart from '@/components/CountsChart'
 import Wrapper from '@/components/WrapperTable'
 
 const ls = store.namespace('counts')
+const DEFAULT_COLOR = '#434348'
 
 export default {
   components: {
@@ -157,6 +158,7 @@ export default {
       if (!this.counts) {
         return null
       }
+      const isMultiHost = _.chain(this.counts).keyBy('hostname').size() > 1
       return _.chain(this.counts)
         .groupBy('kind')
         .pick(['inc', 'avg', 'max', 'min', 'per', 'time'])
@@ -169,8 +171,11 @@ export default {
                 .keyBy('hostname')
                 .map(({ data }, hostname) => {
                   data = this.filled(data.map(([x, y]) => [x * 1000, y]).reverse())
-                  const hex = this.convertToHex(hostname)
-                  const color = '#' + hex.slice(0, 6)
+                  let color = DEFAULT_COLOR
+                  if (isMultiHost) {
+                    const hex = this.convertToHex(hostname)
+                    color = '#' + hex.slice(0, 6)
+                  }
                   return { name: hostname, data, color }
                 })
                 .sortBy('name')
