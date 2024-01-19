@@ -15,7 +15,7 @@
           id="filter-hostname"
           v-model="filters.hostname"
           v-if="sortedHostnames.length > 1 || filters.hostname"
-          :class="{ selected: filters.logname }"
+          :class="{ selected: filters.hostname }"
         >
           <option value="">Hostname</option>
           <option v-for="hostname in sortedHostnames" :value="hostname" :key="hostname">
