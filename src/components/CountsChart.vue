@@ -42,6 +42,7 @@ export default {
             stacking: kind === 'inc' ? 'normal' : undefined,
             marker: {
               enabled: true,
+              symbol: 'circle',
               radius: 2
             }
           }
