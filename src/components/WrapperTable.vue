@@ -237,6 +237,12 @@ table {
   }
 
   &.left-orient {
+    #filter-logname {
+      display: block;
+    }
+    .kinds {
+      padding-bottom: 16px;
+    }
     .filters {
       select,
       input {
@@ -395,6 +401,8 @@ table {
 
   .kinds {
     font-size: 13px;
+    overflow-x: scroll;
+    max-width: 300px;
 
     .kindblock {
       margin-top: 10px;
@@ -414,6 +422,7 @@ table {
 
         a {
           text-decoration: none;
+          white-space: nowrap;
 
           &:hover {
             text-decoration: underline;

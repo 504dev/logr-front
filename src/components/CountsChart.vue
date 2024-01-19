@@ -39,7 +39,11 @@ export default {
         },
         plotOptions: {
           area: {
-            stacking: kind === 'inc' ? 'normal' : undefined
+            stacking: kind === 'inc' ? 'normal' : undefined,
+            marker: {
+              enabled: true,
+              radius: 2
+            }
           }
         },
         xAxis: {
