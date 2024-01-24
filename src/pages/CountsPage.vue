@@ -79,13 +79,27 @@ import _ from 'lodash'
 import store from 'store2'
 import { mapState } from 'vuex'
 import ACTIONS from '@/store/action-types'
-import MUTATIONS from '@/store/mutations-types.js'
+import MUTATIONS from '@/store/mutations-types'
 import CountsChart from '@/components/CountsChart'
 import Wrapper from '@/components/WrapperTable'
 
 const ls = store.namespace('counts')
+
 const DEFAULT_COLOR = '#434348'
-const COLORS = ['#434348', '#90ed7d', '#f7a35c', '#8085e9', '#f15c80', '#e4d354', '#2b908f', '#f45b5b', '#91e8e1', '#7cb5ec']
+const COLORS = [DEFAULT_COLOR, '#90ed7d', '#f7a35c', '#8085e9', '#f15c80', '#e4d354', '#2b908f', '#f45b5b', '#91e8e1', '#7cb5ec']
+
+const TIME = {}
+TIME.MINUTE = 60 * 1000
+TIME.HOUR = 60 * TIME.MINUTE
+TIME.DAY = 24 * TIME.HOUR
+TIME.YEAR = 366 * TIME.DAY
+
+const DELTAS = {
+  'm': [TIME.MINUTE, TIME.HOUR * 6],
+  '5m': [TIME.MINUTE * 5, TIME.DAY],
+  'h': [TIME.HOUR, TIME.DAY * 14],
+  'd': [TIME.DAY, TIME.YEAR],
+}
 
 export default {
   components: {
@@ -226,17 +240,15 @@ export default {
       if (list.length < 2) {
         return list
       }
+      const [delta, range] = DELTAS[this.filters.agg]
       const filled = [] //list.slice(0, 1)
-      const first = _.first(list)[0]
-      const last = Date.now() //_.last(list)[0]
-      const delta = {
-        m: 1000 * 60,
-        '5m': 1000 * 60 * 5,
-        h: 1000 * 60 * 60,
-        d: 1000 * 60 * 60 * 24
-      }[this.filters.agg]
+      let lastDate = Date.now() //_.last(list)[0]
+      lastDate = lastDate - (lastDate % delta) + delta
+      let firstDate = _.first(list)[0]
+      let firstDateAlt = lastDate - range //_.first(list)[0]
+      firstDate = firstDate > firstDateAlt ? firstDateAlt : firstDate
       let i = 0
-      for (let t = first; t <= last; t += delta) {
+      for (let t = firstDate; t <= lastDate; t += delta) {
         if (t === _.get(list, [i, 0])) {
           filled.push(list[i])
           i++

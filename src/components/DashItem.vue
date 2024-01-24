@@ -5,7 +5,7 @@
         <span>{{ dash.name }}</span>
       </router-link>
       <div class="team">
-        <a :href="`https://github.com/${dash.owner.username}`">
+        <a :href="`https://github.com/${dash.owner.github_id ? dash.owner.username : '504dev/logr'}`">
           <img
             :src="`https://avatars.githubusercontent.com/u/${dash.owner.github_id}`"
             :title="dash.owner.username"
@@ -35,7 +35,7 @@
         >
           <span>cnts</span>
         </router-link>
-        <div class="empty" v-if="isEmpty">(empty)</div>
+        <div class="empty" v-if="isEmpty">no data</div>
       </div>
       <div class="tools">
         <span @click="onShare(dash)" title="share">
@@ -170,11 +170,11 @@ export default {
     /*outline: dashed 1px red;*/
     a {
       img {
-        box-shadow: 0 0 1px 0 black;
+        box-shadow: 0 0 0 1px black;
         position: relative;
         width: 16px;
         height: 16px;
-        border-radius: 16px;
+        border-radius: 4px;
         margin: 0;
         z-index: 1;
         &.member {
