@@ -26,29 +26,31 @@
           class="window list window-logs"
           :class="{ x2: !hasCounts }"
           v-if="hasLogs"
-          ><span>logs</span></router-link
+          >
+          <span v-show="false">logs</span>
+        </router-link
         ><router-link
           :to="`/dashboard/${dash.id}/counts`"
           class="window list window-counts"
           :class="{ x2: !hasLogs }"
           v-if="hasCounts"
         >
-          <span>cnts</span>
+          <span v-show="false">cnts</span>
         </router-link>
         <div class="empty" v-if="isEmpty">no data</div>
       </div>
       <div class="tools">
-        <span @click="onShare(dash)" title="share">
-          <font-awesome-icon class="icon" icon="share" />
+        <span @click="onKeys(dash)">
+          <font-awesome-icon class="icon" icon="key" title="keys" />
+        </span>
+        <span @click="onShare(dash)" title="add member">
+          <font-awesome-icon class="icon" icon="plus-square" />
         </span>
         <span @click="onEdit(dash)">
           <font-awesome-icon class="icon" icon="edit" title="edit" />
         </span>
         <span @click="onDelete(dash)">
           <font-awesome-icon class="icon" icon="trash-alt" title="remove" />
-        </span>
-        <span @click="onKeys(dash)">
-          <font-awesome-icon class="icon" icon="key" title="keys" />
         </span>
       </div>
     </div>
@@ -129,6 +131,13 @@ export default {
 }
 </script>
 
+<style lang="scss">
+.vm--modal {
+  border: solid 1px #333;
+  border-radius: 4px;
+  background: #fafafafa;
+}
+</style>
 <style lang="scss" scoped>
 .container {
   display: inline-block;

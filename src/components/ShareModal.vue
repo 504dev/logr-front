@@ -2,6 +2,20 @@
   <modal v-bind="$attrs" width="480" @opened="focus">
     <div class="modal-body">
       <p class="title">{{ dash.name }}</p>
+      <form @submit.prevent="addMember()">
+        <input
+          type="text"
+          :value="search"
+          @input="debounceSearch"
+          class="search selected"
+          placeholder="type username"
+        /><img v-if="!disabled" :src="`${match.avatar_url}?size=64`" /><button
+        class="add selected"
+        :disabled="disabled"
+      >
+        Add member
+      </button>
+      </form>
       <div class="team">
         <div
           v-for="member in membersSorted"
@@ -25,20 +39,6 @@
           {{ member.user.username }}
         </div>
       </div>
-      <form @submit.prevent="addMember()">
-        <input
-          type="text"
-          :value="search"
-          @input="debounceSearch"
-          class="search selected"
-          placeholder="type username"
-        /><img v-if="!disabled" :src="`${match.avatar_url}?size=64`" /><button
-          class="add selected"
-          :disabled="disabled"
-        >
-          Add member
-        </button>
-      </form>
     </div>
   </modal>
 </template>
@@ -123,12 +123,13 @@ export default {
     font-weight: bold;
   }
   .team {
+    /*text-align: center;*/
     margin-top: 20px;
     .member {
       position: relative;
       box-sizing: border-box;
       display: inline-block;
-      width: 150px;
+      width: 115px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -184,7 +185,7 @@ export default {
   form {
     margin-top: 16px;
     input.search {
-      width: 320px;
+      width: 330px;
       max-width: none;
     }
     img {
@@ -197,7 +198,8 @@ export default {
     }
     button.add {
       width: 120px;
-      margin-left: 8px;
+      /*margin-left: 8px;*/
+      float: right;
       background-color: #080;
       border-color: #040;
       color: white;
