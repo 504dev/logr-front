@@ -244,7 +244,7 @@ export default {
       background-image: url('/static/counts.jpg');
       background-size: 110px;
       background-position-y: -4px;
-      background-position-x: 0;
+      background-position-x: 26px;
       opacity: 0.8;
       width: 78px;
       border-radius: 0 4px 4px 0;
