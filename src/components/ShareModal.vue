@@ -124,7 +124,7 @@ export default {
   }
   .team {
     /*text-align: center;*/
-    margin-top: 20px;
+    margin-top: 16px;
     padding-left: 8px;
     line-height: 32px;
     .member {
