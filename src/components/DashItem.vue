@@ -134,7 +134,7 @@ export default {
 <style lang="scss">
 .vm--modal {
   border: solid 1px #333;
-  border-radius: 4px;
+  border-radius: 4px !important;
   background: #fafafafa;
 }
 </style>

@@ -22,11 +22,11 @@
           :key="member.id"
           class="member"
           :class="{ invited: !member.user.login_at }"
+          :title="member.user.username"
         >
           <span class="remove" @click="removeMember(member)">
             <img
               :src="`https://avatars.githubusercontent.com/u/${member.user.github_id}`"
-              :title="member.user.username"
               :key="member.user_id"
               class="avatar"
             />
@@ -125,6 +125,8 @@ export default {
   .team {
     /*text-align: center;*/
     margin-top: 20px;
+    padding-left: 8px;
+    line-height: 32px;
     .member {
       position: relative;
       box-sizing: border-box;
@@ -162,7 +164,7 @@ export default {
         img {
           box-sizing: border-box;
           border: solid 1px black;
-          border-radius: 100%;
+          border-radius: 50%;
           width: 100%;
           height: 100%;
         }
@@ -183,7 +185,8 @@ export default {
     }
   }
   form {
-    margin-top: 16px;
+    margin-top: 20px;
+    overflow: hidden;
     input.search {
       width: 330px;
       max-width: none;
@@ -192,9 +195,9 @@ export default {
       width: 16px;
       height: 16px;
       border-radius: 16px;
-      margin: 6px;
-      margin-left: -24px;
+      margin: 6px 0 0 -24px;
       border: solid 1px #000;
+      /*box-shadow: 0 0 0 1px black;*/
     }
     button.add {
       width: 120px;
