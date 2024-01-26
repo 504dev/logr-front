@@ -1,5 +1,5 @@
 <template>
-  <modal v-bind="$attrs" width="480" @opened="focus">
+  <modal v-bind="$attrs" width="480" height="400" @opened="focus">
     <div class="modal-body">
       <p class="title">{{ dash.name }}</p>
       <form @submit.prevent="addMember()">

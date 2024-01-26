@@ -1,5 +1,5 @@
 <template>
-  <modal v-bind="$attrs" width="480" height="340">
+  <modal v-bind="$attrs" width="640" height="340">
     <div class="modal-body">
       <p class="title">{{ dash.name }}</p>
       <codes :keys="dash.keys[0]" v-if="dash.keys" class="codes" />
