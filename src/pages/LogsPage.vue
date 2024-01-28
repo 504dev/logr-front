@@ -25,12 +25,13 @@
           <option value="">Level</option>
           <option v-for="level in sortedLevels" :value="level" :key="level">
             {{ level }}
-          </option> </select
+          </option></select
         ><select v-model="filters.version" id="filter-version" :class="{ selected: filters.version }">
           <option value="">Version</option>
-          <option v-for="version in sortedVersions" :value="version" :key="version" v-if="version">
+          <template v-for="version in sortedVersions">
+          <option v-if="version" :value="version" :key="version">
             {{ version }}
-          </option> </select
+          </option></template></select
         ><input-x
           id="filter-message"
           v-model="filters.message"
@@ -133,7 +134,6 @@ const ls = store.namespace('logs')
 
 export default {
   components: {
-    DateTimeRegexp,
     Wrapper,
     LogItem,
     RangeDateTimePicker,

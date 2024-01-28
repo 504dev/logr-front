@@ -21,12 +21,10 @@
 
 <script>
 import ACTIONS from '../store/action-types'
-import Logo from '../components/Logo'
 import Codes from '../components/Codes'
 
 export default {
   components: {
-    Logo,
     Codes
   },
   async mounted() {

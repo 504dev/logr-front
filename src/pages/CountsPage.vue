@@ -20,12 +20,13 @@
           <option value="">Hostname</option>
           <option v-for="hostname in sortedHostnames" :value="hostname" :key="hostname">
             {{ hostname }}
-          </option> </select
+          </option></select
         ><select v-model="filters.version" id="filter-version" :class="{ selected: filters.version }">
           <option value="">Version</option>
-          <option v-for="version in sortedVersions" :value="version" :key="version" v-if="version">
+          <template v-for="version in sortedVersions">
+          <option v-if="version" :value="version" :key="version">
             {{ version }}
-          </option> </select
+          </option></template></select
         ><select v-model="filters.agg" id="filter-agg" :class="{ selected: filters.agg }">
           <option v-for="agg in ['m', '5m', 'h', 'd']" :value="agg" :key="agg">
             {{ agg }}
