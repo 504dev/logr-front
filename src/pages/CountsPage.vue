@@ -81,8 +81,8 @@ import store from 'store2'
 import { mapState } from 'vuex'
 import ACTIONS from '@/store/action-types'
 import MUTATIONS from '@/store/mutations-types'
-import CountsChart from '@/components/CountsChart'
-import Wrapper from '@/components/WrapperTable'
+import CountsChart from '@/components/CountsChart.vue'
+import Wrapper from '@/components/WrapperTable.vue'
 
 const ls = store.namespace('counts')
 

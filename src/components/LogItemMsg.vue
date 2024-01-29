@@ -17,7 +17,7 @@
 <script>
 import _ from 'lodash'
 import ansicolor from 'ansicolor'
-import CounterWidget from './CounterWidget'
+import CounterWidget from './CounterWidget.vue'
 
 export default {
   components: { CounterWidget },

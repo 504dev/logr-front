@@ -4,15 +4,15 @@ import ls from 'store2'
 import Vue from 'vue'
 import Vuex from 'vuex'
 import jwtDecode from 'jwt-decode'
-import Sock from '../libs/sock'
+import Sock from '@/libs/sock'
 import ACTIONS from './action-types.js'
 import MUTATIONS from './mutations-types.js'
-import { RoleDemo } from '../../constants/roles'
+import { RoleDemo } from '@/../constants/roles'
 import demoStore from './demo'
 
 Vue.use(Vuex)
 
-console.log(process.env)
+console.log(import.meta.env)
 
 const store = new Vuex.Store({
   state: {
@@ -31,7 +31,7 @@ const store = new Vuex.Store({
   },
   getters: {
     restUrl() {
-      return process.env.VUE_APP_REST || location.origin
+      return import.meta.env.VITE_REST || location.origin
     },
     wsUrl(state, getters) {
       return getters.restUrl.replace(/^http/, 'ws').replace(/\/?$/, '/ws')

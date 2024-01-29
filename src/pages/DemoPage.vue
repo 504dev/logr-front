@@ -20,8 +20,8 @@
 </template>
 
 <script>
-import ACTIONS from '../store/action-types'
-import Codes from '../components/Codes'
+import ACTIONS from '@/store/action-types'
+import Codes from '@/components/Codes.vue'
 
 export default {
   components: {

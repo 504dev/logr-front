@@ -15,7 +15,7 @@
       />
       <span class="nav">
         <span class="username">{{ jwtPayload.username }}</span>
-        <span>|</span>
+        <span> | </span>
         <a href="#" @click.prevent="$store.dispatch(ACTIONS.LOGOUT)">
           <font-awesome-icon icon="sign-out-alt" />
         </a>
@@ -45,10 +45,10 @@
 </template>
 
 <script>
-import DashItem from '../components/DashItem'
-import Logo from '../components/Logo'
-import ACTIONS from '../store/action-types'
-import { RoleViewer } from '../../constants/roles'
+import DashItem from '@/components/DashItem.vue'
+import Logo from '@/components/Logo.vue'
+import ACTIONS from '@/store/action-types'
+import { RoleViewer } from '@/../constants/roles'
 import { mapState, mapGetters } from 'vuex'
 
 export default {

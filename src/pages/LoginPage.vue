@@ -23,7 +23,7 @@ import _ from 'lodash'
 import qs from 'querystring'
 import store from 'store2'
 import { mapGetters, mapState } from 'vuex'
-import ACTIONS from '../store/action-types'
+import ACTIONS from '@/store/action-types'
 
 const ls = store.namespace('login.loginers')
 

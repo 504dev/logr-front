@@ -47,7 +47,7 @@
 import _ from 'lodash'
 import axios from 'axios'
 import { mapState } from 'vuex'
-import ACTIONS from '../store/action-types'
+import ACTIONS from '@/store/action-types'
 
 export default {
   props: {

@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import MUTATIONS from '../store/mutations-types'
+import MUTATIONS from '@/store/mutations-types'
 import store from 'store2'
 import { mapGetters } from 'vuex'
 

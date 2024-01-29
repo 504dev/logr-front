@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import Codes from './Codes'
+import Codes from './Codes.vue'
 
 export default {
   components: {

@@ -84,8 +84,8 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import MUTATIONS from '../store/mutations-types.js'
-import Spinner from '../components/Spinner'
+import MUTATIONS from '@/store/mutations-types.js'
+import Spinner from '@/components/Spinner.vue'
 
 export default {
   components: {

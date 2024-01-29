@@ -61,9 +61,9 @@
 
 <script>
 import { mapState } from 'vuex'
-import ACTIONS from '../store/action-types'
-import ShareModal from './ShareModal'
-import KeysModal from './KeysModal'
+import ACTIONS from '@/store/action-types'
+import ShareModal from './ShareModal.vue'
+import KeysModal from './KeysModal.vue'
 
 export default {
   components: {
