@@ -15,7 +15,7 @@
       />
       <span class="nav">
         <span class="username">{{ jwtPayload.username }}</span>
-        <span> | </span>
+        <span>|</span>
         <a href="#" @click.prevent="$store.dispatch(ACTIONS.LOGOUT)">
           <font-awesome-icon icon="sign-out-alt" />
         </a>
