@@ -57,7 +57,7 @@
           v-model="filters.timestamp"
           :class="{ selected: filters.timestamp.some(v => v) }"
           v-if="false"
-        /><input-x
+      /><input-x
           id="filter-regexp"
           ref="date-time-regexp"
           v-model="filters.pattern"
@@ -124,7 +124,6 @@ import MUTATIONS from '@/store/mutations-types'
 import LogItem from '@/components/LogItem'
 import RangeDateTimePicker from '@/components/RangeDateTimePicker'
 import DateTimeIso from '@/components/DateTimeIso'
-import DateTimeRegexp from '@/components/DateTimeRegexp'
 import Wrapper from '@/components/WrapperTable'
 import InputX from '@/components/InputX'
 import Spinner from '@/components/Spinner'
@@ -250,9 +249,9 @@ export default {
       console.log('onTag', value)
       if (value.pattern) {
         if (this.$refs['date-time-iso']) {
-          const $pattern = this.$refs['date-time-iso'].$el.firstChild
-          $pattern.value = value.pattern
-          $pattern.dispatchEvent(new Event('change', { bubbles: true }))
+          const $iso = this.$refs['date-time-iso'].$el.firstChild
+          $iso.value = value.pattern
+          $iso.dispatchEvent(new Event('change', { bubbles: true }))
         }
         if (this.$refs['date-time-regexp']) {
           this.filters.pattern = value.pattern
