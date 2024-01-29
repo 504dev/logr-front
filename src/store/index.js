@@ -7,7 +7,7 @@ import jwtDecode from 'jwt-decode'
 import Sock from '@/libs/sock'
 import ACTIONS from './action-types.js'
 import MUTATIONS from './mutations-types.js'
-import { RoleDemo } from '@/../constants/roles'
+import { RoleDemo } from '@/constants/roles'
 import demoStore from './demo'
 
 Vue.use(Vuex)
