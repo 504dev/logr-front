@@ -1,10 +1,8 @@
 import { fileURLToPath, URL } from 'node:url'
-import { createVuePlugin } from 'vite-plugin-vue2'
+import vue from '@vitejs/plugin-vue2'
 
 export default {
-  plugins: [
-    createVuePlugin(),
-  ],
+  plugins: [vue()],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
