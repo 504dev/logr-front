@@ -76,17 +76,19 @@
 </template>
 
 <script>
-import _ from 'lodash'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _max from 'lodash/max'
 import _size from 'lodash/size'
+import _pick from 'lodash/pick'
 import _first from 'lodash/first'
 import _sumBy from 'lodash/sumBy'
+import _keyBy from 'lodash/keyBy'
 import _sortBy from 'lodash/sortBy'
 import _pickBy from 'lodash/pickBy'
 import _groupBy from 'lodash/groupBy'
 import _mapValues from 'lodash/mapValues'
+import _zipObject from 'lodash/zipObject'
 import store from 'store2'
 import { mapState } from 'vuex'
 import ACTIONS from '@/store/action-types'
@@ -178,34 +180,29 @@ export default {
         return null
       }
       // const isMultiHost = _size(_keyBy(this.counts, 'hostname')) > 1
-      const colorsMap = _.chain(this.counts).keyBy('hostname').keys().zipObject(COLORS).value()
+      const colorsMap = _zipObject(this.sortedHostnames, COLORS)
       console.log(colorsMap)
-      return _.chain(this.counts)
-        .groupBy('kind')
-        .pick(['inc', 'avg', 'max', 'min', 'per', 'time'])
-        .mapValues(group => {
-          return _.chain(group)
-            .sortBy('keyname')
-            .groupBy('keyname')
-            .mapValues(group => {
-              return _.chain(group)
-                .keyBy('hostname')
-                .map(({ data }, hostname) => {
-                  data = this.filled(data.map(([x, y]) => [x * 1000, y]).reverse())
-                  // let color = DEFAULT_COLOR
-                  // if (isMultiHost) {
-                  //   const hex = this.convertToHex(hostname)
-                  //   color = '#' + hex.slice(0, 6)
-                  // }
-                  const color = colorsMap[hostname]
-                  return { name: hostname, data, color }
-                })
-                .sortBy('name')
-                .value()
-            })
-            .value()
+
+      const grouped = _pick(
+        _groupBy(this.counts, 'kind'),
+        ['inc', 'avg', 'max', 'min', 'per', 'time']
+      )
+
+      return _mapValues(grouped, group => {
+        const sorted = _sortBy(group, 'keyname')
+        const grouped = _groupBy(sorted, 'keyname')
+
+        return _mapValues(grouped, group => {
+          const indexed = _keyBy(group, 'hostname')
+          const mapped = _map(indexed, ({ data }, hostname) => {
+            data = this.filled(data.map(([x, y]) => [x * 1000, y]).reverse())
+            // const color = !isMultiHost ? DEFAULT_COLOR : '#' + this.convertToHex(hostname).slice(0, 6)
+            const color = colorsMap[hostname]
+            return { name: hostname, data, color }
+          })
+          return _sortBy(mapped, 'name')
         })
-        .value()
+      })
     },
     nodata() {
       return _size(this.charts) === 0
