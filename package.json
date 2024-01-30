@@ -10,6 +10,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint ./src",
+    "test": "echo woof!",
     "prepare": "husky"
   },
   "dependencies": {
