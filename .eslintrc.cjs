@@ -12,10 +12,11 @@ module.exports = {
     parser: '@babel/eslint-parser',
     babelOptions: {
       parserOpts: {
-        plugins: ["jsx"]
+        plugins: ['jsx']
       }
     }
   },
+  ignorePatterns: ['/dist'],
   rules: {
     'vue/multi-word-component-names': 'off'
   }
