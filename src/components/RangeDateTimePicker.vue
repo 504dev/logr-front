@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import DateTimePicker from './DateTimePicker'
+import DateTimePicker from './DateTimePicker.vue'
 
 export default {
   props: {

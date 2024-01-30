@@ -76,13 +76,23 @@
 </template>
 
 <script>
-import _ from 'lodash'
+import _get from 'lodash/get'
+import _map from 'lodash/map'
+import _pick from 'lodash/pick'
+import _first from 'lodash/first'
+import _sumBy from 'lodash/sumBy'
+import _keyBy from 'lodash/keyBy'
+import _sortBy from 'lodash/sortBy'
+import _pickBy from 'lodash/pickBy'
+import _groupBy from 'lodash/groupBy'
+import _mapValues from 'lodash/mapValues'
+import _zipObject from 'lodash/zipObject'
 import store from 'store2'
 import { mapState } from 'vuex'
 import ACTIONS from '@/store/action-types'
 import MUTATIONS from '@/store/mutations-types'
-import CountsChart from '@/components/CountsChart'
-import Wrapper from '@/components/WrapperTable'
+import CountsChart from '@/components/CountsChart.vue'
+import Wrapper from '@/components/WrapperTable.vue'
 
 const ls = store.namespace('counts')
 
@@ -150,11 +160,7 @@ export default {
       return (this.dashboards || []).find(dash => dash.id === +this.$route.params.id)
     },
     sortedLognames() {
-      return _.chain(this.lognames)
-        .sortBy('cnt')
-        .reverse()
-        .map('logname')
-        .value()
+      return _map(_sortBy(this.lognames, 'cnt').reverse(), 'logname')
     },
     sortedHostnames() {
       return this.groupStatsBy('hostname')
@@ -163,49 +169,41 @@ export default {
       return this.groupStatsBy('version', 'updated')
     },
     keynames() {
-      return _.mapValues(this.charts, group => {
-        return _.chain(group)
-          .keys()
-          .groupBy(v => v.split(':')[0])
-          .value()
+      return _mapValues(this.charts, group => {
+        return _groupBy(Object.keys(group), v => v.split(':')[0])
       })
     },
     charts() {
       if (!this.counts) {
-        return null
+        return []
       }
-      // const isMultiHost = _.chain(this.counts).keyBy('hostname').size() > 1
-      const colorsMap = _.chain(this.counts).keyBy('hostname').keys().zipObject(COLORS).value()
+      // const isMultiHost = _size(_keyBy(this.counts, 'hostname')) > 1
+      const colorsMap = _zipObject(this.sortedHostnames, COLORS)
       console.log(colorsMap)
-      return _.chain(this.counts)
-        .groupBy('kind')
-        .pick(['inc', 'avg', 'max', 'min', 'per', 'time'])
-        .mapValues(group => {
-          return _.chain(group)
-            .sortBy('keyname')
-            .groupBy('keyname')
-            .mapValues(group => {
-              return _.chain(group)
-                .keyBy('hostname')
-                .map(({ data }, hostname) => {
-                  data = this.filled(data.map(([x, y]) => [x * 1000, y]).reverse())
-                  // let color = DEFAULT_COLOR
-                  // if (isMultiHost) {
-                  //   const hex = this.convertToHex(hostname)
-                  //   color = '#' + hex.slice(0, 6)
-                  // }
-                  const color = colorsMap[hostname]
-                  return { name: hostname, data, color }
-                })
-                .sortBy('name')
-                .value()
-            })
-            .value()
+
+      const grouped = _pick(
+        _groupBy(this.counts, 'kind'),
+        ['inc', 'avg', 'max', 'min', 'per', 'time']
+      )
+
+      return _mapValues(grouped, group => {
+        const sorted = _sortBy(group, 'keyname')
+        const grouped = _groupBy(sorted, 'keyname')
+
+        return _mapValues(grouped, group => {
+          const indexed = _keyBy(group, 'hostname')
+          const mapped = _map(indexed, ({ data }, hostname) => {
+            data = this.filled(data.map(([x, y]) => [x * 1000, y]).reverse())
+            // const color = !isMultiHost ? DEFAULT_COLOR : '#' + this.convertToHex(hostname).slice(0, 6)
+            const color = colorsMap[hostname]
+            return { name: hostname, data, color }
+          })
+          return _sortBy(mapped, 'name')
         })
-        .value()
+      })
     },
     nodata() {
-      return _.size(this.charts) === 0
+      return this.charts.length === 0
     }
   },
   methods: {
@@ -213,7 +211,7 @@ export default {
       let { hostname = '', logname = '', pid = '', version = '', agg = 'm' } = this.$route.query
       if (logname === '') {
         logname = ls.get(`dash${this.dash.id}.filters.logname`)
-        logname = this.sortedLognames.includes(logname) ? logname : _.first(this.sortedLognames) || ''
+        logname = this.sortedLognames.includes(logname) ? logname : _first(this.sortedLognames) || ''
       }
       this.filters = {
         logname,
@@ -243,14 +241,14 @@ export default {
       }
       const [delta, range] = DELTAS[this.filters.agg]
       const filled = [] //list.slice(0, 1)
-      let lastDate = Date.now() //_.last(list)[0]
+      let lastDate = Date.now() //_last(list)[0]
       lastDate = lastDate - (lastDate % delta) + delta
-      let firstDate = _.first(list)[0]
-      let firstDateAlt = lastDate - range //_.first(list)[0]
+      let firstDate = _first(list)[0]
+      let firstDateAlt = lastDate - range //_first(list)[0]
       firstDate = firstDate > firstDateAlt ? firstDateAlt : firstDate
       let i = 0
       for (let t = firstDate; t <= lastDate; t += delta) {
-        if (t === _.get(list, [i, 0])) {
+        if (t === _get(list, [i, 0])) {
           filled.push(list[i])
           i++
         } else {
@@ -268,7 +266,7 @@ export default {
     },
     updateLocation() {
       let query = { ...this.filters }
-      query = _.pickBy(query)
+      query = _pickBy(query)
       this.$router.replace({ query })
     },
     async updateStats() {
@@ -294,19 +292,14 @@ export default {
       this.loading = false
     },
     groupStatsBy(fieldname, sort = 'cnt') {
-      return _.chain(this.stats)
-        .groupBy(fieldname)
-        .map((group, key) => {
-          const cnt = _.sumBy(group, 'cnt')
-          const updated = _.chain(group)
-            .map('updated')
-            .max()
-            .value()
-          return { [fieldname]: key, cnt, updated }
-        })
-        .sortBy(v => -v[sort])
-        .map(fieldname)
-        .value()
+      const grouped = _groupBy(this.stats, fieldname)
+      const mapped = _map(grouped, (group, key) => {
+        const cnt = _sumBy(group, 'cnt')
+        const updated = Math.max(..._map(group, 'updated'))
+        return { [fieldname]: key, cnt, updated }
+      })
+      const sorted = _sortBy(mapped, v => -v[sort])
+      return _map(sorted, fieldname)
     },
     switchOrient() {
       this.$store.commit(MUTATIONS.SWITCH_ORIENT)

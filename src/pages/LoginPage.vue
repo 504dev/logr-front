@@ -19,11 +19,10 @@
 </template>
 
 <script>
-import _ from 'lodash'
-import qs from 'querystring'
+import _sortBy from 'lodash/sortBy'
 import store from 'store2'
 import { mapGetters, mapState } from 'vuex'
-import ACTIONS from '../store/action-types'
+import ACTIONS from '@/store/action-types'
 
 const ls = store.namespace('login.loginers')
 
@@ -38,7 +37,7 @@ export default {
     loginers() {
       const res = {}
       ls.each((username, info) => (res[username] = info))
-      return _.sortBy(res, info => -info.login_at)
+      return _sortBy(res, info => -info.login_at)
     },
     name() {
       const id = Math.random()
@@ -59,12 +58,12 @@ export default {
   methods: {
     setupUrl() {
       const callback = `${location.origin}/login`
-      return `${this.restUrl}/oauth/setup?${qs.stringify({ callback })}`
+      return `${this.restUrl}/oauth/setup?${new URLSearchParams({ callback }).toString()}`
     },
     loginUrl(query = {}) {
       const callback = `${location.origin}/jwt/`
       query = { ...query, callback }
-      return `${this.restUrl}/oauth/authorize?${qs.stringify(query)}`
+      return `${this.restUrl}/oauth/authorize?${new URLSearchParams(query).toString()}`
     }
   }
 }

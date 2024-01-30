@@ -1,4 +1,3 @@
-const _ = require('lodash')
 
 export default class Sock {
   constructor (url, jwt) {
@@ -22,7 +21,8 @@ export default class Sock {
   }
   _handleMessage (event) {
     const data = JSON.parse(event.data)
-    _.each(this.handlers[data.path], handler => handler(data))
+    const handlers = this.handlers[data.path] || []
+    handlers.forEach(handler => handler(data))
   }
   _send (data) {
     return this.socket.send(JSON.stringify(data))

@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import LogItemMsg from './LogItemMsg'
+import LogItemMsg from './LogItemMsg.vue'
 
 export default {
   components: {

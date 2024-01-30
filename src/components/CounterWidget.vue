@@ -12,8 +12,8 @@
 </template>
 
 <script>
-import CountsSnippetChart from './CountsSnippetChart'
-import ACTIONS from '../store/action-types'
+import CountsSnippetChart from './CountsSnippetChart.vue'
+import ACTIONS from '@/store/action-types'
 
 export default {
   components: {

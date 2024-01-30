@@ -1,11 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import LoginPage from '@/pages/LoginPage'
-import DashboardPage from '@/pages/DashboardPage'
-import DemoPage from '@/pages/DemoPage'
-import LogsPage from '@/pages/LogsPage'
-import CountsPage from '@/pages/CountsPage'
-import JwtPage from '@/pages/JwtPage'
+const LoginPage = () => import('@/pages/LoginPage.vue')
+const DashboardPage = () => import('@/pages/DashboardPage.vue')
+const DemoPage = () => import('@/pages/DemoPage.vue')
+const LogsPage = () => import('@/pages/LogsPage.vue')
+const CountsPage = () => import('@/pages/CountsPage.vue')
+const JwtPage = () => import('@/pages/JwtPage.vue')
 
 Vue.use(Router)
 
