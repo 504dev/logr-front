@@ -20,7 +20,6 @@
 
 <script>
 import _sortBy from 'lodash/sortBy'
-import qs from 'query-string'
 import store from 'store2'
 import { mapGetters, mapState } from 'vuex'
 import ACTIONS from '@/store/action-types'
@@ -59,12 +58,12 @@ export default {
   methods: {
     setupUrl() {
       const callback = `${location.origin}/login`
-      return `${this.restUrl}/oauth/setup?${qs.stringify({ callback })}`
+      return `${this.restUrl}/oauth/setup?${new URLSearchParams({ callback }).toString()}`
     },
     loginUrl(query = {}) {
       const callback = `${location.origin}/jwt/`
       query = { ...query, callback }
-      return `${this.restUrl}/oauth/authorize?${qs.stringify(query)}`
+      return `${this.restUrl}/oauth/authorize?${new URLSearchParams(query).toString()}`
     }
   }
 }
