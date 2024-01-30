@@ -20,7 +20,7 @@
 
 <script>
 import _sortBy from 'lodash/sortBy'
-import qs from 'querystring'
+import qs from 'query-string'
 import store from 'store2'
 import { mapGetters, mapState } from 'vuex'
 import ACTIONS from '@/store/action-types'
