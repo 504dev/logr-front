@@ -1,4 +1,7 @@
-import _ from 'lodash'
+import _find from 'lodash/find'
+import _findIndex from 'lodash/findIndex'
+import _filter from 'lodash/filter'
+import _omit from 'lodash/omit'
 import axios from 'axios'
 import ls from 'store2'
 import Vue from 'vue'
@@ -104,18 +107,18 @@ const store = new Vuex.Store({
       ls.remove('redirect_url')
     },
     [MUTATIONS.DELETE_DASHBOARD]: (state, id) => {
-      const index = _.findIndex(state.dashboards, { id })
+      const index = _findIndex(state.dashboards, { id })
       state.dashboards.splice(index, 1)
     },
     [MUTATIONS.EDIT_DASHBOARD]: (state, { id, name }) => {
-      const dash = _.find(state.dashboards, { id })
+      const dash = _find(state.dashboards, { id })
       dash.name = name
     },
     [MUTATIONS.MEMBER_REMOVE]: (state, id) => {
       for (const dash of state.dashboards) {
-        const deleted = _.find(dash.members, { id })
+        const deleted = _find(dash.members, { id })
         if (deleted) {
-          dash.members = _.filter(dash.members, m => m !== deleted)
+          dash.members = _filter(dash.members, m => m !== deleted)
         }
       }
     }
@@ -223,7 +226,7 @@ const store = new Vuex.Store({
     },
     async [ACTIONS.LOAD_COUNTS_SNIPPET]({}, params) {
       const dashId = params.dash_id
-      params = _.omit(params, 'dash_id')
+      params = _omit(params, 'dash_id')
       const { data } = await api(`/counts/${dashId}/snippet`, { params })
       return data
     },

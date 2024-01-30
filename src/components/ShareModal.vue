@@ -44,7 +44,8 @@
 </template>
 
 <script>
-import _ from 'lodash'
+import _sortBy from 'lodash/sortBy'
+import _debounce from 'lodash/debounce'
 import axios from 'axios'
 import { mapState } from 'vuex'
 import ACTIONS from '@/store/action-types'
@@ -74,14 +75,14 @@ export default {
       return !this.match
     },
     membersSorted() {
-      return _.sortBy(this.dash.members, 'user.login_at')
+      return _sortBy(this.dash.members, 'user.login_at')
     }
   },
   methods: {
     focus(e) {
       e.ref.querySelector('input').focus()
     },
-    debounceSearch: _.debounce(async function(e) {
+    debounceSearch: _debounce(async function(e) {
       this.search = e.target.value
       const { data } = await axios(`https://api.github.com/users/${this.search}`).catch(() => ({ data: null }))
       this.match = data

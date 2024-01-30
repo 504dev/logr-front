@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import _ from 'lodash'
+import _sortBy from 'lodash/sortBy'
 import qs from 'querystring'
 import store from 'store2'
 import { mapGetters, mapState } from 'vuex'
@@ -38,7 +38,7 @@ export default {
     loginers() {
       const res = {}
       ls.each((username, info) => (res[username] = info))
-      return _.sortBy(res, info => -info.login_at)
+      return _sortBy(res, info => -info.login_at)
     },
     name() {
       const id = Math.random()

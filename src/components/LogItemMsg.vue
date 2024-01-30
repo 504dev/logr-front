@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import _ from 'lodash'
+import _each from 'lodash/each'
 import ansicolor from 'ansicolor'
 import CounterWidget from './CounterWidget.vue'
 
@@ -39,9 +39,9 @@ export default {
       const result = []
       let { spans } = ansicolor.parse(this.value)
 
-      _.each(spans, span => {
+      _each(spans, span => {
         const matches = this.search(span.text).map(v => ({ ...span, ...v }))
-        _.each(matches, item => {
+        _each(matches, item => {
           if (item.match) {
             result.push(item)
             return

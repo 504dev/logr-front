@@ -117,7 +117,15 @@
 </template>
 
 <script>
-import _ from 'lodash'
+import _get from 'lodash/get'
+import _map from 'lodash/map'
+import _max from 'lodash/max'
+import _last from 'lodash/last'
+import _first from 'lodash/first'
+import _sumBy from 'lodash/sumBy'
+import _sortBy from 'lodash/sortBy'
+import _pickBy from 'lodash/pickBy'
+import _groupBy from 'lodash/groupBy'
 import store from 'store2'
 import ACTIONS from '@/store/action-types'
 import MUTATIONS from '@/store/mutations-types'
@@ -216,11 +224,7 @@ export default {
       return (this.dashboards || []).find(dash => dash.id === +this.$route.params.id)
     },
     sortedLognames() {
-      return _.chain(this.lognames)
-        .sortBy('cnt')
-        .reverse()
-        .map('logname')
-        .value()
+      return _map(_sortBy(this.lognames, 'cnt').reverse(), 'logname')
     },
     sortedHostnames() {
       return this.groupStatsBy('hostname')
@@ -232,11 +236,8 @@ export default {
       return this.groupStatsBy('version', 'updated').slice(0, 10)
     },
     offset() {
-      const list = _.last(this.logs.deep) || this.logs.history
-      return _.chain(list)
-        .last()
-        .get('timestamp')
-        .value()
+      const list = _last(this.logs.deep) || this.logs.history
+      return _get(_last(list), 'timestamp')
     }
   },
   methods: {
@@ -279,7 +280,7 @@ export default {
       } = this.$route.query
       if (logname === '') {
         logname = ls.get(`dash${this.dash.id}.filters.logname`)
-        logname = this.sortedLognames.includes(logname) ? logname : _.first(this.sortedLognames) || ''
+        logname = this.sortedLognames.includes(logname) ? logname : _first(this.sortedLognames) || ''
       }
       timestamp = []
         .concat(timestamp)
@@ -311,7 +312,7 @@ export default {
       if (this.buffer.data.length > 0) {
         const { live } = this.logs
         let chunk = this.buffer.data.splice(0)
-        chunk = _.sortBy(chunk, 'timestamp')
+        chunk = _sortBy(chunk, 'timestamp')
         live.push(...chunk)
         if (live.length > maxlen) {
           live.splice(0, live.length - maxlen)
@@ -365,7 +366,7 @@ export default {
       if (query.timestamp[0] === '' && query.timestamp[1] === '') {
         delete query.timestamp
       }
-      query = _.pickBy(query)
+      query = _pickBy(query)
       this.$router.replace({ query })
     },
     async updateStats() {
@@ -401,19 +402,14 @@ export default {
       this.loading = false
     },
     groupStatsBy(fieldname, sort = 'cnt') {
-      return _.chain(this.stats)
-        .groupBy(fieldname)
-        .map((group, key) => {
-          const cnt = _.sumBy(group, 'cnt')
-          const updated = _.chain(group)
-            .map('updated')
-            .max()
-            .value()
-          return { [fieldname]: key, cnt, updated }
-        })
-        .sortBy(v => -v[sort])
-        .map(fieldname)
-        .value()
+      const grouped = _groupBy(this.stats, fieldname)
+      const mapped = _map(grouped, (group, key) => {
+        const cnt = _sumBy(group, 'cnt')
+        const updated = _max(_map(group, 'updated'))
+        return { [fieldname]: key, cnt, updated }
+      })
+      const sorted = _sortBy(mapped, v => -v[sort])
+      return _map(sorted, fieldname)
     },
     switchMode() {
       this.$store.commit(MUTATIONS.SWITCH_THEME)

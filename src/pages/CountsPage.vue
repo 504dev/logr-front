@@ -77,6 +77,12 @@
 
 <script>
 import _ from 'lodash'
+import _get from 'lodash/get'
+import _size from 'lodash/size'
+import _first from 'lodash/first'
+import _sumBy from 'lodash/sumBy'
+import _pickBy from 'lodash/pickBy'
+import _mapValues from 'lodash/mapValues'
 import store from 'store2'
 import { mapState } from 'vuex'
 import ACTIONS from '@/store/action-types'
@@ -163,7 +169,7 @@ export default {
       return this.groupStatsBy('version', 'updated')
     },
     keynames() {
-      return _.mapValues(this.charts, group => {
+      return _mapValues(this.charts, group => {
         return _.chain(group)
           .keys()
           .groupBy(v => v.split(':')[0])
@@ -205,7 +211,7 @@ export default {
         .value()
     },
     nodata() {
-      return _.size(this.charts) === 0
+      return _size(this.charts) === 0
     }
   },
   methods: {
@@ -213,7 +219,7 @@ export default {
       let { hostname = '', logname = '', pid = '', version = '', agg = 'm' } = this.$route.query
       if (logname === '') {
         logname = ls.get(`dash${this.dash.id}.filters.logname`)
-        logname = this.sortedLognames.includes(logname) ? logname : _.first(this.sortedLognames) || ''
+        logname = this.sortedLognames.includes(logname) ? logname : _first(this.sortedLognames) || ''
       }
       this.filters = {
         logname,
@@ -243,14 +249,14 @@ export default {
       }
       const [delta, range] = DELTAS[this.filters.agg]
       const filled = [] //list.slice(0, 1)
-      let lastDate = Date.now() //_.last(list)[0]
+      let lastDate = Date.now() //_last(list)[0]
       lastDate = lastDate - (lastDate % delta) + delta
-      let firstDate = _.first(list)[0]
-      let firstDateAlt = lastDate - range //_.first(list)[0]
+      let firstDate = _first(list)[0]
+      let firstDateAlt = lastDate - range //_first(list)[0]
       firstDate = firstDate > firstDateAlt ? firstDateAlt : firstDate
       let i = 0
       for (let t = firstDate; t <= lastDate; t += delta) {
-        if (t === _.get(list, [i, 0])) {
+        if (t === _get(list, [i, 0])) {
           filled.push(list[i])
           i++
         } else {
@@ -268,7 +274,7 @@ export default {
     },
     updateLocation() {
       let query = { ...this.filters }
-      query = _.pickBy(query)
+      query = _pickBy(query)
       this.$router.replace({ query })
     },
     async updateStats() {
@@ -297,7 +303,7 @@ export default {
       return _.chain(this.stats)
         .groupBy(fieldname)
         .map((group, key) => {
-          const cnt = _.sumBy(group, 'cnt')
+          const cnt = _sumBy(group, 'cnt')
           const updated = _.chain(group)
             .map('updated')
             .max()

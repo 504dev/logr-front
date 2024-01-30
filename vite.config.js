@@ -1,7 +1,8 @@
+import { defineConfig } from 'vite'
 import { fileURLToPath, URL } from 'node:url'
 import vue from '@vitejs/plugin-vue2'
 
-export default {
+export default defineConfig({
   plugins: [
     vue({
       template: {
@@ -16,5 +17,14 @@ export default {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
       vue: 'vue/dist/vue.js'
     }
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          lodash: ['lodash']
+        }
+      }
+    }
   }
-}
+})
