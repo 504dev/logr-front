@@ -15,7 +15,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
-      vue: 'vue/dist/vue.js'
+      vue: 'vue/dist/vue.min.js'
     }
   },
   build: {
