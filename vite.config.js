@@ -20,12 +20,12 @@ export default defineConfig({
   },
   build: {
     chunkSizeWarningLimit: 666,
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          lodash: ['lodash']
-        }
-      }
-    }
+    // rollupOptions: {
+    //   output: {
+    //     manualChunks: {
+    //       lodash: ['lodash']
+    //     }
+    //   }
+    // }
   }
 })
