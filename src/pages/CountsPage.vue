@@ -178,7 +178,8 @@ export default {
         return []
       }
       // const isMultiHost = _size(_keyBy(this.counts, 'hostname')) > 1
-      const colorsMap = _zipObject(this.sortedHostnames, COLORS)
+      // const colorsMap = _zipObject(Object.keys(_keyBy(this.counts)), COLORS)
+      const colorsMap = _zipObject(this.sortedHostnames.slice().reverse(), COLORS)
       console.log(colorsMap)
 
       const grouped = _pick(
