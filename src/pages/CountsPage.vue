@@ -78,8 +78,6 @@
 <script>
 import _get from 'lodash/get'
 import _map from 'lodash/map'
-import _max from 'lodash/max'
-import _size from 'lodash/size'
 import _pick from 'lodash/pick'
 import _first from 'lodash/first'
 import _sumBy from 'lodash/sumBy'
@@ -177,7 +175,7 @@ export default {
     },
     charts() {
       if (!this.counts) {
-        return null
+        return []
       }
       // const isMultiHost = _size(_keyBy(this.counts, 'hostname')) > 1
       const colorsMap = _zipObject(this.sortedHostnames, COLORS)
@@ -205,7 +203,7 @@ export default {
       })
     },
     nodata() {
-      return _size(this.charts) === 0
+      return this.charts.length === 0
     }
   },
   methods: {
@@ -297,7 +295,7 @@ export default {
       const grouped = _groupBy(this.stats, fieldname)
       const mapped = _map(grouped, (group, key) => {
         const cnt = _sumBy(group, 'cnt')
-        const updated = _max(_map(group, 'updated'))
+        const updated = Math.max(..._map(group, 'updated'))
         return { [fieldname]: key, cnt, updated }
       })
       const sorted = _sortBy(mapped, v => -v[sort])

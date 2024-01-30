@@ -119,7 +119,6 @@
 <script>
 import _get from 'lodash/get'
 import _map from 'lodash/map'
-import _max from 'lodash/max'
 import _last from 'lodash/last'
 import _first from 'lodash/first'
 import _sumBy from 'lodash/sumBy'
@@ -405,7 +404,7 @@ export default {
       const grouped = _groupBy(this.stats, fieldname)
       const mapped = _map(grouped, (group, key) => {
         const cnt = _sumBy(group, 'cnt')
-        const updated = _max(_map(group, 'updated'))
+        const updated = Math.max(..._map(group, 'updated'))
         return { [fieldname]: key, cnt, updated }
       })
       const sorted = _sortBy(mapped, v => -v[sort])
