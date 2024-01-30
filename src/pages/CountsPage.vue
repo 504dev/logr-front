@@ -78,10 +78,14 @@
 <script>
 import _ from 'lodash'
 import _get from 'lodash/get'
+import _map from 'lodash/map'
+import _max from 'lodash/max'
 import _size from 'lodash/size'
 import _first from 'lodash/first'
 import _sumBy from 'lodash/sumBy'
+import _sortBy from 'lodash/sortBy'
 import _pickBy from 'lodash/pickBy'
+import _groupBy from 'lodash/groupBy'
 import _mapValues from 'lodash/mapValues'
 import store from 'store2'
 import { mapState } from 'vuex'
@@ -156,11 +160,7 @@ export default {
       return (this.dashboards || []).find(dash => dash.id === +this.$route.params.id)
     },
     sortedLognames() {
-      return _.chain(this.lognames)
-        .sortBy('cnt')
-        .reverse()
-        .map('logname')
-        .value()
+      return _map(_sortBy(this.lognames, 'cnt').reverse(), 'logname')
     },
     sortedHostnames() {
       return this.groupStatsBy('hostname')
@@ -170,17 +170,14 @@ export default {
     },
     keynames() {
       return _mapValues(this.charts, group => {
-        return _.chain(group)
-          .keys()
-          .groupBy(v => v.split(':')[0])
-          .value()
+        return _groupBy(Object.keys(group), v => v.split(':')[0])
       })
     },
     charts() {
       if (!this.counts) {
         return null
       }
-      // const isMultiHost = _.chain(this.counts).keyBy('hostname').size() > 1
+      // const isMultiHost = _size(_keyBy(this.counts, 'hostname')) > 1
       const colorsMap = _.chain(this.counts).keyBy('hostname').keys().zipObject(COLORS).value()
       console.log(colorsMap)
       return _.chain(this.counts)
@@ -300,19 +297,14 @@ export default {
       this.loading = false
     },
     groupStatsBy(fieldname, sort = 'cnt') {
-      return _.chain(this.stats)
-        .groupBy(fieldname)
-        .map((group, key) => {
-          const cnt = _sumBy(group, 'cnt')
-          const updated = _.chain(group)
-            .map('updated')
-            .max()
-            .value()
-          return { [fieldname]: key, cnt, updated }
-        })
-        .sortBy(v => -v[sort])
-        .map(fieldname)
-        .value()
+      const grouped = _groupBy(this.stats, fieldname)
+      const mapped = _map(grouped, (group, key) => {
+        const cnt = _sumBy(group, 'cnt')
+        const updated = _max(_map(group, 'updated'))
+        return { [fieldname]: key, cnt, updated }
+      })
+      const sorted = _sortBy(mapped, v => -v[sort])
+      return _map(sorted, fieldname)
     },
     switchOrient() {
       this.$store.commit(MUTATIONS.SWITCH_ORIENT)
