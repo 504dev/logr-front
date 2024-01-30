@@ -163,7 +163,7 @@ export default {
       return _map(_sortBy(this.lognames, 'cnt').reverse(), 'logname')
     },
     sortedHostnames() {
-      return this.groupStatsBy('hostname')
+      return this.groupStatsBy('hostname', 'updated').slice(0, 20)
     },
     sortedVersions() {
       return this.groupStatsBy('version', 'updated')
@@ -179,8 +179,8 @@ export default {
       }
       // const isMultiHost = _size(_keyBy(this.counts, 'hostname')) > 1
       // const colorsMap = _zipObject(Object.keys(_keyBy(this.counts)), COLORS)
-      const colorsMap = _zipObject(this.sortedHostnames.slice().reverse(), COLORS)
-      console.log(colorsMap)
+      const colorsMap = _zipObject(this.sortedHostnames, COLORS)
+      console.log(this.sortedHostnames, COLORS, colorsMap)
 
       const grouped = _pick(
         _groupBy(this.counts, 'kind'),
