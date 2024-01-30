@@ -64,7 +64,7 @@ export default {
         .replace('T', ' ')
       for (let i = text.length; i >= 7; i--) {
         const chunk = text.slice(0, i)
-        const [since, to] = this.text2range(chunk)
+        const [/*since*/, to] = this.text2range(chunk)
         if (to === dtB.getTime()) {
           return chunk.trim()
         }
@@ -110,13 +110,14 @@ export default {
         case 10:
           to.setUTCDate(to.getUTCDate() + 1)
           break
-        case 9:
+        case 9: {
           const m = to.getUTCMonth()
           to.setUTCDate(to.getUTCDate() + (to.getUTCDate() === 1 ? 9 : 10))
           if (m !== to.getUTCMonth()) {
             to.setUTCDate(1)
           }
           break
+        }
         case 8:
         case 7:
           to.setUTCMonth(to.getUTCMonth() + 1)

@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import { fileURLToPath, URL } from 'node:url'
 import vue from '@vitejs/plugin-vue2'
+import eslint from 'vite-plugin-eslint'
 
 export default defineConfig({
   plugins: [
@@ -10,7 +11,8 @@ export default defineConfig({
           whitespace: 'preserve'
         }
       }
-    })
+    }),
+    eslint()
   ],
   resolve: {
     alias: {

@@ -189,42 +189,34 @@ const store = new Vuex.Store({
       if (state.user.role === RoleDemo) {
         return demoStore.actions[ACTIONS.MEMBER_ADD](store, { dash, member })
       }
-      try {
-        const { data } = await api(`/me/dashboard/${dash.id}/member`, {
-          params: { username: member.login },
-          method: 'POST'
-        })
-        dash.members.push(data)
-        return data
-      } catch (e) {
-        throw e
-      }
+      const { data } = await api(`/me/dashboard/${dash.id}/member`, {
+        params: { username: member.login },
+        method: 'POST'
+      })
+      dash.members.push(data)
+      return data
     },
     async [ACTIONS.MEMBER_REMOVE]({ state, commit }, { dash, id }) {
       if (state.user.role === RoleDemo) {
         commit(MUTATIONS.MEMBER_REMOVE, id)
         return {}
       }
-      try {
-        const { data } = await api(`/me/dashboard/${dash.id}/member`, {
-          params: { id },
-          method: 'DELETE'
-        })
-        commit(MUTATIONS.MEMBER_REMOVE, id)
-        return data
-      } catch (e) {
-        throw e
-      }
+      const { data } = await api(`/me/dashboard/${dash.id}/member`, {
+        params: { id },
+        method: 'DELETE'
+      })
+      commit(MUTATIONS.MEMBER_REMOVE, id)
+      return data
     },
-    async [ACTIONS.LOAD_LOGS]({}, params) {
+    async [ACTIONS.LOAD_LOGS](_, params) {
       const { data } = await api('/logs', { params })
       return data
     },
-    async [ACTIONS.LOAD_COUNTS]({}, params) {
+    async [ACTIONS.LOAD_COUNTS](_, params) {
       const { data } = await api('/counts', { params })
       return data
     },
-    async [ACTIONS.LOAD_COUNTS_SNIPPET]({}, params) {
+    async [ACTIONS.LOAD_COUNTS_SNIPPET](_, params) {
       const dashId = params.dash_id
       params = _omit(params, 'dash_id')
       const { data } = await api(`/counts/${dashId}/snippet`, { params })
@@ -242,7 +234,7 @@ const store = new Vuex.Store({
       state.lognames.logs[dashId] = data
       return data
     },
-    async [ACTIONS.LOAD_LOGS_STATS]({}, { dashId, logname }) {
+    async [ACTIONS.LOAD_LOGS_STATS](_, { dashId, logname }) {
       const { data } = await api(`/logs/${dashId}/stats`, { params: { logname } })
       return data
     },
@@ -255,7 +247,7 @@ const store = new Vuex.Store({
       state.lognames.counts[dashId] = data
       return data
     },
-    async [ACTIONS.LOAD_COUNTS_STATS]({}, { dashId, logname }) {
+    async [ACTIONS.LOAD_COUNTS_STATS](_, { dashId, logname }) {
       const { data } = await api(`/counts/${dashId}/stats`, { params: { logname } })
       return data
     },

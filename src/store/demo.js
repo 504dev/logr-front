@@ -6,7 +6,7 @@ Vue.use(Vuex)
 
 const store = {
   actions: {
-    async [ACTIONS.MEMBER_ADD]({ state }, { dash, member }) {
+    async [ACTIONS.MEMBER_ADD](_, { dash, member }) {
       dash.members.push({
         id: Date.now(),
         dash_id: dash.id,
