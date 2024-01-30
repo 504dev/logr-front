@@ -155,10 +155,10 @@
   dependencies:
     "@fortawesome/fontawesome-common-types" "^0.2.36"
 
-"@fortawesome/vue-fontawesome@0.1.10":
-  version "0.1.10"
-  resolved "https://registry.npmjs.org/@fortawesome/vue-fontawesome/-/vue-fontawesome-0.1.10.tgz"
-  integrity sha512-b2+SLF31h32LSepVcXe+BQ63yvbq5qmTCy4KfFogCYm2bn68H5sDWUnX+U7MBqnM2aeEk9M7xSoqGnu+wSdY6w==
+"@fortawesome/vue-fontawesome@2.0.10":
+  version "2.0.10"
+  resolved "https://registry.npmjs.org/@fortawesome/vue-fontawesome/-/vue-fontawesome-2.0.10.tgz"
+  integrity sha512-OTETSXz+3ygD2OK2/vy82cmUBpuJqeOAg4gfnnv+f2Rir1tDIhQg026Q3NQxznq83ZLz8iNqGG9XJm26inpDeg==
 
 "@rollup/rollup-android-arm-eabi@4.9.6":
   version "4.9.6"
@@ -552,7 +552,7 @@ is-wsl@^2.2.0:
 
 jwt-decode@4.0.0:
   version "4.0.0"
-  resolved "https://registry.yarnpkg.com/jwt-decode/-/jwt-decode-4.0.0.tgz#2270352425fd413785b2faf11f6e755c5151bd4b"
+  resolved "https://registry.npmjs.org/jwt-decode/-/jwt-decode-4.0.0.tgz"
   integrity sha512-+KJGIyHgkGuIq3IEBNftfhW/LfWhXUIY6OmyVWjliu5KH1y0fw7VQ8YndE2O4qZdMSd9SqbnC8GOcZEy0Om7sA==
 
 lodash@4.17.21:
@@ -824,6 +824,11 @@ vuex@3.6.2:
   version "3.6.2"
   resolved "https://registry.npmjs.org/vuex/-/vuex-3.6.2.tgz"
   integrity sha512-ETW44IqCgBpVomy520DT5jf8n0zoCac+sxWnn+hMe/CzaSejb/eVw2YToiXYX+Ex/AuHHia28vWTq4goAexFbw==
+
+weekstart@1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/weekstart/-/weekstart-1.1.0.tgz#af642eb10dc24b1af9d4dcc0415056edc087b897"
+  integrity sha512-ZO3I7c7J9nwGN1PZKZeBYAsuwWEsCOZi5T68cQoVNYrzrpp5Br0Bgi0OF4l8kH/Ez7nKfxa5mSsXjsgris3+qg==
 
 wrap-ansi@^7.0.0:
   version "7.0.0"
