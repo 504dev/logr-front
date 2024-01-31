@@ -1,6 +1,6 @@
 <template>
   <span class="preview">
-    <log-item v-for="(item, i) of randomStat" :key="i" :value="{
+    <log-item :preview="true" v-for="(item, i) of randomStat" :key="i" :value="{
       timestamp: item.updated,
       message: `[${item.logname} / ${item.cnt}] ${new Date(item.updated / 1e6).toISOString()}`,
       level: item.level
@@ -9,6 +9,8 @@
 </template>
 
 <script>
+import _sortBy from 'lodash/sortBy';
+import _sumBy from 'lodash/sumBy';
 import LogItem from './LogItem.vue';
 
 export default {
@@ -20,11 +22,29 @@ export default {
   },
   computed: {
     randomStat() {
-      return Array.from({ length: 11 }, () => {
-        const rndi = Math.ceil(Math.random() * this.stats.length) - 1
-        return this.stats[rndi]
-      })
+      const size = 11
+      const result = _sortBy(this.stats, 'cnt').reverse().slice(0, size)
+      const sampler = this.probabilitySample(result, 'cnt', Math.cbrt)
+      for (let i = result.length; i <= size; i++) {
+        result.push(sampler())
+      }
+      return result
     },
+  },
+  methods: {
+    probabilitySample(data, field, func = v => v) {
+      const list = data.map(payload => ({ payload, probability: func(payload[field]) }))
+      const sum = _sumBy(list, 'probability')
+      return () => {
+        const rndi = Math.floor(Math.random() * sum)
+        for (let i = 0, cum = 0; i < list.length; i++) {
+          cum += list[i].probability
+          if (rndi < cum) {
+            return list[i].payload
+          }
+        }
+      }
+    }
   }
 }
 </script>

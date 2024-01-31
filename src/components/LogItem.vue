@@ -1,7 +1,18 @@
 <template>
   <span class="log-item">
+
+    <template v-if="preview">
+      <span class="log-datetime"
+      ><span class="date">{{ date }}</span><span class="separator"
+      >T</span
+      ><span class="time">{{ time }}</span><small>.{{ msec }}</small
+      ></span>
+      <span class="log-level ellipsis" :class="`log-level-${value.level}`">{{ value.level }}</span>
+      <span class="log-message">{{value.message}}</span>
+    </template>
+
+    <template v-else>
     <span
-      v-if="value.logname"
       class="log-logname ellipsis tag"
       @click="$emit('tag', { logname: value.logname })"
       :title="value.logname"
@@ -9,7 +20,6 @@
       >{{ value.logname }}</span
     >
     <span
-      v-if="value.hostname"
       class="log-hostname ellipsis tag"
       @click="$emit('tag', { hostname: value.hostname })"
       :title="value.hostname"
@@ -35,16 +45,18 @@
     <span
       class="log-level ellipsis"
       :class="`log-level-${value.level}`"
-      @click="$attrs.filters && $emit('tag', { level: $attrs.filters.level === value.level ? '' : value.level })"
+      @click="$emit('tag', { level: $attrs.filters.level === value.level ? '' : value.level })"
       >{{ value.level }}</span
     >
     <log-item-msg
       :value="value.message"
-      :filter="$attrs.filters && $attrs.filters.message"
+      :filter="$attrs.filters.message"
       :timestamp="value.timestamp"
       class="log-message"
     />
+    </template>
   </span>
+
 </template>
 
 <script>
@@ -55,7 +67,8 @@ export default {
     LogItemMsg
   },
   props: {
-    value: Object
+    value: Object,
+    preview: Boolean
   },
   computed: {
     formatted() {
