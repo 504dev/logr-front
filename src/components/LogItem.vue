@@ -4,14 +4,14 @@
       class="log-logname ellipsis tag"
       @click="$emit('tag', { logname: value.logname })"
       :title="value.logname"
-      v-show="!$attrs.filters.logname"
+      v-show="$attrs.filters && !$attrs.filters.logname"
       >{{ value.logname }}</span
     >
     <span
       class="log-hostname ellipsis tag"
       @click="$emit('tag', { hostname: value.hostname })"
       :title="value.hostname"
-      v-show="!$attrs.filters.hostname"
+      v-show="$attrs.filters && !$attrs.filters.hostname"
       >{{ value.hostname }}</span
     >
     <span class="log-datetime"
@@ -33,12 +33,12 @@
     <span
       class="log-level ellipsis"
       :class="`log-level-${value.level}`"
-      @click="$emit('tag', { level: $attrs.filters.level === value.level ? '' : value.level })"
+      @click="$attrs.filters && $emit('tag', { level: $attrs.filters.level === value.level ? '' : value.level })"
       >{{ value.level }}</span
     >
     <log-item-msg
       :value="value.message"
-      :filter="$attrs.filters.message"
+      :filter="$attrs.filters && $attrs.filters.message"
       :timestamp="value.timestamp"
       class="log-message"
     />

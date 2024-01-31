@@ -27,16 +27,14 @@
           :class="{ x2: !hasCounts }"
           v-if="hasLogs"
           >
-          <span v-show="false">logs</span>
+          <logs-preview :stats="stats.logs"/>
         </router-link
         ><router-link
           :to="`/dashboard/${dash.id}/counts`"
           class="window list window-counts"
           :class="{ x2: !hasLogs }"
           v-if="hasCounts"
-        >
-          <span v-show="false">cnts</span>
-        </router-link>
+        />
         <div class="empty" v-if="isEmpty">no data</div>
       </div>
       <div class="tools">
@@ -64,11 +62,13 @@ import { mapState } from 'vuex'
 import ACTIONS from '@/store/action-types'
 import ShareModal from './ShareModal.vue'
 import KeysModal from './KeysModal.vue'
+import LogsPreview from './LogsPreview.vue'
 
 export default {
   components: {
     ShareModal,
-    KeysModal
+    KeysModal,
+    LogsPreview,
   },
   props: {
     dash: Object
@@ -211,27 +211,14 @@ export default {
     width: 95px;
     height: 80px;
     margin-top: 15px;
-    padding-top: 38px;
-    background-color: #ddd;
+    background-color: #000;
     border: solid 1px #000;
     cursor: pointer;
     color: #fff;
-    text-align: center;
+    text-align: left;
     text-decoration: none;
-    span {
-      display: none;
-    }
-    &:hover {
-      span {
-        display: inline-block;
-      }
-    }
+    overflow: hidden;
     &.window-logs {
-      /*font-size: 20px;*/
-      /*margin-right: 8px;*/
-      background-color: #444;
-      background-image: url('/static/logs.jpg');
-      background-size: 90px;
       opacity: 0.88;
       width: 120px;
       border-radius: 4px 0 0 4px;
