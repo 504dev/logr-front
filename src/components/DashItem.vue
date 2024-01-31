@@ -220,7 +220,7 @@ export default {
     overflow: hidden;
     &.window-logs {
       opacity: 0.88;
-      width: 120px;
+      width: 158px;
       border-radius: 4px 0 0 4px;
       &:hover {
         opacity: 0.99;
@@ -233,7 +233,7 @@ export default {
       background-position-y: -4px;
       background-position-x: 26px;
       opacity: 0.8;
-      width: 78px;
+      width: 40px;
       border-radius: 0 4px 4px 0;
       &:not(.x2) {
         border-left: 0;

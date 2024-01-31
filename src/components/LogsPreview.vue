@@ -2,7 +2,7 @@
   <span class="preview">
     <log-item v-for="(item, i) of randomStat" :key="i" :value="{
       timestamp: item.updated,
-      message: `[${item.logname}, cnt=${item.cnt}, ${new Date(item.updated / 1e6).toISOString()}`,
+      message: `[${item.logname} / ${item.cnt}] ${new Date(item.updated / 1e6).toISOString()}`,
       level: item.level
     }"/>
   </span>
@@ -25,9 +25,6 @@ export default {
         return this.stats[rndi]
       })
     },
-  },
-  mounted() {
-    console.log(this.stats)
   }
 }
 </script>
