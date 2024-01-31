@@ -223,7 +223,13 @@ export default {
       return (this.dashboards || []).find(dash => dash.id === +this.$route.params.id)
     },
     sortedLognames() {
-      return _map(_sortBy(this.lognames, 'cnt').reverse(), 'logname')
+      const grouped = _groupBy(this.lognames, 'logname')
+      const mapped = _map(grouped, (group, logname) => {
+        const cnt = _sumBy(group, 'cnt')
+        return { logname, cnt }
+      })
+      const sorted = _sortBy(mapped, 'cnt').reverse()
+      return _map(sorted, 'logname')
     },
     sortedHostnames() {
       return this.groupStatsBy('hostname')
