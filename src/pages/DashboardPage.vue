@@ -125,6 +125,7 @@ export default {
       opacity: 0.9;
     }
     .nav {
+      font-size: 16px;
       position: absolute;
       display: inline-block;
       top: 8px;

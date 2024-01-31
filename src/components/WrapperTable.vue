@@ -154,6 +154,14 @@ table {
       margin: 0;
       padding: 0;
 
+      .customs {
+        font-size: 16px;
+      }
+
+      .goto {
+        font-size: 13px;
+      }
+
       &.lefter {
         background-color: #ddd;
         width: 180px;
@@ -177,7 +185,6 @@ table {
         }
 
         .goto {
-          font-size: smaller;
           position: absolute;
           right: 0;
           bottom: 0;
@@ -206,7 +213,6 @@ table {
         }
 
         .goto {
-          font-size: smaller;
           position: absolute;
           right: 15px;
           top: 55px;
@@ -244,6 +250,8 @@ table {
     }
     .kinds {
       padding-bottom: 16px;
+      padding-right: 16px;
+      padding-left: 2px;
     }
     .filters {
       select,
@@ -402,7 +410,8 @@ table {
   }
 
   .kinds {
-    font-size: 13px;
+    font-family: Courier, monospace;
+    font-size: 12px;
     overflow-x: scroll;
     max-width: 300px;
 

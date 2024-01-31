@@ -227,7 +227,6 @@ export default {
       }
     }
     &.window-counts {
-      /*font-size: 18px;*/
       background-image: url('/static/counts.jpg');
       background-size: 110px;
       background-position-y: -4px;
