@@ -12,6 +12,6 @@
   }
 }
 .rotating {
-  animation: rotating 1s linear infinite;
+  animation: rotating 0.75s linear infinite;
 }
 </style>

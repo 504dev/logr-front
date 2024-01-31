@@ -234,10 +234,6 @@ const store = new Vuex.Store({
       state.lognames.logs[dashId] = data
       return data
     },
-    async [ACTIONS.LOAD_LOGS_STATS](_, { dashId, logname }) {
-      const { data } = await api(`/logs/${dashId}/stats`, { params: { logname } })
-      return data
-    },
     async [ACTIONS.LOAD_COUNTS_LOGNAMES]({ state }, dashId) {
       const cached = state.lognames.counts[dashId]
       if (cached) {
@@ -245,6 +241,10 @@ const store = new Vuex.Store({
       }
       const { data } = await api(`/counts/${dashId}/lognames`).catch(() => ({ data: [] }))
       state.lognames.counts[dashId] = data
+      return data
+    },
+    async [ACTIONS.LOAD_LOGS_STATS](_, { dashId, logname }) {
+      const { data } = await api(`/logs/${dashId}/stats`, { params: { logname } })
       return data
     },
     async [ACTIONS.LOAD_COUNTS_STATS](_, { dashId, logname }) {

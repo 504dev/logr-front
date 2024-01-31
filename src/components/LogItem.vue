@@ -1,17 +1,19 @@
 <template>
   <span class="log-item">
     <span
+      v-if="value.logname"
       class="log-logname ellipsis tag"
       @click="$emit('tag', { logname: value.logname })"
       :title="value.logname"
-      v-show="$attrs.filters && !$attrs.filters.logname"
+      v-show="!$attrs.filters.logname"
       >{{ value.logname }}</span
     >
     <span
+      v-if="value.hostname"
       class="log-hostname ellipsis tag"
       @click="$emit('tag', { hostname: value.hostname })"
       :title="value.hostname"
-      v-show="$attrs.filters && !$attrs.filters.hostname"
+      v-show="!$attrs.filters.hostname"
       >{{ value.hostname }}</span
     >
     <span class="log-datetime"

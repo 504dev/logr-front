@@ -70,7 +70,9 @@
       </td>
       <td>
         <div class="content">
-          <spinner size="2x" v-if="loading" />
+          <template v-if="loading">
+            <spinner size="2x"/><spinner/>
+          </template>
           <slot v-else name="content"></slot>
         </div>
         <router-link to="/dashboards" v-if="fullscreen"
@@ -382,7 +384,7 @@ table {
     /*box-shadow: 0 0 0 1px #000;*/
 
     &:hover {
-      box-shadow: 0 0 0 1px #9e9;
+      box-shadow: 0 0 0 2px #9e9;
     }
   }
 

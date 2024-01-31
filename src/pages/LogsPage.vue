@@ -100,7 +100,7 @@
           :key="key"
           @tag="onTag"
           @hover="onHover"
-        ></log-item>
+        />
         <span class="cnt" :title="`${logs.history.length}rows`">{{ logs.history.length }}<small>.</small></span>
       </div>
       <div class="block block-deep dashed" :class="{ reverse: !direction }" v-for="(deep, key) in logs.deep" :key="key">
@@ -108,7 +108,7 @@
         <span class="cnt" :title="`${deep.length}rows`">{{ deep.length }}<small>.</small></span>
       </div>
       <button class="more" @click="onMore" v-if="offset">
-        more
+        fetch more
         <spinner v-if="deepLoading" />
         <font-awesome-icon icon="chevron-circle-down" v-else />
       </button>
@@ -240,10 +240,15 @@ export default {
     sortedVersions() {
       return this.groupStatsBy('version', 'updated').slice(0, 10)
     },
+    lastPack() {
+      return _last(this.logs.deep) || this.logs.history
+    },
     offset() {
-      const list = _last(this.logs.deep) || this.logs.history
-      return _get(_last(list), 'timestamp')
-    }
+      return _get(_last(this.lastPack), 'timestamp')
+    },
+    // hasMore() {
+    //   return this.lastPack.length === +this.filters.limit
+    // }
   },
   methods: {
     onHover(value) {
@@ -487,11 +492,13 @@ input#filter-limit {
 }
 
 .more {
-  border-color: #040;
-  color: white;
+  border-color: #111;
+  color: #111;
+  font-weight: bold;
   width: 180px;
   margin: 5px 0;
-  background-color: green;
+  /*background-color: #fb8;*/
+  background-color: #5b5;
   opacity: 0.9;
   cursor: pointer;
   &:hover {
