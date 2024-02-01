@@ -512,7 +512,7 @@ input#filter-limit {
   background-color: #eee;
   border-color: black;
   svg {
-    zoom: 0.8;
+    font-size: 12px;
   }
   &.pause-on {
     background-color: #088;
