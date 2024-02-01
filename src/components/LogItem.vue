@@ -1,5 +1,5 @@
 <template>
-  <span class="log-item">
+  <span class="log-item" :class="{ preview }">
 
     <template v-if="preview">
       <span class="log-datetime"
@@ -68,7 +68,10 @@ export default {
   },
   props: {
     value: Object,
-    preview: Boolean
+    preview: {
+      type: Boolean,
+      default: false,
+    }
   },
   computed: {
     formatted() {
@@ -113,6 +116,13 @@ export default {
   }
 }
 .log-item {
+  &.preview {
+    font-size: 6.4px;
+    line-height: 6.6px;
+    > .log-level {
+      width: 25px;
+    }
+  }
   line-height: 17px;
   display: block;
   white-space: nowrap;

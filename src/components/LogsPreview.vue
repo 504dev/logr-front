@@ -22,7 +22,7 @@ export default {
   },
   computed: {
     randomStat() {
-      const size = 11
+      const size = 12
       const result = _sortBy(this.stats, 'cnt').reverse().slice(0, size)
       const sampler = this.probabilitySample(result, 'cnt', Math.cbrt)
       for (let i = result.length; i <= size; i++) {
@@ -51,13 +51,13 @@ export default {
 
 <style lang="scss" scoped>
 .preview {
-  opacity: 0.5;
-  line-height: 1.3;
   position: relative;
-  top: -2px;
-  left: -95px;
+  top: 0;
+  left: -19px;
   font-family: Courier, monospace;
   pointer-events: none;
-  zoom: 0.4;
+  > span {
+    opacity: 0.5;
+  }
 }
 </style>

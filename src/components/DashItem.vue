@@ -10,13 +10,16 @@
             :src="`https://avatars.githubusercontent.com/u/${dash.owner.github_id}`"
             :title="dash.owner.username"
             class="owner"/></a
-        ><a v-for="member in members" :key="member.id" :href="`https://github.com/${member.user.username}`"
+        ><a v-for="(member, i) in members" :key="member.id" :href="`https://github.com/${member.user.username}`"
           ><img
             :src="`https://avatars.githubusercontent.com/u/${member.user.github_id}`"
             :title="member.user.username"
             :key="member.user_id"
             class="member"
-            :style="{ marginLeft: -2 - members.length + 'px' }"
+            :style="{
+              marginLeft: (-2 - members.length) + 'px',
+              zIndex: (members.length - i),
+            }"
           />
         </a>
       </div>
@@ -186,14 +189,11 @@ export default {
         border-radius: 4px;
         margin: 0;
         z-index: 1;
-        &.member {
-          float: right;
-        }
         &.owner {
-          z-index: 2;
+          z-index: 99;
         }
         &:hover {
-          z-index: 3;
+          z-index: 100 !important;
         }
       }
     }
@@ -272,14 +272,13 @@ export default {
     display: none;
   }
   .tools {
-    zoom: 0.75;
+    font-size: 12px;
     position: absolute;
-    bottom: 0;
-    right: 0;
-    margin: 5px;
+    bottom: 8px;
+    right: 8px;
     .icon {
       cursor: pointer;
-      margin: 5px;
+      margin-left: 8px;
     }
   }
 }

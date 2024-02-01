@@ -383,7 +383,7 @@ table {
 
   .avatar {
     position: absolute;
-    top: 12px;
+    top: 13px;
     left: 10px;
     width: 24px;
     height: 24px;

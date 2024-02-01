@@ -191,6 +191,7 @@ export default {
     input.search {
       width: 330px;
       max-width: none;
+      padding-right: 25px;
     }
     img {
       width: 16px;
