@@ -59,13 +59,15 @@
     <template v-slot:content>
       <span v-if="nodata" class="nodata">No data</span>
       <div v-else>
-        <div v-for="(group, kind) in charts" :key="kind">
-          <a :name="`${kind}`"></a>
-          <div v-for="(series, keyname) in group" :key="keyname">
+        <div v-for="(group, kind) in charts" :key="kind" :id="`${kind}`">
+          <div v-for="(series, keyname) in group" :key="keyname" :id="`${kind}:${keyname}`">
             <p class="header">
-              <a :name="`${kind}:${keyname}`"
-                ><b>{{ kind }}:</b>{{ keyname }}</a
-              >
+              <b>{{ kind }}:</b>{{ keyname }}
+              <span v-for="({ value, name }) of lastValueMap[kind][keyname]"
+                :title="name"
+                :key="name"
+                class="lastval"
+              >{{ nFormatter(value) }}</span>
             </p>
             <counts-chart :series="series" class="chart" :kind="kind" />
           </div>
@@ -85,6 +87,7 @@ import _keyBy from 'lodash/keyBy'
 import _sortBy from 'lodash/sortBy'
 import _pickBy from 'lodash/pickBy'
 import _groupBy from 'lodash/groupBy'
+import _findLast from 'lodash/findLast'
 import _mapValues from 'lodash/mapValues'
 import _zipObject from 'lodash/zipObject'
 import store from 'store2'
@@ -205,9 +208,43 @@ export default {
     },
     nodata() {
       return this.charts.length === 0
-    }
+    },
+    lastValueMap() {
+      return _mapValues(this.charts, keymap => {
+        return _mapValues(keymap, hosts => {
+          if (hosts.length > 1) {
+            return []
+          }
+          return _map(hosts, ({ name, data }) => {
+            return {
+              name,
+              value: _findLast(data, '1')[1]
+            }
+          })
+        })
+      })
+    },
   },
   methods: {
+    nFormatter(num, digits = 2) {
+      const lookup = [
+        { value: 0, symbol: '' },
+        { value: 1e3, symbol: 'k' },
+        { value: 1e6, symbol: 'M' },
+        { value: 1e9, symbol: 'G' },
+        { value: 1e12, symbol: 'T' },
+        { value: 1e15, symbol: 'P' },
+        { value: 1e18, symbol: 'E' }
+      ];
+
+      const item = lookup.findLast(item => Math.abs(num) >= item.value)
+      num /= (item.value || 1)
+      digits -= Math.log10(num)
+      digits = digits < 0 ? 0 : Math.round(digits)
+      console.log(num, Math.log10(num),  digits)
+      const regexp = /\.0+$|(?<=\.[0-9]*[1-9])0+$/
+      return num.toFixed(digits).replace(regexp, '').concat(item.symbol)
+    },// (+value.toFixed(3)).toLocaleString()
     parseLocation() {
       let { hostname = '', logname = '', pid = '', version = '', agg = 'm' } = this.$route.query
       if (logname === '') {
@@ -332,6 +369,19 @@ select#filter-agg {
   font-size: 18px;
   margin-left: 8px;
   text-align: left;
+}
+.lastval {
+  font-size: smaller;
+  font-weight: bold;
+  display: inline-block;
+  background: #333;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin: 0 24px;
+  float: right;
+  text-align: center;
+  min-width: 24px;
 }
 .nodata {
   /*display: block;*/

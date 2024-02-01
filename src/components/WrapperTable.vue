@@ -252,6 +252,7 @@ table {
       padding-bottom: 16px;
       padding-right: 16px;
       padding-left: 2px;
+      box-sizing: border-box;
     }
     .filters {
       select,
@@ -410,8 +411,8 @@ table {
   }
 
   .kinds {
-    font-family: Courier, monospace;
-    font-size: 12px;
+    //font-family: Courier, monospace;
+    font-size: 13px;
     overflow-x: scroll;
     max-width: 300px;
 

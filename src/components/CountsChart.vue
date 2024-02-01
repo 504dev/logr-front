@@ -1,5 +1,5 @@
 <template>
-  <div :id="id" />
+  <div :id="id"/>
 </template>
 
 <script>
@@ -26,7 +26,10 @@ export default {
       Highcharts.chart(this.id, {
         chart: {
           type: 'area',
-          zoomType: 'x'
+          zoomType: 'x',
+          style: {
+            fontFamily: 'Courier, monospace'
+          }
         },
         credits: {
           enabled: false
@@ -39,6 +42,7 @@ export default {
         },
         plotOptions: {
           area: {
+            animation: false,
             stacking: kind === 'inc' ? 'normal' : undefined,
             marker: {
               enabled: true,
