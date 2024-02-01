@@ -131,7 +131,7 @@ export default {
       top: 8px;
       left: 96px;
       .username {
-        font-weight: 500;
+        font-weight: 501;
       }
     }
   }
@@ -163,12 +163,11 @@ export default {
       border-color: #9e9;
     }
     &.mini {
-      width: 110px;
-      height: 80px;
-      line-height: 40px;
-      font-size: 60px;
-      zoom: 0.8;
-      /*border-width: 6px;*/
+      width: 88px;
+      height: 64px;
+      line-height: 28px;
+      font-size: 48px;
+      border-width: 3px;
     }
   }
   .watermark {

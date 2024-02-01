@@ -91,7 +91,7 @@ a {
   }
 }
 .zoom {
-  zoom: 1.5;
+  font-size: 24px;
 }
 .avatar {
   width: 20px;
