@@ -2,7 +2,7 @@
   <span class="preview">
     <log-item :preview="true" v-for="(item, i) of randomStat" :key="i" :value="{
       timestamp: item.updated,
-      message: `[${item.logname} / ${item.cnt}] ${new Date(item.updated / 1e6).toISOString()}`,
+      message: `[${item.logname} / ${item.cnt}] ${item.message.replaceAll(/\n/g, ' ')}`,
       level: item.level
     }"/>
   </span>
