@@ -1,13 +1,11 @@
 <template>
   <div class="widget" v-if="expand && counts">
-    <counts-snippet-chart :subtitle="kind + ':' + keyname" :series="series" class="chart" /><span
-      @click="closeChart"
-      class="close"
-      ><font-awesome-icon icon="times-circle"/></span>
+    <span @click="closeChart" class="label close"><font-awesome-icon icon="times"/></span
+    ><counts-snippet-chart :subtitle="title" :series="series" class="chart" />
   </div>
-  <span v-else-if="valid" @click="showChart" class="label open"><font-awesome-icon icon="chart-line"/></span>
+  <span v-else-if="valid" @click="showChart" class="label open"><font-awesome-icon icon="chart-line"/> {{title}}</span>
   <span v-else class="label invalid" title="invalid widget"
-    ><font-awesome-icon icon="exclamation-triangle"/> {{ JSON.stringify(this.$attrs) }}</span
+  ><font-awesome-icon icon="exclamation-triangle"/> {{ JSON.stringify(this.$attrs) }}</span
   >
 </template>
 
@@ -29,6 +27,9 @@ export default {
     timestamp: String,
     limit: Number
   },
+  mounted() {
+    console.log(this.$attrs, this.$props)
+  },
   data() {
     return {
       expand: false,
@@ -36,6 +37,9 @@ export default {
     }
   },
   computed: {
+    title() {
+      return this.kind + ':' + this.keyname
+    },
     valid() {
       return this.dashId && this.logname && this.hostname && this.kind && this.keyname && this.timestamp
     },
@@ -85,12 +89,7 @@ export default {
     width: 360px;
     height: 200px;
     border-radius: 5px;
-    border: solid 1px #000;
-  }
-  .close {
-    cursor: pointer;
-    vertical-align: top;
-    margin-left: 1px;
+    border: solid 2px #434348;
   }
 }
 .label {
@@ -98,14 +97,20 @@ export default {
   border-radius: 2px;
   &.open {
     cursor: pointer;
-    background-color: rgba(160, 160, 160, 0.5);
+    background-color: #9e9;
+    color: #000;
     &:hover {
       background-color: rgba(160, 160, 160, 0.7);
     }
   }
-  &.invalid {
+  &.close {
     cursor: pointer;
-    background-color: rgba(192, 64, 64, 0.5);
+    vertical-align: top;
+    margin-right: 2px;
+  }
+  &.invalid {
+    cursor: initial;
+    background-color: tomato;
   }
 }
 </style>

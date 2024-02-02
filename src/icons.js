@@ -12,6 +12,7 @@ import { faAngleDown } from '@fortawesome/free-solid-svg-icons/faAngleDown'
 import { faChevronCircleDown } from '@fortawesome/free-solid-svg-icons/faChevronCircleDown'
 import { faCompactDisc } from '@fortawesome/free-solid-svg-icons/faCompactDisc'
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons/faTimesCircle'
+import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes'
 import { faEdit } from '@fortawesome/free-solid-svg-icons/faEdit'
 import { faShare } from '@fortawesome/free-solid-svg-icons/faShare'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons/faTrashAlt'
@@ -37,6 +38,7 @@ library.add(faAngleDown)
 library.add(faChevronCircleDown)
 library.add(faCompactDisc)
 library.add(faTimesCircle)
+library.add(faTimes)
 library.add(faEdit)
 library.add(faShare)
 library.add(faTrashAlt)
