@@ -60,14 +60,14 @@
       <span v-if="nodata" class="nodata">No data</span>
       <div v-else>
         <div v-for="(group, kind) in charts" :key="kind" :id="`${kind}`">
-          <div v-for="(series, keyname) in group" :key="keyname" :id="`${kind}:${keyname}`">
+          <div v-for="(series, keyname) in group" :key="keyname" :id="`${kind}:${keyname}`" class="block">
             <p class="header">
               <b>{{ kind }}:</b>{{ keyname }}
-              <span v-for="({ value, name }) of lastValueMap[kind][keyname]"
+              <span v-for="({ point, name }) of lastValueMap[kind][keyname]"
                 :title="name"
                 :key="name"
                 class="lastval"
-              >{{ nFormatter(value) }}</span>
+              >{{ nFormatter(point[1]) }}</span>
             </p>
             <counts-chart :series="series" class="chart" :kind="kind" />
           </div>
@@ -82,6 +82,7 @@ import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _pick from 'lodash/pick'
 import _first from 'lodash/first'
+import _maxBy from 'lodash/maxBy'
 import _sumBy from 'lodash/sumBy'
 import _keyBy from 'lodash/keyBy'
 import _sortBy from 'lodash/sortBy'
@@ -96,11 +97,9 @@ import ACTIONS from '@/store/action-types'
 import MUTATIONS from '@/store/mutations-types'
 import CountsChart from '@/components/CountsChart.vue'
 import Wrapper from '@/components/WrapperTable.vue'
+import { COLORS } from '@/constants/colors'
 
 const ls = store.namespace('counts')
-
-const DEFAULT_COLOR = '#434348'
-const COLORS = [DEFAULT_COLOR, '#90ed7d', '#f7a35c', '#8085e9', '#f15c80', '#e4d354', '#2b908f', '#f45b5b', '#91e8e1', '#7cb5ec']
 
 const TIME = {}
 TIME.MINUTE = 60 * 1000
@@ -212,15 +211,13 @@ export default {
     lastValueMap() {
       return _mapValues(this.charts, keymap => {
         return _mapValues(keymap, hosts => {
-          if (hosts.length > 1) {
-            return []
-          }
-          return _map(hosts, ({ name, data }) => {
+          const candidates = _map(hosts, ({ name, data }) => {
             return {
               name,
-              value: _findLast(data, '1')[1]
+              point: _findLast(data, '1')
             }
           })
+          return [_maxBy(candidates, 'point.0')]
         })
       })
     },
@@ -239,12 +236,12 @@ export default {
 
       const item = lookup.findLast(item => Math.abs(num) >= item.value)
       num /= (item.value || 1)
-      digits -= Math.log10(num)
+      digits -= Math.log10(Math.abs(num))
       digits = digits < 0 ? 0 : Math.round(digits)
-      console.log(num, Math.log10(num),  digits)
+
       const regexp = /\.0+$|(?<=\.[0-9]*[1-9])0+$/
       return num.toFixed(digits).replace(regexp, '').concat(item.symbol)
-    },// (+value.toFixed(3)).toLocaleString()
+    },
     parseLocation() {
       let { hostname = '', logname = '', pid = '', version = '', agg = 'm' } = this.$route.query
       if (logname === '') {
@@ -360,6 +357,10 @@ select#filter-agg {
   width: 70px;
   float: right;
 }
+.block {
+  display: inline-block;
+  width: 100%;
+}
 .chart {
   height: 240px;
   min-width: 360px;
@@ -374,14 +375,25 @@ select#filter-agg {
   font-size: smaller;
   font-weight: bold;
   display: inline-block;
-  background: #333;
-  color: #fff;
-  padding: 8px 12px;
+  background-color: #fff;
+  color: #000;
+  padding: 6px 12px;
   border-radius: 4px;
-  margin: 0 24px;
+  margin: 0 16px;
   float: right;
   text-align: center;
   min-width: 24px;
+  line-height: 8px;
+  border: solid 2px #000;
+  &.black {
+    background-color: #000;
+    color: #fff;
+  }
+  &.gray {
+    background-color: #eee;
+    border-color: #eee;
+    color: #000;
+  }
 }
 .nodata {
   /*display: block;*/

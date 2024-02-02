@@ -14,6 +14,7 @@
 <script>
 import CountsSnippetChart from './CountsSnippetChart.vue'
 import ACTIONS from '@/store/action-types'
+import { DEFAULT_COLOR } from '@/constants/colors'
 
 export default {
   components: {
@@ -46,7 +47,8 @@ export default {
       return [
         {
           name: this.keyname,
-          data
+          data,
+          color: DEFAULT_COLOR
         }
       ]
     }
@@ -81,7 +83,7 @@ export default {
   .chart {
     display: inline-block;
     width: 360px;
-    height: 160px;
+    height: 200px;
     border-radius: 5px;
     border: solid 1px #000;
   }

@@ -24,7 +24,10 @@ export default {
       const { title, subtitle } = this
       Highcharts.chart(this.id, {
         chart: {
-          type: 'line'
+          type: 'line',
+          style: {
+            fontFamily: 'Courier, monospace'
+          }
         },
         credits: {
           enabled: false
