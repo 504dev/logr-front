@@ -96,7 +96,7 @@ export default {
     border-radius: 4px;
     border: solid 2px #9e9;
     border-top-left-radius: 0;
-    box-shadow: 0 2px 0 2px black;
+    box-shadow: 2px 2px 0 0 black;
     z-index: 999;
     background: #fff;
   }
