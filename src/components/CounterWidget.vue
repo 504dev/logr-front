@@ -1,12 +1,12 @@
 <template>
-  <div class="widget" v-if="expand && counts">
-    <span @click="closeChart" class="label close"><font-awesome-icon icon="times"/></span
-    ><counts-snippet-chart :subtitle="title" :series="series" class="chart" />
+  <span v-if="!valid" class="label invalid" title="invalid widget"
+  ><font-awesome-icon icon="exclamation-triangle"/> {{ JSON.stringify(this.$attrs) }}</span>
+  <div class="widget" v-else>
+    <span v-if="!expand" @click="showChart" class="label open"><font-awesome-icon icon="chart-line"/> {{title}}</span
+    ><span v-else @click="closeChart" class="label close"><font-awesome-icon icon="times"/> {{title}}</span
+    ><counts-snippet-chart :subtitle="title" :series="series" class="chart" v-if="expand && counts"
+  />
   </div>
-  <span v-else-if="valid" @click="showChart" class="label open"><font-awesome-icon icon="chart-line"/> {{title}}</span>
-  <span v-else class="label invalid" title="invalid widget"
-  ><font-awesome-icon icon="exclamation-triangle"/> {{ JSON.stringify(this.$attrs) }}</span
-  >
 </template>
 
 <script>
@@ -41,6 +41,7 @@ export default {
       return this.kind + ':' + this.keyname
     },
     valid() {
+      // TODO validateion error message
       return this.dashId && this.logname && this.hostname && this.kind && this.keyname && this.timestamp
     },
     series() {
@@ -59,11 +60,9 @@ export default {
   },
   methods: {
     closeChart() {
-      console.log('closeChart')
       this.expand = false
     },
     async showChart() {
-      console.log('showChart')
       this.expand = true
       const payload = {
         dash_id: this.dashId,
@@ -82,31 +81,43 @@ export default {
 </script>
 <style lang="scss" scoped>
 .widget {
+  //outline: dotted 1px tomato;
   display: inline-block;
+  position: relative;
   vertical-align: text-top;
   .chart {
     display: inline-block;
-    width: 360px;
+    position: absolute;
+    left: 0;
+    top: 18px;
+    width: 100%;
     height: 200px;
-    border-radius: 5px;
-    border: solid 2px #434348;
+    min-width: 360px;
+    border-radius: 4px;
+    border: solid 2px #9e9;
+    border-top-left-radius: 0;
+    box-shadow: 0 2px 0 2px black;
+    z-index: 999;
+    background: #fff;
   }
 }
 .label {
   padding: 2px 5px;
   border-radius: 2px;
+  cursor: pointer;
+  background-color: #9e9;
+  color: #000;
   &.open {
-    cursor: pointer;
-    background-color: #9e9;
-    color: #000;
     &:hover {
       background-color: rgba(160, 160, 160, 0.7);
     }
   }
   &.close {
-    cursor: pointer;
-    vertical-align: top;
-    margin-right: 2px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    > svg {
+      margin: 0 2px;
+    }
   }
   &.invalid {
     cursor: initial;
