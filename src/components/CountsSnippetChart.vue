@@ -54,7 +54,8 @@ export default {
           split: true,
           shared: true,
           crosshairs: true,
-          pointFormat: `<span style="color:{point.color}">●</span> {series.name}: <b>{point.y:,.2f}</b><br/>`,
+          // pointFormat: `<span style="color:{point.color}">●</span> {series.name}: <b>{point.y:,.2f}</b><br/>`,
+          pointFormat: `<b>{point.y:,.2f}</b><br/>`,
           xDateFormat: '%H:%M'
         },
         series: this.series

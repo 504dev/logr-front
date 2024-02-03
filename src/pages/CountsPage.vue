@@ -214,7 +214,7 @@ export default {
           const candidates = _map(hosts, ({ name, data }) => {
             return {
               name,
-              point: _findLast(data, '1')
+              point: _findLast(data, ([, x]) => x != null)
             }
           })
           return [_maxBy(candidates, 'point.0')]
@@ -236,8 +236,10 @@ export default {
 
       const item = lookup.findLast(item => Math.abs(num) >= item.value)
       num /= (item.value || 1)
-      digits -= Math.log10(Math.abs(num))
-      digits = digits < 0 ? 0 : Math.round(digits)
+      if (num !== 0) {
+        digits -= Math.log10(Math.abs(num))
+        digits = digits < 0 ? 0 : Math.round(digits)
+      }
 
       const regexp = /\.0+$|(?<=\.[0-9]*[1-9])0+$/
       return num.toFixed(digits).replace(regexp, '').concat(item.symbol)
@@ -360,11 +362,11 @@ select#filter-agg {
 .block {
   display: inline-block;
   width: 100%;
+  border-bottom: solid 2px #000;
 }
 .chart {
   height: 240px;
   min-width: 360px;
-  border-bottom: dashed 1px #000;
 }
 .header {
   font-size: 18px;

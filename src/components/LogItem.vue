@@ -101,7 +101,7 @@ export default {
   overflow: hidden;
 }
 .tag {
-  color: #fff;
+  //color: #fff;
   font-size: 10px;
   line-height: 16px;
   display: inline-block;

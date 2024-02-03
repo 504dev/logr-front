@@ -2,10 +2,9 @@
   <span v-if="!valid" class="label invalid" title="invalid widget"
   ><font-awesome-icon icon="exclamation-triangle"/> {{ JSON.stringify(this.$attrs) }}</span>
   <div class="widget" v-else>
-    <span v-if="!expand" @click="showChart" class="label open"><font-awesome-icon icon="chart-line"/> {{title}}</span
-    ><span v-else @click="closeChart" class="label close"><font-awesome-icon icon="times"/> {{title}}</span
-    ><counts-snippet-chart :subtitle="title" :series="series" class="chart" v-if="expand && counts"
-  />
+    <span @click="expanded ? hideChart() : showChart()" class="label" :class="expanded ? 'close' : 'open'"
+    ><font-awesome-icon :icon="expanded ? 'times' : 'chart-line'"/> {{title}}</span
+    ><counts-snippet-chart v-if="expanded && counts" :subtitle="title" :series="series" class="chart" />
   </div>
 </template>
 
@@ -32,7 +31,7 @@ export default {
   },
   data() {
     return {
-      expand: false,
+      expanded: false,
       counts: null
     }
   },
@@ -59,11 +58,11 @@ export default {
     }
   },
   methods: {
-    closeChart() {
-      this.expand = false
+    hideChart() {
+      this.expanded = false
     },
     async showChart() {
-      this.expand = true
+      this.expanded = true
       const payload = {
         dash_id: this.dashId,
         timestamp: Math.round(this.timestamp / 1e9),
@@ -74,7 +73,7 @@ export default {
         limit: this.limit || 15
       }
       console.log({ payload })
-      this.counts = this.counts || (await this.$store.dispatch(ACTIONS.LOAD_COUNTS_SNIPPET, payload))
+      this.counts = this.counts || (await this.$store.dispatch(ACTIONS.LOAD_COUNTS_SNIPPET, payload)) || { data: [] }
     }
   }
 }

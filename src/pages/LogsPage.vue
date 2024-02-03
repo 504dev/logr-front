@@ -86,7 +86,7 @@
     <template v-slot:content>
       <div class="block block-live" :class="{ reverse: !!direction }">
         <template v-for="(log, key) in logs.live">
-          <div v-if="log.hr" :key="key" class="separator-pause" :class="{ active: log.timer }">
+          <div v-if="log.hr" :key="key" class="separator-pause" :class="log.timer ? 'active' : 'inactive'">
             <span><font-awesome-icon icon="pause" /> {{ log.text }}</span>
           </div>
           <log-item v-else :value="log" :filters="filters" :key="key" @tag="onTag" @hover="onHover" />
@@ -349,15 +349,16 @@ export default {
       if (this.pausedLine) {
         clearInterval(this.pausedLine.timer)
         delete this.pausedLine.timer
+        this.pausedLine.text = this.pausedLine.text.slice(0, 5)
       }
       if (this.paused) {
         const hr = {
           hr: true,
           timestamp: Date.now(),
-          text: '00:00',
+          text: '00:00.0',
           timer: setInterval(() => {
-            hr.text = new Date(Date.now() - hr.timestamp).toISOString().slice(14, 19)
-          }, 1000)
+            hr.text = new Date(Date.now() - hr.timestamp).toISOString().slice(14, 21)
+          }, 100)
         }
         this.pausedLine = hr
         this.buffer.data.push(hr)
@@ -523,24 +524,37 @@ input#filter-limit {
 
 .separator-pause {
   position: relative;
-  border-top: dashed 1px #888;
+  border-top: dashed 1px #000;
+  margin: 4px 0;
   span {
     position: absolute;
     top: -9px;
-    right: 0;
+    right: 51%;
+    background-color: #000;
     color: #fff;
-    font-size: 10px;
-    background-color: #888;
-    border: solid 1px #666;
-    padding: 1px 4px;
+    outline: solid 4px #fff;
     border-radius: 3px;
-    margin-right: 5px;
+    padding: 3px 4px;
+    font-size: 10px;
+    font-weight: bold;
   }
   &.active {
     border-top: dashed 1px #088;
     span {
+      //margin-right: -6px;
       background-color: #088;
-      border: solid 1px #066;
+    }
+  }
+}
+.night .separator-pause {
+  span {
+    outline: solid 4px #000;
+  }
+  &.inactive {
+    border-top: dashed 1px #fff;
+    span {
+      background-color: #fff;
+      color: #000;
     }
   }
 }
