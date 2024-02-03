@@ -3,7 +3,10 @@
   ><font-awesome-icon icon="exclamation-triangle"/> {{ JSON.stringify(this.$attrs) }}</span>
   <div class="widget" @blur="hideChart()" tabindex="1" v-else>
     <span @click="expanded ? hideChart() : showChart()" class="label" :class="expanded ? 'close' : 'open'"
-    ><font-awesome-icon :icon="expanded ? 'times' : 'chart-line'"/> {{title}}</span
+      ><font-awesome-icon :icon="expanded ? 'times' : 'chart-line'"/>
+      <span>{{title}}</span>
+      <span class="value">{{lastValue ? (lastValue[1] ? nFormatter(lastValue[1]) : '-') : ' '}}</span>
+    </span
     ><counts-snippet-chart v-if="expanded && counts" :subtitle="title" :series="series" class="chart" />
   </div>
 </template>
@@ -27,17 +30,24 @@ export default {
     timestamp: String,
     limit: Number
   },
-  mounted() {
-    console.log(this.$attrs, this.$props)
+  async mounted() {
+    this.timer = setInterval(() => this.loadDataOnViewport(), 100)
+    this.loadDataOnViewport()
+  },
+  destroyed() {
+    if (this.timer) {
+      clearInterval(this.timer)
+    }
   },
   data() {
     return {
       expanded: false,
-      counts: null
+      counts: null,
+      timer: null,
     }
   },
   computed: {
-    ...mapGetters(['filled']),
+    ...mapGetters(['filled', 'nFormatter']),
     title() {
       return this.kind + ':' + this.keyname
     },
@@ -61,6 +71,15 @@ export default {
           color: DEFAULT_COLOR
         }
       ]
+    },
+    lastValue() {
+      if (!this.counts) {
+        return null
+      }
+      if (this.counts.data.length === 0) {
+        return [null, null]
+      }
+      return this.counts.data[0]
     }
   },
   methods: {
@@ -69,6 +88,9 @@ export default {
     },
     async showChart() {
       this.expanded = true
+      this.counts = this.counts || await this.loadData()
+    },
+    async loadData() {
       const payload = {
         dash_id: this.dashId,
         timestamp: Math.round(this.timestamp / 1e9),
@@ -78,8 +100,14 @@ export default {
         kind: this.kind,
         limit: this.limit || 15
       }
-      console.log({ payload })
-      this.counts = this.counts || (await this.$store.dispatch(ACTIONS.LOAD_COUNTS_SNIPPET, payload)) || { data: [] }
+      return (await this.$store.dispatch(ACTIONS.LOAD_COUNTS_SNIPPET, payload)) || { data: [] }
+    },
+    async loadDataOnViewport() {
+      const { top } = this.$el.getBoundingClientRect()
+      if (top > 0 &&  top < window.innerHeight) {
+        clearInterval(this.timer)
+        this.counts = this.counts || await this.loadData()
+      }
     }
   }
 }
@@ -105,28 +133,38 @@ export default {
     z-index: 999;
     background: #fff;
   }
-}
-.label {
-  padding: 2px 5px;
-  border-radius: 2px;
-  cursor: pointer;
-  background-color: #9e9;
-  color: #000;
-  &.open {
-    &:hover {
-      background-color: #bbb;
+  .label {
+    padding: 2px 5px;
+    border-radius: 2px;
+    cursor: pointer;
+    background-color: #9e9;
+    color: #000;
+    &.open {
+      &:hover {
+        background-color: #bbb;
+        > .value {
+          color: #bbb;
+        }
+      }
     }
-  }
-  &.close {
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-    > svg {
-      margin: 0 2px;
+    &.close {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+      > svg {
+        margin: 0 2px;
+      }
     }
-  }
-  &.invalid {
-    cursor: initial;
-    background-color: tomato;
+    &.invalid {
+      cursor: initial;
+      background-color: tomato;
+    }
+    > .value {
+      font-size: small;
+      background: #000;
+      border-radius: 3px;
+      color: #9e9;
+      padding: 0 4px;
+    }
   }
 }
 </style>

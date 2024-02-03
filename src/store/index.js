@@ -90,6 +90,27 @@ const store = new Vuex.Store({
       }
       return filled
     },
+    nFormatter: () => (num, digits = 2) => {
+      const lookup = [
+        { value: 0, symbol: '' },
+        { value: 1e3, symbol: 'k' },
+        { value: 1e6, symbol: 'M' },
+        { value: 1e9, symbol: 'G' },
+        { value: 1e12, symbol: 'T' },
+        { value: 1e15, symbol: 'P' },
+        { value: 1e18, symbol: 'E' }
+      ];
+
+      const item = lookup.findLast(item => Math.abs(num) >= item.value)
+      num /= (item.value || 1)
+      if (num !== 0) {
+        digits -= Math.log10(Math.abs(num))
+        digits = digits < 0 ? 0 : Math.round(digits)
+      }
+
+      const regexp = /\.0+$|(?<=\.[0-9]*[1-9])0+$/
+      return num.toFixed(digits).replace(regexp, '').concat(item.symbol)
+    },
   },
   mutations: {
     [MUTATIONS.SET_JWT]: (state, token) => {
