@@ -50,6 +50,11 @@ export default {
           },
           lineWidth: 2
         },
+        plotOptions: {
+          line: {
+            animation: false
+          }
+        },
         tooltip: {
           split: true,
           shared: true,

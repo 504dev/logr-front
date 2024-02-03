@@ -78,7 +78,6 @@
 </template>
 
 <script>
-import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _pick from 'lodash/pick'
 import _first from 'lodash/first'
@@ -92,7 +91,7 @@ import _findLast from 'lodash/findLast'
 import _mapValues from 'lodash/mapValues'
 import _zipObject from 'lodash/zipObject'
 import store from 'store2'
-import { mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import ACTIONS from '@/store/action-types'
 import MUTATIONS from '@/store/mutations-types'
 import CountsChart from '@/components/CountsChart.vue'
@@ -158,6 +157,7 @@ export default {
   },
   computed: {
     ...mapState(['user', 'dashboards', 'orient']),
+    ...mapGetters(['filled']),
     dash() {
       return (this.dashboards || []).find(dash => dash.id === +this.$route.params.id)
     },
@@ -196,7 +196,8 @@ export default {
         return _mapValues(grouped, group => {
           const indexed = _keyBy(group, 'hostname')
           const mapped = _map(indexed, ({ data }, hostname) => {
-            data = this.filled(data.map(([x, y]) => [x * 1000, y]).reverse())
+            data = data.map(([x, y]) => [x * 1000, y]).reverse()
+            data = this.filled(data, ...DELTAS[this.filters.agg])
             // const color = !isMultiHost ? DEFAULT_COLOR : '#' + this.convertToHex(hostname).slice(0, 6)
             const color = colorsMap[hostname]
             return { name: hostname, data, color }
@@ -214,7 +215,7 @@ export default {
           const candidates = _map(hosts, ({ name, data }) => {
             return {
               name,
-              point: _findLast(data, ([, x]) => x != null)
+              point: _findLast(data, ([, y]) => y != null)
             }
           })
           return [_maxBy(candidates, 'point.0')]
@@ -271,28 +272,6 @@ export default {
       }
 
       return Math.abs(hash).toString(16)
-    },
-    filled(list) {
-      if (list.length < 2) {
-        return list
-      }
-      const [delta, range] = DELTAS[this.filters.agg]
-      const filled = [] //list.slice(0, 1)
-      let lastDate = Date.now() //_last(list)[0]
-      lastDate = lastDate - (lastDate % delta) + delta
-      let firstDate = _first(list)[0]
-      let firstDateAlt = lastDate - range //_first(list)[0]
-      firstDate = firstDate > firstDateAlt ? firstDateAlt : firstDate
-      let i = 0
-      for (let t = firstDate; t <= lastDate; t += delta) {
-        if (t === _get(list, [i, 0])) {
-          filled.push(list[i])
-          i++
-        } else {
-          filled.push([t, null])
-        }
-      }
-      return filled
     },
     async onChangeFilters(e) {
       console.log('onChangeFilters', e)

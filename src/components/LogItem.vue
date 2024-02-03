@@ -44,7 +44,7 @@
     >
     <span
       class="log-level ellipsis"
-      :class="`log-level-${value.level}`"
+      :class="[`log-level-${value.level}`]"
       @click="$emit('tag', { level: $attrs.filters.level === value.level ? '' : value.level })"
       >{{ value.level }}</span
     >
@@ -130,14 +130,17 @@ export default {
     .date:hover,
     .time:hover {
       cursor: pointer;
-      box-shadow: 0 0 0 1px #888;
+      outline: solid 1px currentColor;
       /*background-color: rgba(128, 128, 128, 0.2);*/
       border-radius: 3px;
       padding-bottom: 1px;
     }
-    .separator,
+    .separator {
+      color: #777;
+      margin: 0 2px;
+    }
     small {
-      color: #888;
+      color: #777;
     }
   }
   .log-logname {
@@ -154,37 +157,47 @@ export default {
     text-align: center;
     color: grey;
     width: 60px;
+    outline-style: solid;
+    outline-width: 0;
+    border-radius: 3px;
     &.log-level-emerg,
     &.log-level-emergency {
       color: darkred;
+      outline-color: darkred;
     }
     &.log-level-alert {
       color: darkred;
+      outline-color: darkred;
     }
     &.log-level-crit,
     &.log-level-critical {
       color: red;
+      outline-color: red;
     }
     &.log-level-error {
       color: orangered;
+      outline-color: orangered;
     }
     &.log-level-warn,
     &.log-level-warning {
       color: orange;
+      outline-color: orange;
     }
     &.log-level-notice {
       color: yellow;
+      outline-color: yellow;
     }
     &.log-level-info {
       color: green;
+      outline-color: green;
     }
     &.log-level-debug {
       color: blue;
+      outline-color: blue;
     }
     &:hover {
       cursor: pointer;
-      background-color: rgba(128, 128, 128, 0.2);
-      border-radius: 3px;
+      outline-width: 1px;
     }
   }
 }

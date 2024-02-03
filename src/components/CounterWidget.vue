@@ -1,7 +1,7 @@
 <template>
   <span v-if="!valid" class="label invalid" title="invalid widget"
   ><font-awesome-icon icon="exclamation-triangle"/> {{ JSON.stringify(this.$attrs) }}</span>
-  <div class="widget" v-else>
+  <div class="widget" @blur="hideChart()" tabindex="1" v-else>
     <span @click="expanded ? hideChart() : showChart()" class="label" :class="expanded ? 'close' : 'open'"
     ><font-awesome-icon :icon="expanded ? 'times' : 'chart-line'"/> {{title}}</span
     ><counts-snippet-chart v-if="expanded && counts" :subtitle="title" :series="series" class="chart" />
@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import CountsSnippetChart from './CountsSnippetChart.vue'
 import ACTIONS from '@/store/action-types'
 import { DEFAULT_COLOR } from '@/constants/colors'
@@ -36,6 +37,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['filled']),
     title() {
       return this.kind + ':' + this.keyname
     },
@@ -47,7 +49,11 @@ export default {
       if (!this.counts) {
         return null
       }
-      const data = this.counts.data.map(([x, y]) => [x * 1000, y])
+      const delta = 60_000
+      const range = delta * (this.limit || 30)
+      const now = Math.round(this.timestamp / 1e6)
+      let data = this.counts.data.map(([x, y]) => [x * 1000, y]).reverse()
+      data = this.filled(data, delta, range, now)
       return [
         {
           name: this.keyname,
@@ -108,7 +114,7 @@ export default {
   color: #000;
   &.open {
     &:hover {
-      background-color: rgba(160, 160, 160, 0.7);
+      background-color: #bbb;
     }
   }
   &.close {

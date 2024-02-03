@@ -272,6 +272,9 @@ export default {
         }
         return
       }
+      if (value.level && value.level === this.filters.level) {
+        value.level = null
+      }
       Object.assign(this.filters, value)
       this.onChangeFilters()
     },
@@ -352,18 +355,21 @@ export default {
         this.pausedLine.text = this.pausedLine.text.slice(0, 5)
       }
       if (this.paused) {
-        const hr = {
-          hr: true,
-          timestamp: Date.now(),
-          text: '00:00.0',
-          timer: setInterval(() => {
-            hr.text = new Date(Date.now() - hr.timestamp).toISOString().slice(14, 21)
-          }, 100)
-        }
-        this.pausedLine = hr
-        this.buffer.data.push(hr)
-        this.flushLive()
+        this.forcePause()
       }
+    },
+    forcePause() {
+      const hr = {
+        hr: true,
+        timestamp: Date.now(),
+        text: '00:00.0',
+        timer: setInterval(() => {
+          hr.text = new Date(Date.now() - hr.timestamp).toISOString().slice(14, 21)
+        }, 100)
+      }
+      this.pausedLine = hr
+      this.buffer.data.push(hr)
+      this.flushLive()
     },
     async onChangeFilters(e) {
       console.log('onChangeFilters', e)
@@ -406,6 +412,9 @@ export default {
           return
         }
         this.logs.history = data
+        if (this.paused) {
+          this.forcePause()
+        }
       } catch (e) {
         console.error(e.response)
         this.logs.history = []
@@ -452,7 +461,7 @@ input#filter-limit {
   position: relative;
   padding: 0;
   margin: 0;
-  border: dashed 0 grey;
+  //border: dashed 0 grey;
   &.block-live {
     z-index: 100;
   }
