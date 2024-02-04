@@ -4,6 +4,7 @@
 
 <script>
 import Highcharts from 'highcharts/highstock'
+import { mapGetters } from 'vuex'
 
 export default {
   props: {
@@ -18,6 +19,9 @@ export default {
   },
   mounted() {
     this.render()
+  },
+  computed: {
+    ...mapGetters(['nFormatter'])
   },
   methods: {
     render() {
@@ -48,7 +52,12 @@ export default {
           title: {
             text: ''
           },
-          lineWidth: 2
+          lineWidth: 2,
+          labels: {
+            formatter: ({ value }) => {
+              return this.nFormatter(value, 3)
+            }
+          }
         },
         plotOptions: {
           line: {

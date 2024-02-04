@@ -163,7 +163,8 @@ export default {
       background: #000;
       border-radius: 3px;
       color: #9e9;
-      padding: 0 4px;
+      padding: 1px 4px;
+      margin-right: -3px;
     }
   }
 }

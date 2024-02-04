@@ -320,7 +320,7 @@ select#filter-agg {
 .block {
   display: inline-block;
   width: 100%;
-  border-bottom: solid 2px #000;
+  border-bottom: dotted 2px #000;
 }
 .chart {
   height: 240px;
