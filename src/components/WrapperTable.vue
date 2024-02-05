@@ -250,16 +250,6 @@ table {
     }
   }
 
-  &.fullscreen {
-    &.left-orient .content {
-      padding-left: 32px;
-    }
-
-    &.head-orient .content {
-      padding-top: 32px;
-    }
-  }
-
   &.left-orient {
     #filter-logname {
       display: block;
@@ -412,22 +402,32 @@ table {
     border-radius: 24px;
     border: solid 1px black;
     z-index: 999;
-    /*box-shadow: 0 0 0 1px #000;*/
 
     &:hover {
-      box-shadow: 0 0 0 2px #9e9;
+      box-shadow: 0 0 0 2px #9e9 !important;
     }
   }
 
   &.fullscreen {
+    .content {
+      padding-left: 32px;
+    }
+
+    .avatar {
+      box-shadow: 0 0 0 2px #fff;
+    }
+    &.night .avatar {
+      box-shadow: 0 0 0 1px #000;
+    }
+
     &.left-orient {
       .avatar {
-        margin-left: -8px;
+        margin-left: -7px;
       }
     }
     &.head-orient {
       .avatar {
-        margin-top: -10px;
+        margin-left: -7px;
       }
     }
   }
