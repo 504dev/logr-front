@@ -393,7 +393,7 @@ table {
 
   .avatar {
     position: absolute;
-    top: 18px;
+    top: 13px;
     left: 10px;
     width: 24px;
     height: 24px;
@@ -415,7 +415,7 @@ table {
     }
     &.head-orient {
       .avatar {
-        margin-top: -16px;
+        margin-top: -10px;
       }
     }
   }
