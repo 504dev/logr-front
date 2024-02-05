@@ -1,11 +1,9 @@
 <template>
   <span class="preview">
-    <log-item :preview="true" v-for="(item, i) of randomStat" :key="i" :value="{
-      timestamp: item.updated,
-      message: `[${item.logname} / ${item.cnt}] ${
-        item.message.replaceAll(/\n/g, ' ') || new Date(item.updated / 1e6).toISOString()
-      }`,
-      level: item.level
+    <log-item :preview="true" v-for="({ timestamp, level, message }, i) of randomStat" :key="i" :value="{
+      timestamp,
+      message,
+      level
     }"/>
   </span>
 </template>
@@ -32,22 +30,23 @@ export default {
         const result = []
         for (let i = 0; i < this.n; i++) {
           result.push({
-            updated: (Date.now() - (i * 123 * 1_000)) * 1e6,
-            level: 'warn',
+            timestamp: (Date.now() - (i * 123 * 1_000)) * 1e6,
             message: new Date().toISOString(),
-            cnt: Math.random(),
-            logname: 'log'
+            level: 'warn',
           })
         }
         return result
       }
-      const size = this.n
-      const result = _sortBy(this.stats, 'cnt').reverse().slice(0, size)
+      const result = _sortBy(this.stats, 'cnt').reverse().slice(0, this.n)
       const sampler = this.probabilitySample(result, 'cnt', Math.cbrt)
-      for (let i = result.length; i <= size; i++) {
+      for (let i = result.length; i <= this.n; i++) {
         result.push(sampler())
       }
-      return result
+      return result.map(({ logname, level, message, updated, cnt }) => ({
+        timestamp: updated,
+        message: `[${logname} / ${cnt}] ${message.replaceAll(/\n/g, ' ') || new Date(updated / 1e6).toISOString()}`,
+        level,
+      }))
     },
   },
   methods: {
