@@ -1,7 +1,10 @@
 <template>
   <wrapper :loading="loading" :class="{ night: !theme, reverse: !direction }">
     <template v-slot:goto>
-      <router-link :to="`/dashboard/${dash.id}/counts`">switch to counts</router-link>
+      <router-link :to="`/dashboard/${dash.id}/counts`" class="goto-charts">
+        <span>go to charts</span>
+        <div></div>
+      </router-link>
     </template>
 
     <template v-slot:filters>
@@ -20,18 +23,19 @@
           <option value="">Hostname</option>
           <option v-for="hostname in sortedHostnames" :value="hostname" :key="hostname">
             {{ hostname }}
-          </option> </select
-        ><select v-model="filters.level" id="filter-level" :class="{ selected: filters.level }">
-          <option value="">Level</option>
-          <option v-for="level in sortedLevels" :value="level" :key="level">
-            {{ level }}
-          </option></select
+          </option>
+        </select
         ><select v-model="filters.version" id="filter-version" :class="{ selected: filters.version }">
           <option value="">Version</option>
           <template v-for="version in sortedVersions">
           <option v-if="version" :value="version" :key="version">
             {{ version }}
           </option></template></select
+        ><select v-model="filters.level" id="filter-level" :class="{ selected: filters.level }">
+          <option value="">Level</option>
+          <option v-for="level in sortedLevels" :value="level" :key="level">
+            {{ level }}
+          </option></select
         ><input-x
           id="filter-message"
           v-model="filters.message"
@@ -446,11 +450,11 @@ export default {
 
 <style lang="scss" scoped>
 select#filter-level {
-  width: 80px;
+  width: 95px;
 }
 select#filter-version {
-  width: 90px;
-  float: right;
+  width: 95px;
+  margin-right: 10px;
 }
 input#filter-limit {
   width: 60px;
@@ -470,8 +474,9 @@ input#filter-limit {
     z-index: 99;
   }
   &.block-deep {
-    opacity: 0.7;
-    margin: 5px 0;
+    opacity: 0.8;
+    //opacity: 0.7;
+    //margin: 5px 0;
     z-index: 98;
   }
   &.reverse {
@@ -499,7 +504,7 @@ input#filter-limit {
   border-color: #111;
   color: #111;
   font-weight: bold;
-  width: 180px;
+  width: 290px;
   margin: 5px 0;
   /*background-color: #fb8;*/
   background-color: #5b5;
@@ -518,7 +523,7 @@ input#filter-limit {
 
 .pause {
   cursor: pointer;
-  width: 110px;
+  width: 130px;
   background-color: #eee;
   border-color: black;
   svg {
@@ -567,4 +572,37 @@ input#filter-limit {
     }
   }
 }
+.goto-charts {
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
+  > div {
+    width: 60px;
+    height: 35px;
+    background: #333;
+    background-image: url('/static/counts.jpg');
+    background-size: 80px;
+    background-position-y: -22px;
+    background-position-x: 75px;
+    border-radius: 2px;
+    //border: solid 1px #fff;
+    outline: solid 1px #000;
+    box-sizing: border-box;
+    opacity: 0.8;
+  }
+  > span {
+    display: none; // off
+    font-size: 11px;
+    visibility: hidden;
+  }
+  &:hover {
+    > div {
+      opacity: 1;
+    }
+    > span {
+      visibility: visible;
+    }
+  }
+}
+
 </style>

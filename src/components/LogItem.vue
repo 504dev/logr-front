@@ -121,6 +121,10 @@ export default {
     line-height: 6.6px;
     > .log-level {
       width: 25px;
+      padding: 0;
+    }
+    > .log-datetime .separator {
+      margin: 0 1px;
     }
   }
   line-height: 17px;
@@ -130,8 +134,8 @@ export default {
     .date:hover,
     .time:hover {
       cursor: pointer;
+      //outline: solid 1px #777;
       outline: solid 1px currentColor;
-      /*background-color: rgba(128, 128, 128, 0.2);*/
       border-radius: 3px;
       padding-bottom: 1px;
     }
@@ -160,6 +164,7 @@ export default {
     outline-style: solid;
     outline-width: 0;
     border-radius: 3px;
+    padding: 0 1px;
     &.log-level-emerg,
     &.log-level-emergency {
       color: darkred;

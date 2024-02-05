@@ -5,7 +5,7 @@
       'left-orient': !orient,
       'head-orient': orient
     }"
-    v-if="this.user && this.dash"
+    v-if="user && dash"
   >
     <tr v-show="orient && !fullscreen">
       <td class="header">
@@ -88,6 +88,7 @@
 import { mapState, mapGetters } from 'vuex'
 import MUTATIONS from '@/store/mutations-types.js'
 import Spinner from '@/components/Spinner.vue'
+import { LOGS, COUNTS } from '@/constants/pages'
 
 export default {
   components: {
@@ -107,6 +108,16 @@ export default {
     },
     arrowDirection() {
       return this.orient ? (this.fullscreen ? 'down' : 'up') : this.fullscreen ? 'right' : 'left'
+    },
+    gotoLink() {
+      switch(this.$route) {
+        case LOGS:
+          return `/dashboard/${this.dashId}/${COUNTS}`
+        case COUNTS:
+          return `/dashboard/${this.dashId}/${LOGS}`
+        default:
+          return ''
+      }
     }
   },
   methods: {
@@ -116,7 +127,7 @@ export default {
     onDashChange(e) {
       const id = e.target.value
       this.$router.push({ params: { ...this.$route.params, id } })
-      location.reload()
+      this.$router.go()
     }
   }
 }
@@ -164,8 +175,8 @@ table {
 
       &.lefter {
         background-color: #ddd;
-        width: 180px;
-        min-width: 180px;
+        width: 200px;
+        min-width: 200px;
         padding: 10px;
         padding-bottom: 110px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -178,6 +189,7 @@ table {
           bottom: 0;
           padding: 10px;
           padding-bottom: 15px;
+          //padding-bottom: 32px;
 
           a {
             margin-right: 4px;
@@ -189,12 +201,13 @@ table {
           right: 0;
           bottom: 0;
           margin-right: 10px;
-          margin-bottom: 17px;
+          margin-bottom: 14px;
+          //margin-bottom: 1px;
         }
       }
 
       &.header {
-        padding: 10px 75px 5px 10px;
+        padding: 10px 90px 5px 10px;
         height: 30px;
         background-color: #ddd;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -215,7 +228,8 @@ table {
         .goto {
           position: absolute;
           right: 15px;
-          top: 55px;
+          //top: 49px;
+          top: 43px;
         }
       }
 
@@ -261,12 +275,12 @@ table {
       }
 
       #filter-regexp {
-        width: 180px;
+        width: 200px;
         margin-bottom: 10px;
       }
 
       #filter-message {
-        width: 180px;
+        width: 200px;
         margin-bottom: 10px;
       }
     }
@@ -284,25 +298,19 @@ table {
 
       select,
       input {
+        max-width: 200px;
         margin-right: 8px;
-      }
-
-      #filter-version {
-        float: inherit;
       }
 
       #filter-agg {
         float: inherit;
       }
 
-      #filter-message {
-        margin-right: 8px;
-        width: 200px;
-      }
-
+      #filter-version,
+      #filter-limit,
+      #filter-message,
       #filter-regexp {
         margin-right: 8px;
-        width: 200px;
       }
     }
   }

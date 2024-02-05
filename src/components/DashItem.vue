@@ -225,6 +225,9 @@ export default {
       &:hover {
         opacity: 0.99;
       }
+      > * {
+        margin-left: -38px;
+      }
     }
     &.window-counts {
       background-image: url('/static/counts.jpg');

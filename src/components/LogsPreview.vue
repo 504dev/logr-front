@@ -20,11 +20,28 @@ export default {
     LogItem
   },
   props: {
-    stats: Object
+    stats: Object,
+    n: {
+      type: Number,
+      default: 12,
+    }
   },
   computed: {
     randomStat() {
-      const size = 12
+      if (!this.stats) {
+        const result = []
+        for (let i = 0; i < this.n; i++) {
+          result.push({
+            updated: (Date.now() - (i * 123 * 1_000)) * 1e6,
+            level: 'warn',
+            message: new Date().toISOString(),
+            cnt: Math.random(),
+            logname: 'log'
+          })
+        }
+        return result
+      }
+      const size = this.n
       const result = _sortBy(this.stats, 'cnt').reverse().slice(0, size)
       const sampler = this.probabilitySample(result, 'cnt', Math.cbrt)
       for (let i = result.length; i <= size; i++) {
@@ -53,9 +70,7 @@ export default {
 
 <style lang="scss" scoped>
 .preview {
-  position: relative;
-  top: 0;
-  left: -19px;
+  display: block;
   font-family: Courier, monospace;
   pointer-events: none;
   > span {

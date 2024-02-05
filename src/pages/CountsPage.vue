@@ -1,7 +1,10 @@
 <template>
   <wrapper :loading="loading" :orient="orient">
     <template v-slot:goto>
-      <router-link :to="`/dashboard/${dash.id}/logs`">switch to logs</router-link>
+      <router-link :to="`/dashboard/${dash.id}/logs`" class="goto-logs">
+        <span>go to logs</span>
+        <div><logs-preview n="6"/></div>
+      </router-link>
     </template>
 
     <template v-slot:filters>
@@ -57,7 +60,7 @@
     </template>
 
     <template v-slot:content>
-      <span v-if="nodata" class="nodata">No data</span>
+      <span v-if="nodata" class="nodata header">:no data</span>
       <div v-else>
         <div v-for="(group, kind) in charts" :key="kind" :id="`${kind}`">
           <div v-for="(series, keyname) in group" :key="keyname" :id="`${kind}:${keyname}`" class="block">
@@ -96,6 +99,7 @@ import ACTIONS from '@/store/action-types'
 import MUTATIONS from '@/store/mutations-types'
 import CountsChart from '@/components/CountsChart.vue'
 import Wrapper from '@/components/WrapperTable.vue'
+import LogsPreview from '@/components/LogsPreview.vue'
 import { COLORS } from '@/constants/colors'
 
 const ls = store.namespace('counts')
@@ -115,6 +119,7 @@ const DELTAS = {
 
 export default {
   components: {
+    LogsPreview,
     CountsChart,
     Wrapper
   },
@@ -310,7 +315,7 @@ input#filter-pid {
 }
 select#filter-version {
   display: inline-block;
-  width: 100px;
+  width: 95px;
 }
 select#filter-agg {
   display: inline-block;
@@ -356,9 +361,43 @@ select#filter-agg {
   }
 }
 .nodata {
-  /*display: block;*/
-  /*position: relative;*/
-  /*top: 45%;*/
-  /*text-align: center;*/
+  display: block;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  top: 45%;
+}
+
+.goto-logs {
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
+  > div {
+    overflow: hidden;
+    width: 60px;
+    height: 35px;
+    background: #333;
+    border-radius: 2px;
+    //border: solid 1px #eee;
+    outline: solid 1px #000;
+    box-sizing: border-box;
+    > span {
+      color: #fff;
+      margin-left: -52px;
+    }
+  }
+  > span {
+    display: none; // off
+    font-size: 11px;
+    visibility: hidden;
+  }
+  &:hover {
+    > div {
+      background: #000;
+    }
+    > span {
+      visibility: visible;
+    }
+  }
 }
 </style>

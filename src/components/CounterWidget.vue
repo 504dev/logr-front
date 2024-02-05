@@ -5,7 +5,7 @@
     <span @click="expanded ? hideChart() : showChart()" class="label" :class="expanded ? 'close' : 'open'"
       ><font-awesome-icon :icon="expanded ? 'times' : 'chart-line'"/>
       <span>{{title}}</span>
-      <span class="value">{{lastValue ? (lastValue[1] ? nFormatter(lastValue[1]) : '-') : ' '}}</span>
+      <span class="value">{{lastValue ? (lastValue[1] ? nFormatter(lastValue[1]) : '-') : '&nbsp;'}}</span>
     </span
     ><counts-snippet-chart v-if="expanded && counts" :subtitle="title" :series="series" class="chart" />
   </div>

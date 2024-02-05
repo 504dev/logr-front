@@ -99,7 +99,7 @@ const store = new Vuex.Store({
         { value: 1e12, symbol: 'T' },
         { value: 1e15, symbol: 'P' },
         { value: 1e18, symbol: 'E' }
-      ];
+      ]
 
       const item = lookup.findLast(item => Math.abs(num) >= item.value)
       num /= (item.value || 1)
