@@ -250,11 +250,11 @@ table {
 
   &.fullscreen {
     &.left-orient .content {
-      padding-left: 30px;
+      padding-left: 32px;
     }
 
     &.head-orient .content {
-      padding-top: 30px;
+      padding-top: 32px;
     }
   }
 
@@ -337,6 +337,7 @@ table {
     margin: 0;
     padding: 0;
     background-color: rgba(128, 128, 128, 0.6);
+    //background-color: #333;
     text-align: center;
     line-height: 40px;
     cursor: pointer;
@@ -354,7 +355,7 @@ table {
       top: 60%;
       width: 20px;
       margin-top: -20px;
-      border-radius: 20px 0 0 20px;
+      border-radius: 4px 0 0 4px;
 
       &.left {
         margin-left: -20px;
@@ -371,7 +372,7 @@ table {
       left: 50%;
       width: 20px;
       margin-top: -10px;
-      border-radius: 20px 0 0 20px;
+      border-radius: 4px 0 0 4px;
       margin-left: -10px;
       transform: rotate(-90deg);
     }
@@ -392,12 +393,13 @@ table {
 
   .avatar {
     position: absolute;
-    top: 13px;
+    top: 18px;
     left: 10px;
     width: 24px;
     height: 24px;
     border-radius: 24px;
     border: solid 1px black;
+    z-index: 999;
     /*box-shadow: 0 0 0 1px #000;*/
 
     &:hover {
@@ -408,7 +410,7 @@ table {
   &.fullscreen {
     &.left-orient {
       .avatar {
-        margin-left: -16px;
+        margin-left: -8px;
       }
     }
     &.head-orient {
