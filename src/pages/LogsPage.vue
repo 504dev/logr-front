@@ -111,11 +111,12 @@
         <log-item v-for="(log, key) in deep" :value="log" :filters="filters" :key="key" @tag="onTag" @hover="onHover" />
         <span class="cnt" :title="`${deep.length}rows`">{{ deep.length }}<small>.</small></span>
       </div>
-      <button class="more" @click="onMore" v-if="offset">
+      <button class="more" @click="onMore" v-if="hasMore">
         fetch more
         <spinner v-if="deepLoading" />
         <font-awesome-icon icon="chevron-circle-down" v-else />
       </button>
+      <button v-else class="no more">no more</button>
     </template>
   </wrapper>
 </template>
@@ -250,9 +251,9 @@ export default {
     offset() {
       return _get(_last(this.lastPack), 'timestamp')
     },
-    // hasMore() {
-    //   return this.lastPack.length === +this.filters.limit
-    // }
+    hasMore() {
+      return this.lastPack.length === +this.filters.limit
+    }
   },
   methods: {
     onHover(value) {
@@ -513,6 +514,10 @@ input#filter-limit {
   &:hover {
     opacity: 1;
   }
+  &.no {
+    background-color: #fff;
+    pointer-events: none;
+  }
 }
 
 .reverse {
@@ -585,10 +590,10 @@ input#filter-limit {
     background-position-y: -22px;
     background-position-x: 75px;
     border-radius: 2px;
-    //border: solid 1px #fff;
     outline: solid 1px #000;
+    //border-bottom: solid 1px #000;
     box-sizing: border-box;
-    opacity: 0.8;
+    opacity: 0.9;
   }
   > span {
     display: none; // off

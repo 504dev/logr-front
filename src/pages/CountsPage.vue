@@ -347,7 +347,7 @@ select#filter-agg {
   margin: 0 16px;
   float: right;
   text-align: center;
-  min-width: 24px;
+  min-width: 20px;
   line-height: 8px;
   border: solid 2px #000;
   &.black {

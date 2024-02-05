@@ -202,7 +202,7 @@ table {
           position: absolute;
           right: 0;
           bottom: 0;
-          margin-right: 10px;
+          margin-right: 11px;
           margin-bottom: 14px;
           //margin-bottom: 1px;
         }
@@ -410,25 +410,14 @@ table {
 
   &.fullscreen {
     .content {
-      padding-left: 32px;
+      padding-left: 34px;
     }
-
     .avatar {
       box-shadow: 0 0 0 2px #fff;
+      margin-left: -7px;
     }
     &.night .avatar {
       box-shadow: 0 0 0 1px #000;
-    }
-
-    &.left-orient {
-      .avatar {
-        margin-left: -7px;
-      }
-    }
-    &.head-orient {
-      .avatar {
-        margin-left: -7px;
-      }
     }
   }
 

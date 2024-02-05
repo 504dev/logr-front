@@ -189,8 +189,8 @@ export default {
       outline-color: orange;
     }
     &.log-level-notice {
-      color: yellow;
-      outline-color: yellow;
+      color: gold;
+      outline-color: gold;
     }
     &.log-level-info {
       color: green;
