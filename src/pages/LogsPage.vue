@@ -366,9 +366,9 @@ export default {
       const hr = {
         hr: true,
         timestamp: Date.now(),
-        text: '00:00.0',
+        text: '00:00',
         timer: setInterval(() => {
-          hr.text = new Date(Date.now() - hr.timestamp).toISOString().slice(14, 21)
+          hr.text = new Date(Date.now() - hr.timestamp).toISOString().slice(14, 19) //21)
         }, 100)
       }
       this.pausedLine = hr
@@ -450,14 +450,14 @@ export default {
 
 <style lang="scss" scoped>
 select#filter-level {
-  width: 95px;
+  width: 85px;
 }
 select#filter-version {
-  width: 95px;
+  width: 85px;
   margin-right: 10px;
 }
 input#filter-limit {
-  width: 60px;
+  width: 55px;
   margin-right: 10px;
 }
 
@@ -504,7 +504,7 @@ input#filter-limit {
   border-color: #111;
   color: #111;
   font-weight: bold;
-  width: 290px;
+  width: 180px;
   margin: 5px 0;
   /*background-color: #fb8;*/
   background-color: #5b5;
@@ -523,7 +523,7 @@ input#filter-limit {
 
 .pause {
   cursor: pointer;
-  width: 130px;
+  width: 115px;
   background-color: #eee;
   border-color: black;
   svg {

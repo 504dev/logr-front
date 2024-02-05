@@ -315,7 +315,7 @@ input#filter-pid {
 }
 select#filter-version {
   display: inline-block;
-  width: 95px;
+  width: 85px;
 }
 select#filter-agg {
   display: inline-block;

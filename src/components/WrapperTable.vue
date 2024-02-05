@@ -78,7 +78,9 @@
         <router-link to="/dashboards" v-if="fullscreen"
           ><img class="avatar" :src="`https://avatars.githubusercontent.com/u/${user.github_id}`"
         /></router-link>
-        <span class="arrow" :class="arrowDirection" @click="onFull"></span>
+        <div class="arrow" :class="arrowDirection">
+          <span @click="onFull"></span>
+        </div>
       </td>
     </tr>
   </table>
@@ -175,8 +177,8 @@ table {
 
       &.lefter {
         background-color: #ddd;
-        width: 200px;
-        min-width: 200px;
+        width: 180px;
+        min-width: 180px;
         padding: 10px;
         padding-bottom: 110px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -262,12 +264,14 @@ table {
     #filter-logname {
       display: block;
     }
+
     .kinds {
       padding-bottom: 16px;
       padding-right: 16px;
       padding-left: 2px;
       box-sizing: border-box;
     }
+
     .filters {
       select,
       input {
@@ -275,15 +279,16 @@ table {
       }
 
       #filter-regexp {
-        width: 200px;
+        width: 180px;
         margin-bottom: 10px;
       }
 
       #filter-message {
-        width: 200px;
+        width: 180px;
         margin-bottom: 10px;
       }
     }
+
     select.dashname {
       text-align-last: center;
       padding-left: 24px;
@@ -298,7 +303,7 @@ table {
 
       select,
       input {
-        max-width: 200px;
+        max-width: 180px;
         margin-right: 8px;
       }
 
@@ -326,64 +331,71 @@ table {
   }
 
   .arrow {
-    display: block;
-    color: #fff;
     position: absolute;
-    z-index: 900;
-    top: 0;
-    left: 0;
-    width: 40px;
-    height: 40px;
-    margin: 0;
-    padding: 0;
-    background-color: rgba(128, 128, 128, 0.6);
-    //background-color: #333;
-    text-align: center;
-    line-height: 40px;
-    cursor: pointer;
+    > span {
+      display: block;
+      color: #fff;
+      position: absolute;
+      z-index: 900;
+      width: 40px;
+      height: 40px;
+      margin: 0;
+      padding: 0;
+      //background-color: rgba(128, 128, 128, 0.6);
+      background-color: #888;
+      text-align: center;
+      line-height: 40px;
+      cursor: pointer;
 
-    &::before {
-      content: '\00a0❮';
-    }
+      &::before {
+        content: '\00a0❮';
+      }
 
-    &:hover {
-      zoom: 1.1;
+      &:hover {
+        zoom: 1.1;
+      }
     }
 
     &.left,
     &.right {
-      top: 60%;
-      width: 20px;
-      margin-top: -20px;
-      border-radius: 4px 0 0 4px;
-
-      &.left {
-        margin-left: -20px;
+      top: 300px;
+      bottom: 60px;
+      left: 0;
+      > span {
+        top: 50%;
+        left: 0;
+        width: 20px;
+        margin-top: -20px;
+        border-radius: 20px 0 0 20px;
       }
-
-      &.right {
-        margin-left: 0;
-        transform: scale(-1, 1);
-      }
+    }
+    &.left > span {
+      margin-left: -20px;
+    }
+    &.right > span {
+      margin-left: 0;
+      transform: scale(-1, 1);
     }
 
     &.up,
     &.down {
-      left: 50%;
-      width: 20px;
-      margin-top: -10px;
-      border-radius: 4px 0 0 4px;
-      margin-left: -10px;
-      transform: rotate(-90deg);
+      top: 0;
+      left: 0;
+      right: 110px;
+      > span {
+        top: 0;
+        right: 0;
+        width: 20px;
+        margin-top: -10px;
+        border-radius: 20px 0 0 20px;
+        margin-right: -10px;
+        transform: rotate(-90deg);
+      }
     }
-
-    &.up {
+    &.up > span {
       &::before {
         content: '\00a0❯';
       }
-
-      //margin-top: -30px;
-      //transform: rotate(90deg);
     }
   }
 

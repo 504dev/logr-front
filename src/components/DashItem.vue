@@ -250,7 +250,7 @@ export default {
     }
     &.--no--list {
       margin-top: 7px;
-      width: 200px;
+      width: 180px;
       height: 40px;
       border: solid 1px #000;
       line-height: 40px;
