@@ -128,9 +128,11 @@ export default {
     this.lognames = await this.$store.dispatch(ACTIONS.LOAD_COUNTS_LOGNAMES, this.dash.id)
 
     this.parseLocation()
-    this.updateLocation()
+    await this.updateLocation()
 
     await this.updateCounts()
+
+    this.scrollToHash()
   },
   data() {
     return {
@@ -229,6 +231,14 @@ export default {
     },
   },
   methods: {
+    scrollToHash() {
+      if (location.hash) {
+        const $el = document.getElementById(location.hash.slice(1))
+        if ($el) {
+          $el.scrollIntoView();
+        }
+      }
+    },
     parseLocation() {
       let { hostname = '', logname = '', pid = '', version = '', agg = 'm' } = this.$route.query
       if (logname === '') {
@@ -262,12 +272,12 @@ export default {
       ls.set(`dash${this.dash.id}.filters.logname`, this.filters.logname)
 
       await this.updateCounts()
-      this.updateLocation()
+      await this.updateLocation()
     },
     updateLocation() {
       let query = { ...this.filters }
       query = _pickBy(query)
-      this.$router.replace({ query })
+      return this.$router.replace({ query, hash: location.hash }).catch(e => console.error(e.message))
     },
     async updateStats() {
       if (this.stats.length) {

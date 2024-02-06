@@ -229,7 +229,7 @@ table {
 
         .goto {
           position: absolute;
-          right: 15px;
+          right: 14px;
           //top: 49px;
           top: 43px;
         }

@@ -7,7 +7,10 @@
       <span>{{title}}</span>
       <span class="value">{{lastValue ? (lastValue[1] ? nFormatter(lastValue[1]) : '-') : '&nbsp;'}}</span>
     </span
-    ><counts-snippet-chart v-if="expanded && counts" :subtitle="title" :series="series" class="chart" />
+    ><div class="chart" v-if="expanded && counts">
+      <counts-snippet-chart :subtitle="title" :series="series" />
+      <span @click="redirect"><font-awesome-icon icon="chart-line"/></span>
+    </div>
   </div>
 </template>
 
@@ -83,6 +86,13 @@ export default {
     }
   },
   methods: {
+    redirect() {
+      this.$router.push({
+        path: './counts',
+        query: { logname: this.logname },
+        hash: this.kind + ':' + this.keyname
+      })
+    },
     hideChart() {
       this.expanded = false
     },
@@ -117,21 +127,35 @@ export default {
   //outline: dotted 1px tomato;
   display: inline-block;
   position: relative;
-  vertical-align: text-top;
   .chart {
     display: inline-block;
     position: absolute;
     left: 0;
     top: 18px;
     width: 100%;
-    height: 200px;
     min-width: 360px;
+    height: 200px;
     border-radius: 4px;
     border: solid 2px #9e9;
     border-top-left-radius: 0;
     box-shadow: 2px 2px 0 0 black;
     z-index: 999;
     background: #fff;
+    > div {
+      height: 100%;
+    }
+    > span {
+      color: #777;
+      display: inline-block;
+      position: absolute;
+      padding: 4px;
+      top: 8px;
+      right: 8px;
+      cursor: pointer;
+      :hover {
+        color: black;
+      }
+    }
   }
   .label {
     padding: 2px 5px;

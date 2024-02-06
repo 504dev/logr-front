@@ -30,7 +30,7 @@ export default {
         const result = []
         for (let i = 0; i < this.n; i++) {
           result.push({
-            timestamp: (Date.now() - (i * 123 * 1_000)) * 1e6,
+            timestamp: (Date.now() - (i * 123_456)) * 1e6,
             message: new Date().toISOString(),
             level: 'warn',
           })
