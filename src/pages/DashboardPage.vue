@@ -35,7 +35,7 @@
     </div>
     <div>
       <h1>Shared</h1>
-      <span v-if="dashgroups.shared.length === 0">No dashboards</span>
+      <span v-if="dashgroups.shared.length === 0"></span>
       <template v-else v-for="dash in dashgroups.shared">
         <dash-item :dash="dash" :key="dash.id" />
       </template>
