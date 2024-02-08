@@ -90,7 +90,7 @@
     <template v-slot:content>
       <div class="block block-live" :class="{ reverse: !!direction }">
         <template v-for="(log, key) in logs.live">
-          <div v-if="log.hr" :key="key" class="separator-pause" :class="log.timer ? 'active' : 'inactive'">
+          <div v-if="log.hr" :key="key" class="separator" :class="{ 'separator-pause': log.timer }">
             <span><font-awesome-icon icon="pause" /> {{ log.text }}</span>
           </div>
           <log-item v-else :value="log" :filters="filters" :key="key" @tag="onTag" @hover="onHover" />
@@ -111,12 +111,14 @@
         <log-item v-for="(log, key) in deep" :value="log" :filters="filters" :key="key" @tag="onTag" @hover="onHover" />
         <span class="cnt" :title="`${deep.length}rows`">{{ deep.length }}<small>.</small></span>
       </div>
-      <button class="more" @click="onMore" v-if="hasMore">
+      <div class="separator separator-nomore" v-if="nomore">
+        <span>{{nomore}}</span>
+      </div>
+      <button class="more" @click="onMore" v-else>
         fetch more
         <spinner v-if="deepLoading" />
         <font-awesome-icon icon="chevron-circle-down" v-else />
       </button>
-      <button v-else class="no more">no more</button>
     </template>
   </wrapper>
 </template>
@@ -251,8 +253,14 @@ export default {
     offset() {
       return _get(_last(this.lastPack), 'timestamp')
     },
-    hasMore() {
-      return this.lastPack.length === +this.filters.limit
+    nomore() {
+      if (this.lastPack.length === 0) {
+        return 'fetched all'
+      }
+      if (this.lastPack.length < +this.filters.limit) {
+        return 'fetched all'
+      }
+      return false
     }
   },
   methods: {
@@ -541,7 +549,8 @@ input#filter-limit {
   }
 }
 
-.separator-pause {
+.separator {
+  z-index: 999;
   position: relative;
   border-top: dashed 1px #000;
   margin: 4px 0;
@@ -557,26 +566,33 @@ input#filter-limit {
     font-size: 10px;
     font-weight: bold;
   }
-  &.active {
-    border-top: dashed 1px #088;
-    span {
-      //margin-right: -6px;
-      background-color: #088;
-    }
-  }
 }
-.night .separator-pause {
+.night .separator {
+  border-top: dashed 1px #fff;
   span {
     outline: solid 4px #000;
-  }
-  &.inactive {
-    border-top: dashed 1px #fff;
-    span {
-      background-color: #fff;
-      color: #000;
-    }
+    background-color: #fff;
+    color: #000;
   }
 }
+.separator.separator-pause {
+  border-top: dashed 1px #088;
+  span {
+    //margin-right: -6px;
+    background-color: #088;
+  }
+}
+.separator.separator-nomore {
+  z-index: 1;
+  border-color: #777;
+  //margin: 10px 0;
+  span {
+    background-color: #777;
+    outline: none;
+    display: none;
+  }
+}
+
 .goto-charts {
   display: inline-block;
   text-align: center;
