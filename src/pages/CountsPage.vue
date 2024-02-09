@@ -47,6 +47,11 @@
           <div v-for="(names, prefix) in group" :key="prefix" style="margin-top: 5px">
             <div v-for="keyname in names" :key="keyname" class="keyname">
               <a :href="`#${kind}:${keyname}`">{{ keyname }}</a>
+              <span v-for="({ point, name }) of lastValueMap[kind][keyname]"
+                    :title="name"
+                    :key="name"
+                    class="lastval-mini black"
+              >{{ nFormatter(point[1]) }}</span>
             </div>
           </div>
         </div>
@@ -231,11 +236,14 @@ export default {
     },
   },
   methods: {
-    scrollToHash() {
-      if (location.hash) {
-        const $el = document.getElementById(location.hash.slice(1))
+    scrollToHash(hash) {
+      hash = (hash || location.hash).replace(/^#/, '')
+      if (hash) {
+        const $el = document.getElementById(hash)
         if ($el) {
-          $el.scrollIntoView();
+          $el.scrollIntoView({
+            behavior: 'smooth'
+          });
         }
       }
     },
@@ -346,6 +354,9 @@ select#filter-agg {
   margin-left: 8px;
   text-align: left;
 }
+.keyname {
+  white-space: nowrap;
+}
 .lastval {
   font-size: smaller;
   font-weight: bold;
@@ -368,6 +379,26 @@ select#filter-agg {
     background-color: #eee;
     border-color: #eee;
     color: #000;
+  }
+}
+.lastval-mini {
+  font-size: 9px;
+  padding: 1px 4px;
+  border-radius: 3px;
+  border: solid 1px #000;
+  color: #000;
+  //margin: 0 4px;
+  &.black {
+    background-color: #333;
+    color: #fff;
+    padding: 2px 4px;
+    border: none;
+  }
+  &.white {
+    background-color: #fff;
+    color: #000;
+    padding: 2px 4px;
+    border: none;
   }
 }
 .nodata {
