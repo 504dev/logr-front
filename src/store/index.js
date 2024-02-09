@@ -189,6 +189,9 @@ const store = new Vuex.Store({
         state.user = data
       } catch (err) {
         console.error(err)
+        if (err.response && err.response.status === 401) {
+          return dispatch(ACTIONS.LOGOUT)
+        }
       }
     },
     async [ACTIONS.LOAD_DASHBOARDS]({ state }) {

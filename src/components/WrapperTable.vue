@@ -323,6 +323,7 @@ table {
   .arrow {
     position: absolute;
     > span {
+      box-sizing: border-box;
       display: block;
       color: #fff;
       position: absolute;
@@ -356,6 +357,9 @@ table {
       }
     }
     &.left > span {
+      line-height: 36px;
+      border: solid 2px #ddd;
+      border-right: none;
       border-radius: 20px 0 0 20px;
       margin-left: -20px;
       &::before {

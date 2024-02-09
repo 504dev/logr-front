@@ -344,7 +344,7 @@ select#filter-agg {
 }
 .block {
   display: inline-block;
-  width: 50%;
+  width: 100%;
   min-width: 400px;
   border-bottom: dotted 2px #000;
   .header {
@@ -392,10 +392,13 @@ select#filter-agg {
   position: relative;
   white-space: nowrap;
   border-bottom: dotted 1px #ccc;
-  padding-right: 50px;
+  padding-right: 30px;
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 300px;
+  > a {
+    padding-right: 20px;
+  }
   .lastval-mini {
     position: absolute;
     right: 0;
