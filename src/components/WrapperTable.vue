@@ -257,7 +257,7 @@ table {
 
     .kinds {
       padding-bottom: 16px;
-      padding-right: 16px;
+      //padding-right: 16px;
       padding-left: 2px;
       box-sizing: border-box;
     }
@@ -337,10 +337,6 @@ table {
       line-height: 40px;
       cursor: pointer;
 
-      &::before {
-        content: '\00a0❮';
-      }
-
       &:hover {
         zoom: 1.1;
       }
@@ -356,15 +352,20 @@ table {
         left: 0;
         width: 20px;
         margin-top: -20px;
-        border-radius: 20px 0 0 20px;
+        border-radius: 0 20px 20px 0;
       }
     }
     &.left > span {
+      border-radius: 20px 0 0 20px;
       margin-left: -20px;
+      &::before {
+        content: '\00a0❮';
+      }
     }
     &.right > span {
-      margin-left: 0;
-      transform: scale(-1, 1);
+      &::before {
+        content: '❯\00a0';
+      }
     }
 
     &.up,
@@ -385,6 +386,11 @@ table {
     &.up > span {
       &::before {
         content: '\00a0❯';
+      }
+    }
+    &.down > span {
+      &::before {
+        content: '\00a0❮';
       }
     }
   }
@@ -425,7 +431,7 @@ table {
     //font-family: Courier, monospace;
     font-size: 13px;
     overflow-x: scroll;
-    max-width: 300px;
+    max-width: 360px;
 
     .kindblock {
       margin-top: 10px;

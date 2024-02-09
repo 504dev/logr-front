@@ -74,7 +74,7 @@
               <span v-for="({ point, name }) of lastValueMap[kind][keyname]"
                 :title="name"
                 :key="name"
-                class="lastval"
+                class="lastval black"
               >{{ nFormatter(point[1]) }}</span>
             </p>
             <counts-chart :series="series" class="chart" :kind="kind" />
@@ -244,6 +244,8 @@ export default {
           $el.scrollIntoView({
             behavior: 'smooth'
           });
+          document.querySelector('.block').classList.remove('active')
+          $el.classList.add('active')
         }
       }
     },
@@ -342,65 +344,78 @@ select#filter-agg {
 }
 .block {
   display: inline-block;
-  width: 100%;
+  width: 50%;
+  min-width: 400px;
   border-bottom: dotted 2px #000;
-}
-.chart {
-  height: 240px;
-  min-width: 360px;
-}
-.header {
-  font-size: 18px;
-  margin-left: 8px;
-  text-align: left;
-}
-.keyname {
-  white-space: nowrap;
-}
-.lastval {
-  font-size: smaller;
-  font-weight: bold;
-  display: inline-block;
-  background-color: #fff;
-  color: #000;
-  padding: 6px 12px;
-  border-radius: 4px;
-  margin: 0 16px;
-  float: right;
-  text-align: center;
-  min-width: 20px;
-  line-height: 8px;
-  border: solid 2px #000;
-  &.black {
-    background-color: #000;
-    color: #fff;
+  .header {
+    font-size: 18px;
+    margin-left: 8px;
+    text-align: left;
+    transition: all 0.5s linear;
   }
-  &.gray {
-    background-color: #eee;
-    border-color: #eee;
-    color: #000;
-  }
-}
-.lastval-mini {
-  font-size: 9px;
-  padding: 1px 4px;
-  border-radius: 3px;
-  border: solid 1px #000;
-  color: #000;
-  //margin: 0 4px;
-  &.black {
-    background-color: #333;
-    color: #fff;
-    padding: 2px 4px;
-    border: none;
-  }
-  &.white {
+  .lastval {
+    font-size: smaller;
+    font-weight: bold;
+    display: inline-block;
     background-color: #fff;
     color: #000;
-    padding: 2px 4px;
-    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    margin: 0 16px;
+    float: right;
+    text-align: center;
+    min-width: 20px;
+    line-height: 8px;
+    border: solid 2px #000;
+    &.black {
+      background-color: #333;
+      color: #fff;
+    }
+    &.gray {
+      background-color: #eee;
+      border-color: #eee;
+      color: #000;
+    }
+  }
+  .chart {
+    height: 240px;
+    min-width: 360px;
+  }
+  &.active {
+    .header {
+      //color: red;
+    }
   }
 }
+
+.keyname {
+  position: relative;
+  white-space: nowrap;
+  border-bottom: dotted 1px #ccc;
+  padding-right: 50px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 300px;
+  .lastval-mini {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    font-size: 9px;
+    padding: 1px 4px;
+    border-radius: 3px;
+    border: solid 1px #000;
+    color: #000;
+    text-align: center;
+    min-width: 8px;
+    &.black {
+      background-color: #333;
+      color: #fff;
+      padding: 2px 4px;
+      border: none;
+    }
+  }
+}
+
 .nodata {
   display: block;
   width: 100%;

@@ -36,7 +36,7 @@ button {
   box-sizing: border-box;
   vertical-align: top;
   width: 100%;
-  max-width: 300px;
+  max-width: 360px;
   height: 30px;
   line-height: 28px;
   font-size: 13px;
