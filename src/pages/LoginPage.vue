@@ -49,7 +49,7 @@ export default {
       return JSON.stringify({
         name: this.name,
         url: location.origin,
-        description: 'logger',
+        description: 'https://github.com/504dev/logr',
         redirect_url: `${this.restUrl}/oauth/setup/callback`,
         callback_url: `${this.restUrl}/oauth/authorize/callback`
       })

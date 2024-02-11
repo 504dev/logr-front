@@ -8,29 +8,46 @@
     </template>
 
     <template v-slot:filters>
-      <form @change="onChangeFilters" @submit.prevent>
-        <select v-model="filters.logname" id="filter-logname" :class="{ selected: filters.logname }">
+      <form @submit.prevent>
+        <select
+          @change="onChangeFilters"
+          v-model="filters.logname"
+          id="filter-logname"
+          :class="{ selected: filters.logname }"
+        >
           <option value="" v-if="sortedLognames.length === 0">Logname</option>
           <option v-for="logname in sortedLognames" :value="logname" :key="logname">
             {{ logname }}
-          </option> </select
-        ><select
-          id="filter-hostname"
+          </option>
+        </select><select
+          @change="onChangeFilters"
           v-model="filters.hostname"
-          v-if="sortedHostnames.length > 1 || filters.hostname"
+          id="filter-hostname"
           :class="{ selected: filters.hostname }"
+          v-if="sortedHostnames.length > 1 || filters.hostname"
         >
           <option value="">Hostname</option>
           <option v-for="hostname in sortedHostnames" :value="hostname" :key="hostname">
             {{ hostname }}
-          </option></select
-        ><select v-model="filters.version" id="filter-version" :class="{ selected: filters.version }">
+          </option>
+        </select><select
+          @change="onChangeFilters"
+          v-model="filters.version"
+          id="filter-version"
+          :class="{ selected: filters.version }"
+        >
           <option value="">Version</option>
           <template v-for="version in sortedVersions">
           <option v-if="version" :value="version" :key="version">
             {{ version }}
-          </option></template></select
-        ><select v-model="filters.agg" id="filter-agg" :class="{ selected: filters.agg }">
+          </option>
+          </template>
+        </select><select
+          @change="onChangeFilters"
+          v-model="filters.agg"
+          id="filter-agg"
+          :class="{ selected: filters.agg }"
+        >
           <option v-for="agg in ['m', '5m', 'h', 'd']" :value="agg" :key="agg">
             {{ agg }}
           </option>
@@ -38,7 +55,7 @@
       </form>
     </template>
 
-    <template v-slot:kinds>
+    <template v-slot:kinds v-if="!loading">
       <div v-for="(group, kind) in keynames" :key="kind" class="kindblock">
         <div class="kindname">
           <a :href="`#${kind}`">{{ kind }}</a>
@@ -47,7 +64,7 @@
           <div v-for="(names, prefix) in group" :key="prefix" style="margin-top: 5px">
             <div v-for="keyname in names" :key="keyname" class="keyname">
               <a :href="`#${kind}:${keyname}`">{{ keyname }}</a>
-              <span v-for="({ point, name }) of lastValueMap[kind][keyname]"
+              <span v-for="({ point, name }) of getLastValue(kind, keyname)"
                     :title="name"
                     :key="name"
                     class="lastval-mini black"
@@ -71,7 +88,7 @@
           <div v-for="(series, keyname) in group" :key="keyname" :id="`${kind}:${keyname}`" class="block">
             <p class="header">
               <b>{{ kind }}:</b>{{ keyname }}
-              <span v-for="({ point, name }) of lastValueMap[kind][keyname]"
+              <span v-for="({ point, name }) of getLastValue(kind, keyname)"
                 :title="name"
                 :key="name"
                 class="lastval black"
@@ -189,7 +206,7 @@ export default {
     },
     charts() {
       if (!this.counts) {
-        return []
+        return {}
       }
       // const isMultiHost = _size(_keyBy(this.counts, 'hostname')) > 1
       // const colorsMap = _zipObject(Object.keys(_keyBy(this.counts)), COLORS)
@@ -219,7 +236,7 @@ export default {
       })
     },
     nodata() {
-      return this.charts.length === 0
+      return !this.counts
     },
     lastValueMap() {
       return _mapValues(this.charts, keymap => {
@@ -236,6 +253,9 @@ export default {
     },
   },
   methods: {
+    getLastValue(kind, keyname) {
+      return this.lastValueMap[kind][keyname]
+    },
     scrollToHash(hash) {
       hash = (hash || location.hash).replace(/^#/, '')
       if (hash) {
@@ -290,15 +310,14 @@ export default {
       return this.$router.replace({ query, hash: location.hash }).catch(e => console.error(e.message))
     },
     async updateStats() {
-      if (this.stats.length) {
-        this.stats = []
-      }
+      this.stats = []
       this.stats = await this.$store.dispatch(ACTIONS.LOAD_COUNTS_STATS, {
         dashId: this.dash.id,
         logname: this.filters.logname
       })
     },
     async updateCounts() {
+      this.counts = null
       this.loading = true
       if (!this.filters.logname) {
         this.loading = false
@@ -312,6 +331,9 @@ export default {
       this.loading = false
     },
     groupStatsBy(fieldname, sort = 'cnt') {
+      if (this.stats.length === 0) {
+        return []
+      }
       const grouped = _groupBy(this.stats, fieldname)
       const mapped = _map(grouped, (group, key) => {
         const cnt = _sumBy(group, 'cnt')
@@ -413,7 +435,7 @@ select#filter-agg {
     &.black {
       background-color: #333;
       color: #fff;
-      padding: 2px 4px;
+      padding: 2px 5px;
       border: none;
     }
   }
@@ -435,7 +457,7 @@ select#filter-agg {
     overflow: hidden;
     width: 60px;
     height: 35px;
-    background: #333;
+    background: #222;
     border-radius: 2px;
     //border: solid 1px #eee;
     outline: solid 1px #000;
