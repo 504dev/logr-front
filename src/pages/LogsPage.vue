@@ -9,41 +9,51 @@
 
     <template v-slot:filters>
       <form @change="onChangeFilters" @submit.prevent>
-        <select v-model="filters.logname" id="filter-logname" :class="{ selected: filters.logname }">
+        <select
+          v-model="filters.logname"
+          id="filter-logname"
+          :class="{ selected: filters.logname }"
+        >
           <option value="" v-if="sortedLognames.length === 0">Logname</option>
           <option v-for="logname in sortedLognames" :value="logname" :key="logname">
             {{ logname }}
-          </option> </select
-        ><select
+          </option>
+        </select><select
           v-model="filters.hostname"
-          v-if="sortedHostnames.length > 1 || filters.hostname"
           id="filter-hostname"
           :class="{ selected: filters.hostname }"
+          v-if="sortedHostnames.length > 1 || filters.hostname"
         >
           <option value="">Hostname</option>
           <option v-for="hostname in sortedHostnames" :value="hostname" :key="hostname">
             {{ hostname }}
           </option>
-        </select
-        ><select v-model="filters.version" id="filter-version" :class="{ selected: filters.version }">
+        </select><select
+          v-model="filters.version"
+          id="filter-version"
+          :class="{ selected: filters.version }"
+        >
           <option value="">Version</option>
           <template v-for="version in sortedVersions">
           <option v-if="version" :value="version" :key="version">
             {{ version }}
-          </option></template></select
-        ><select v-model="filters.level" id="filter-level" :class="{ selected: filters.level }">
+          </option></template>
+        </select><select
+          v-model="filters.level"
+          id="filter-level"
+          :class="{ selected: filters.level }"
+        >
           <option value="">Level</option>
           <option v-for="level in sortedLevels" :value="level" :key="level">
             {{ level }}
-          </option></select
-        ><input-x
+          </option>
+        </select><input-x
           id="filter-message"
           v-model="filters.message"
           placeholder="Message"
           :class="{ selected: filters.message }"
           :x2="!orient"
-        ></input-x
-        ><input
+        /><input
           type="number"
           v-model="filters.pid"
           placeholder="Pid"
@@ -54,14 +64,7 @@
           id="filter-timestamp"
           v-model="filters.timestamp"
           v-if="false"
-        ></range-date-time-picker
-        ><date-time-iso
-          id="filter-iso"
-          ref="date-time-iso"
-          v-model="filters.timestamp"
-          :class="{ selected: filters.timestamp.some(v => v) }"
-          v-if="false"
-      /><input-x
+        /><input-x
           id="filter-regexp"
           ref="date-time-regexp"
           v-model="filters.pattern"
@@ -137,7 +140,6 @@ import ACTIONS from '@/store/action-types'
 import MUTATIONS from '@/store/mutations-types'
 import LogItem from '@/components/LogItem.vue'
 import RangeDateTimePicker from '@/components/RangeDateTimePicker.vue'
-import DateTimeIso from '@/components/DateTimeIso.vue'
 import Wrapper from '@/components/WrapperTable.vue'
 import InputX from '@/components/InputX.vue'
 import Spinner from '@/components/Spinner.vue'
@@ -150,7 +152,6 @@ export default {
     Wrapper,
     LogItem,
     RangeDateTimePicker,
-    DateTimeIso,
     InputX,
     Spinner
   },
@@ -163,7 +164,7 @@ export default {
 
     this.lognames = await this.$store.dispatch(ACTIONS.LOAD_LOGS_LOGNAMES, this.dash.id)
     this.parseLocation()
-    this.updateLocation()
+    await this.updateLocation()
 
     await this.$store.dispatch(ACTIONS.PAUSE_LOGS, this.paused)
     this.sock.on('/log', this.logHandler)
@@ -272,11 +273,6 @@ export default {
     onTag(value) {
       console.log('onTag', value)
       if (value.pattern) {
-        if (this.$refs['date-time-iso']) {
-          const $iso = this.$refs['date-time-iso'].$el.firstChild
-          $iso.value = value.pattern
-          $iso.dispatchEvent(new Event('change', { bubbles: true }))
-        }
         if (this.$refs['date-time-regexp']) {
           this.filters.pattern = value.pattern
           this.placeholderRe = ''
@@ -361,7 +357,7 @@ export default {
       console.log('onPause', e)
       this.paused = 1 - this.paused
       await this.$store.dispatch(ACTIONS.PAUSE_LOGS, this.paused)
-      this.updateLocation()
+      await this.updateLocation()
       if (this.pausedLine) {
         clearInterval(this.pausedLine.timer)
         delete this.pausedLine.timer
@@ -389,7 +385,7 @@ export default {
       ls.set(`dash${this.dash.id}.filters.logname`, this.filters.logname)
 
       await this.updateLogs()
-      this.updateLocation()
+      await this.updateLocation()
     },
     updateLocation() {
       let query = { ...this.filters, paused: this.paused }
@@ -397,7 +393,7 @@ export default {
         delete query.timestamp
       }
       query = _pickBy(query)
-      this.$router.replace({ query })
+      return this.$router.replace({ query }).catch(e => console.error(e.message))
     },
     async updateStats() {
       if (this.stats.length) {

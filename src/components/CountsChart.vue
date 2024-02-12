@@ -22,6 +22,7 @@ export default {
   },
   methods: {
     render() {
+      console.log('render(%s)', this.id, this.series)
       const { title, subtitle, kind } = this
       Highcharts.chart(this.id, {
         chart: {

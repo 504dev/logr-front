@@ -55,7 +55,7 @@
       </form>
     </template>
 
-    <template v-slot:kinds v-if="!loading">
+    <template v-slot:kinds v-if="!nodata">
       <div v-for="(group, kind) in keynames" :key="kind" class="kindblock">
         <div class="kindname">
           <a :href="`#${kind}`">{{ kind }}</a>
