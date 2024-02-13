@@ -7,7 +7,7 @@
     }"
     v-if="user && dash"
   >
-    <tr v-if="orient && !fullscreen">
+    <tr v-if="orient" v-show="!fullscreen">
       <td class="header">
         <router-link to="/dashboards"
           ><img class="avatar" :src="`https://avatars.githubusercontent.com/u/${user.github_id}`"
@@ -39,7 +39,7 @@
       </td>
     </tr>
     <tr>
-      <td class="lefter" v-if="!orient && !fullscreen">
+      <td class="lefter" v-if="!orient" v-show="!fullscreen">
         <router-link to="/dashboards"
           ><img class="avatar" :src="`https://avatars.githubusercontent.com/u/${user.github_id}`"
         /></router-link>
