@@ -154,7 +154,7 @@ export default {
   position: relative;
   width: 220px;
   height: 160px;
-  background-color: #eee;
+  background-color: #f4f2f0;
   padding: 10px;
   border-radius: 4px;
   border: solid 1px #000;

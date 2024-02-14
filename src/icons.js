@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck'
+import { faCopy } from '@fortawesome/free-solid-svg-icons/faCopy'
 import { faCog } from '@fortawesome/free-solid-svg-icons/faCog'
 import { faEnvelopeOpenText } from '@fortawesome/free-solid-svg-icons/faEnvelopeOpenText'
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons/faSignOutAlt'
@@ -27,6 +29,8 @@ import { faMoon as farMoon } from '@fortawesome/free-regular-svg-icons/faMoon'
 import { faWindowMaximize as farWindowMaximize } from '@fortawesome/free-regular-svg-icons/faWindowMaximize'
 import { faGithub as fabGithub } from '@fortawesome/free-brands-svg-icons/faGithub'
 
+library.add(faCopy)
+library.add(faCheck)
 library.add(faCog)
 library.add(faEnvelopeOpenText)
 library.add(faSignOutAlt)

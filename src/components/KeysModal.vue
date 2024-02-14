@@ -2,17 +2,17 @@
   <modal v-bind="$attrs" width="640" height="340">
     <div class="modal-body">
       <p class="title">{{ dash.name }}</p>
-      <codes :keys="dash.keys[0]" v-if="dash.keys" class="codes" />
+      <code-examples :keys="dash.keys[0]" v-if="dash.keys" class="codes" />
     </div>
   </modal>
 </template>
 
 <script>
-import Codes from './Codes.vue'
+import CodeExamples from './CodeExamples.vue'
 
 export default {
   components: {
-    Codes
+    CodeExamples
   },
   props: {
     dash: Object

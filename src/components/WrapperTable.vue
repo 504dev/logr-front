@@ -176,7 +176,7 @@ table {
       }
 
       &.lefter {
-        background-color: #ddd;
+        background-color: #e4e2e0;
         width: 180px;
         min-width: 180px;
         padding: 10px;
@@ -211,7 +211,7 @@ table {
       &.header {
         padding: 10px 90px 5px 10px;
         height: 30px;
-        background-color: #ddd;
+        background-color: #e4e2e0;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         z-index: 800;
 
@@ -358,7 +358,7 @@ table {
     }
     &.left > span {
       line-height: 36px;
-      border: solid 2px #ddd;
+      border: solid 2px #e4e2e0;
       border-right: none;
       border-radius: 20px 0 0 20px;
       margin-left: -20px;

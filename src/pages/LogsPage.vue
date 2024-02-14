@@ -357,7 +357,6 @@ export default {
       console.log('onPause', e)
       this.paused = 1 - this.paused
       await this.$store.dispatch(ACTIONS.PAUSE_LOGS, this.paused)
-      await this.updateLocation()
       if (this.pausedLine) {
         clearInterval(this.pausedLine.timer)
         delete this.pausedLine.timer
@@ -366,6 +365,7 @@ export default {
       if (this.paused) {
         this.forcePause()
       }
+      await this.updateLocation()
     },
     forcePause() {
       const hr = {
@@ -533,7 +533,7 @@ input#filter-limit {
 .pause {
   cursor: pointer;
   width: 115px;
-  background-color: #eee;
+  background-color: #f4f2f0;
   border-color: black;
   svg {
     font-size: 12px;

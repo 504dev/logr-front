@@ -104,13 +104,15 @@ $logr->info('Hello, Logr!');`
     width: 120px;
   }
   .keys {
+    background-color: #fff;
     box-sizing: border-box;
     font-size: 13px;
     padding: 10px;
-    border-radius: 4px;
+    border-radius: 6px;
     width: 100%;
     height: 265px;
     margin: 0;
+    outline: solid 1px #e4e2e0;
   }
 }
 </style>

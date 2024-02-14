@@ -6,12 +6,16 @@
         <font-awesome-icon :icon="['fab', 'github']" />
       </a>
     </div>
+    <div class="docker">
+      <prism>{{ docker }}</prism>
+      <copy-to-clipboard :text="docker" />
+    </div>
     <div class="window" v-if="token">
       <iframe :src="url" @load="onLoad" ref="iframe"></iframe>
     </div>
     <div class="examples">
       <h2>Usage</h2>
-      <codes :keys="keys" v-model="lang" />
+      <code-examples :keys="keys" v-model="lang" />
       <div class="link" v-if="link">
         <a :href="link" target="_blank">{{ link }}</a>
       </div>
@@ -21,11 +25,15 @@
 
 <script>
 import ACTIONS from '@/store/action-types'
-import Codes from '@/components/Codes.vue'
+import CodeExamples from '@/components/CodeExamples.vue'
+import CopyToClipboard from '@/components/CopyToClipboard.vue'
+import Prism from 'vue-prism-component'
 
 export default {
   components: {
-    Codes
+    CopyToClipboard,
+    CodeExamples,
+    Prism
   },
   async mounted() {
     document.title = 'Demo'
@@ -35,11 +43,11 @@ export default {
     return {
       token: null,
       keys: {
-        public_key: 'MDwwDQYJKoZIhvcNAQEBBQADKwAwKAIhAJs2zmsJINqe2jNB14TT0JSK0jnhhD+XrX6EwNCM3aGHAgMBAAE=',
-        private_key:
-          'MIGqAgEAAiEAmzbOawkg2p7aM0HXhNPQlIrSOeGEP5etfoTA0IzdoYcCAwEAAQIhAJFeb02IKyEWjj5beEK+HELLO:)1m6jbjutLpGglUi8VkgLm3hAhEAxJMa7O8UJPrA0qzZdR+MswIRAMoiz+SgegcoRh+f5s3Fqd0CEFQPN+9j2TBrDjPI+ICuSiMCEA4qjGlYedTglLGIslM/hB0CEEJ4rgmCV48AAuI/x2iNFp8='
+        public_key: 'MDwwDQYJKoZIhvcNAQEBBQADKwAwKAIhAJs2zmsJINq=',
+        private_key: 'MIGqAgEAAiEAmzbOawkg2p7waM0HXhNPQlIrSOeGEP5='
       },
-      lang: 'javascript'
+      lang: 'javascript',
+      docker: 'docker run -d -p 7776:7776/udp -p 7778:7778 --name logr kozhurkin/logr',
     }
   },
   computed: {
@@ -74,14 +82,21 @@ export default {
 }
 </script>
 
+<style>
+body {
+  background-color: #f4f2f0;
+}
+</style>
+
 <style scoped lang="scss">
+
 .container {
   min-width: 540px;
   text-align: center;
   box-sizing: border-box;
   padding: 40px 80px;
   padding-top: 0;
-  border-top: solid 10px #eee;
+  //border-top: solid 10px #eee;
 }
 @media screen and (max-width: 800px) {
   .container {
@@ -92,7 +107,7 @@ export default {
 
 .title {
   font-size: 64px;
-  line-height: 150px;
+  line-height: 128px;
   .logr {
     font-family: Logr;
     font-size: 96px;
@@ -101,7 +116,33 @@ export default {
     color: #551a8b;
   }
 }
+
+.docker {
+  font-size: 13px;
+  font-weight: bold;
+  display: inline-block;
+  position: relative;
+  //outline: dashed 1px #000;
+  //zoom: 0.75;
+  margin-bottom: 24px;
+  > pre {
+    background-color: #e4e2e0;
+    text-align: center;
+    border-radius: 8px;
+    margin: 0;
+    padding: 16px;
+    padding-right: 50px;
+  }
+  > svg {
+    position: absolute;
+    padding: 12px;
+    right: 8px;
+    top: 8px;
+  }
+}
+
 .window {
+  background-color: #fff;
   display: inline-block;
   box-sizing: border-box;
   width: 100%;

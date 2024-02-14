@@ -394,8 +394,8 @@ select#filter-agg {
       color: #fff;
     }
     &.gray {
-      background-color: #eee;
-      border-color: #eee;
+      background-color: #f4f2f0;
+      border-color: #f4f2f0;
       color: #000;
     }
   }
