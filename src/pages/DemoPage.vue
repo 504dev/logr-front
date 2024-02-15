@@ -107,7 +107,7 @@ body {
 
 .title {
   font-size: 64px;
-  line-height: 128px;
+  line-height: 120px;
   .logr {
     font-family: Logr;
     font-size: 96px;
@@ -124,7 +124,7 @@ body {
   position: relative;
   //outline: dashed 1px #000;
   //zoom: 0.75;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
   > pre {
     background-color: #e4e2e0;
     text-align: center;
