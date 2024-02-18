@@ -124,7 +124,6 @@ body {
   position: relative;
   //outline: dashed 1px #000;
   //zoom: 0.75;
-  margin-bottom: 20px;
   > pre {
     background-color: #e4e2e0;
     text-align: center;
@@ -152,6 +151,7 @@ body {
   overflow: hidden;
   border: solid 1px black;
   margin-bottom: 40px;
+  margin-top: 16px;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.5);
   iframe {
     border: 0;
