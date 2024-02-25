@@ -1,9 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import { DEMO, DASHBOARDS, LOGS, COUNTS, LOGIN, JWT } from '@/constants/pages'
+import { DEMO, DASHBOARDS, LOGS, COUNTS, LOGIN, JWT, POLICY, SUPPORT } from '@/constants/pages'
 const LoginPage = () => import('@/pages/LoginPage.vue')
 const DashboardPage = () => import('@/pages/DashboardPage.vue')
 const DemoPage = () => import('@/pages/DemoPage.vue')
+const PolicyPage = () => import('@/pages/PolicyPage.vue')
+const SupportPage = () => import('@/pages/SupportPage.vue')
 const LogsPage = () => import('@/pages/LogsPage.vue')
 const CountsPage = () => import('@/pages/CountsPage.vue')
 const JwtPage = () => import('@/pages/JwtPage.vue')
@@ -22,6 +24,16 @@ export default new Router({
       path: '/demo',
       name: DEMO,
       component: DemoPage
+    },
+    {
+      path: '/policy',
+      name: POLICY,
+      component: PolicyPage
+    },
+    {
+      path: '/support',
+      name: SUPPORT,
+      component: SupportPage
     },
     {
       path: '/dashboards',
