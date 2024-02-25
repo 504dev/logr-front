@@ -8,6 +8,13 @@
       <input required minlength="2" type="text" placeholder="Your Name" v-model="form.name" />
       <input required type="email" placeholder="Email" v-model="form.email" />
       <textarea required autofocus maxlength="1000" placeholder="Your Message" v-model="form.message"></textarea>
+      <vue-recaptcha
+        ref="recaptcha"
+        size="invisible"
+        sitekey="6Ld2qn8pAAAAAM7lcXJ99sLdm4NQXXP2L_4gm8ht"
+        @verify="onVerify"
+        @expired="onCaptchaExpired"
+      ></vue-recaptcha>
       <input type="submit" value="Send" class="submit" />
       <div class="success" v-show="success">
         <font-awesome-icon icon="check" />
@@ -19,8 +26,12 @@
 
 <script>
 import axios from 'axios'
+import { VueRecaptcha } from 'vue-recaptcha'
 
 export default {
+  components: {
+    VueRecaptcha,
+  },
   data() {
     return {
       success: false,
@@ -32,11 +43,18 @@ export default {
     }
   },
   methods: {
-    async onSubmit() {
-      await axios.post('/support', this.form)
+    onSubmit() {
+      this.$refs.recaptcha.execute()
+    },
+    async onVerify(recaptchaToken) {
+      console.log({ recaptchaToken })
+      await axios.post('/support', { ...this.form, recaptchaToken })
       this.form = { name: '', email: '', message: '' }
       this.success = true
       setTimeout(() => this.success = false, 2_000)
+    },
+    onCaptchaExpired () {
+      this.$refs.recaptcha.reset()
     }
   }
 }

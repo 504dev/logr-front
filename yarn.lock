@@ -1788,6 +1788,11 @@ vue-datetime@1.0.0-beta.14:
   resolved "https://registry.npmjs.org/vue-datetime/-/vue-datetime-1.0.0-beta.14.tgz"
   integrity sha512-n25LqldE1xryeoweohiqlxy8iUsi+UwZnKLaN4gXjk7xxGL6rUl1y/GGvkoMwJUzRKttw+QnQV4oFAYupUQdug==
 
+vue-demi@^0.13.11:
+  version "0.13.11"
+  resolved "https://registry.npmjs.org/vue-demi/-/vue-demi-0.13.11.tgz"
+  integrity sha512-IR8HoEEGM65YY3ZJYAjMlKygDQn25D5ajNFNoKh9RSDMQtlzCxtfQjdQgv9jjK+m3377SsJXY8ysq8kLCZL25A==
+
 vue-eslint-parser@^9.4.2:
   version "9.4.2"
   resolved "https://registry.npmjs.org/vue-eslint-parser/-/vue-eslint-parser-9.4.2.tgz"
@@ -1812,6 +1817,13 @@ vue-prism-component@1.2.0:
   version "1.2.0"
   resolved "https://registry.npmjs.org/vue-prism-component/-/vue-prism-component-1.2.0.tgz"
   integrity sha512-0N9CNuQu+36CJpdsZHrhdq7d18oBvjVMjawyKdIr8xuzFWLfdxECZQYbFaYoopPBg3SvkEEMtkhYqdgTQl5Y+A==
+
+vue-recaptcha@2.0.3:
+  version "2.0.3"
+  resolved "https://registry.npmjs.org/vue-recaptcha/-/vue-recaptcha-2.0.3.tgz"
+  integrity sha512-Rz0kLIETUgmOrp7CxFvaFE65DkhKdWu4pteWOTt2i+yTajTHPqtyOW6DqTg0BvALWTm+WUvWVV7k5XXFijQnBw==
+  dependencies:
+    vue-demi "^0.13.11"
 
 vue-router@3.6.5:
   version "3.6.5"
