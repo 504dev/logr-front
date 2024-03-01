@@ -14,7 +14,7 @@ export default {
     kind: String
   },
   data() {
-    const id = 'container_' + Math.random()
+    const id = `container_${this.kind}_${Math.random()}`
     return { id }
   },
   mounted() {
@@ -24,6 +24,10 @@ export default {
     render() {
       console.log('render(%s)', this.id, this.series)
       const { title, subtitle, kind } = this
+      let yAxisMax = null
+      if (kind === 'per') {
+        yAxisMax = Math.max(100, ...this.series.map(({ data }) => data.map(v => v[1])).flat())
+      }
       Highcharts.chart(this.id, {
         chart: {
           type: 'area',
@@ -59,7 +63,7 @@ export default {
           title: {
             text: ''
           },
-          max: kind === 'per' ? 100 : undefined
+          max: yAxisMax
         },
         tooltip: {
           split: true,

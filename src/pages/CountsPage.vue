@@ -239,9 +239,10 @@ export default {
       return !this.counts
     },
     lastValueMap() {
-      return _mapValues(this.charts, keymap => {
+      return _mapValues(this.charts, (keymap, kind) => {
         return _mapValues(keymap, hosts => {
           const candidates = _map(hosts, ({ name, data }) => {
+            data = kind === 'inc' ? data.slice(0, -2) : data
             return {
               name,
               point: _findLast(data, ([, y]) => y != null)
