@@ -8,10 +8,14 @@
           :dashId="dashId"
           :timestamp="timestamp"
         ></counter-widget
-        ><span v-else :tabindex="json && 0" class="json">{{ JSON.stringify(json, null, 2) }}</span></template
-      ><template v-else>{{ text }}</template></span
-    ></span
-  >
+        ><span
+          v-else
+          tabindex="0"
+          class="json"
+        >{{ JSON.stringify(json, null, 2) }}</span
+      ></template
+    ><template v-else>{{ text }}</template></span
+  ></span>
 </template>
 
 <script>
@@ -106,7 +110,7 @@ export default {
                   chunks.push({ text: tmp })
                   tmp = ''
                 }
-                chunks.push({ text: test, json })
+                chunks.push({ text: test, json, formatted: test.includes('\n') })
                 i = j
                 break
               } catch (e) {
@@ -137,7 +141,7 @@ export default {
   color: black;
 }
 .json {
-  border-bottom: 1px dotted mediumpurple;
+  border-bottom: 1px dotted currentColor;
   white-space: nowrap;
   outline: none;
   &:focus {
