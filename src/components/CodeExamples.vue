@@ -46,7 +46,7 @@ ${private_key}
 const { Logr } = require('logr-node-client');
 
 const conf = new Logr({
-  udp: ':7776',
+  udp: '${location.hostname}:7776',
   publicKey: '${public_key}',
   privateKey: '${private_key}',
 });
@@ -59,7 +59,7 @@ import logrc "github.com/504dev/logr-go-client"
 
 func main() {
     conf := logrc.Config{
-        Udp:        ":7776",
+        Udp:        "${location.hostname}:7776",
         PublicKey:  "${public_key}",
         PrivateKey: "${private_key}",
     }
@@ -71,7 +71,7 @@ func main() {
 from logrpy import Logr
 
 conf = Logr(
-    ('127.0.0.1', 7776),
+    ('${location.hostname}', 7776),
     '${public_key}',
     '${private_key}',
 )
@@ -81,7 +81,7 @@ logr = conf.getlogger('hello.log')
 logr.info('Hello, Logr!')`
       const php = `\
 $conf = new Logr(
-    ':7776',
+    '${location.hostname}:7776',
     '${public_key}',
     '${private_key}'
 );
