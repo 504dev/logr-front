@@ -18,7 +18,7 @@ export default {
   },
   props: {
     keys: Object,
-    options: { type: Array, default: () => ['plain', 'javascript', 'golang', 'python', 'php'] },
+    options: { type: Array, default: () => ['yml', 'javascript', 'golang', 'python', 'php'] },
     value: { type: String, default: 'javascript' }
   },
   data() {
@@ -35,12 +35,11 @@ export default {
   computed: {
     code() {
       const { public_key, private_key } = this.keys
-      const plain = `\
-/* public key */
-${public_key}
-
-/* private key */
-${private_key}
+      const yml = `\
+logr:
+  udp: "${location.hostname}:7776"
+  public_key: "${public_key}"
+  private_key: "${private_key}"
 `
       const javascript = `\
 const { Logr } = require('logr-node-client');
@@ -89,7 +88,7 @@ $conf = new Logr(
 $logr = $conf->getLogger('hello.log');
 
 $logr->info('Hello, Logr!');`
-      return { plain, javascript, golang, python, php }
+      return { yml, javascript, golang, python, php }
     }
   }
 }
