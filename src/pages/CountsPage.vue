@@ -10,7 +10,7 @@
     <template v-slot:filters>
       <form @submit.prevent>
         <select
-          @change="onChangeFilters"
+          @change="onChangeLogname"
           v-model="filters.logname"
           id="filter-logname"
           :class="{ selected: filters.logname }"
@@ -298,12 +298,18 @@ export default {
 
       return Math.abs(hash).toString(16)
     },
+    async onChangeLogname(e) {
+      location.hash = ''
+      return this.onChangeFilters(e)
+    },
     async onChangeFilters(e) {
       console.log('onChangeFilters', e)
       ls.set(`dash${this.dash.id}.filters.logname`, this.filters.logname)
 
       await this.updateCounts()
       await this.updateLocation()
+
+      this.scrollToHash()
     },
     updateLocation() {
       let query = { ...this.filters }
