@@ -208,6 +208,9 @@ export default {
       if (!this.counts) {
         return {}
       }
+      if (this.sortedHostnames.length === 0) {
+        return {}
+      }
       // const isMultiHost = _size(_keyBy(this.counts, 'hostname')) > 1
       // const colorsMap = _zipObject(Object.keys(_keyBy(this.counts)), COLORS)
       const colorsMap = _zipObject(this.sortedHostnames, COLORS)
