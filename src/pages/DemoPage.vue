@@ -1,16 +1,20 @@
 <template>
   <div class="container">
+
     <div class="title">
       <span class="logr">logr</span>
       <a href="https://github.com/504dev/logr" class="github">
         <font-awesome-icon :icon="['fab', 'github']" />
       </a>
     </div>
+
     <div class="docker">
       <prism>{{ docker }}</prism>
       <copy-to-clipboard :text="docker" />
     </div>
-    <div class="window" v-if="token">
+
+    <template v-if="token">
+    <div class="window">
       <iframe :src="url" @load="onLoad" ref="iframe"></iframe>
     </div>
     <div class="examples">
@@ -20,6 +24,8 @@
         <a :href="link" target="_blank">{{ link }}</a>
       </div>
     </div>
+    </template>
+
   </div>
 </template>
 
