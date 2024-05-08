@@ -64,7 +64,7 @@
           <div v-for="(names, prefix) in group" :key="prefix" style="margin-top: 5px">
             <div v-for="keyname in names" :key="keyname" class="keyname">
               <a :href="`#${kind}:${keyname}`">{{ keyname }}</a>
-              <span v-for="({ point, name }) of getLastValue(kind, keyname)"
+              <span v-for="({ point, name }) of getLastValue(kind, keyname) || {}"
                     :title="name"
                     :key="name"
                     class="lastval-mini black"
