@@ -17,7 +17,7 @@
       ></vue-recaptcha>
       <input type="submit" value="Send" class="submit" />
       <div class="success" v-show="success">
-        <font-awesome-icon icon="check" />
+        <FontAwesomeIcon icon="check" />
       </div>
     </form>
   </div>

@@ -1,5 +1,4 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import { createWebHistory, createRouter } from 'vue-router'
 import { DEMO, DASHBOARDS, LOGS, COUNTS, LOGIN, JWT, POLICY, SUPPORT } from '@/constants/pages'
 const LoginPage = () => import('@/pages/LoginPage.vue')
 const DashboardPage = () => import('@/pages/DashboardPage.vue')
@@ -10,11 +9,8 @@ const LogsPage = () => import('@/pages/LogsPage.vue')
 const CountsPage = () => import('@/pages/CountsPage.vue')
 const JwtPage = () => import('@/pages/JwtPage.vue')
 
-
-Vue.use(Router)
-
-export default new Router({
-  mode: 'history',
+export const router = createRouter({
+  history: createWebHistory(),
   routes: [
     {
       path: '/',

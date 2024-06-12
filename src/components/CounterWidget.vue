@@ -1,28 +1,28 @@
 <template>
   <span v-if="!valid" class="label invalid" title="invalid widget"
-  ><font-awesome-icon icon="exclamation-triangle"/> {{ JSON.stringify(this.$attrs) }}</span>
+  ><FontAwesomeIcon icon="exclamation-triangle"/> {{ JSON.stringify(this.$attrs) }}</span>
   <div class="widget" @blur="hideChart()" tabindex="1" v-else>
     <span @click="expanded ? hideChart() : showChart()" class="label" :class="expanded ? 'close' : 'open'"
-      ><font-awesome-icon :icon="expanded ? 'times' : 'chart-line'"/>
+      ><FontAwesomeIcon :icon="expanded ? 'times' : 'chart-line'"/>
       <span>{{title}}</span>
       <span class="value">{{lastValue ? (lastValue[1] ? nFormatter(lastValue[1]) : '-') : '&nbsp;'}}</span>
     </span
     ><div class="chart" v-if="expanded && counts">
       <counts-snippet-chart :subtitle="title" :series="series" />
-      <span @click="redirect"><font-awesome-icon icon="chart-line"/></span>
+      <span @click="redirect"><FontAwesomeIcon icon="chart-line"/></span>
     </div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import CountsSnippetChart from './CountsSnippetChart.vue'
+import CountsSnippetChart from '@/components/CountsSnippetChart.vue'
 import ACTIONS from '@/store/action-types'
 import { DEFAULT_COLOR } from '@/constants/colors'
 
 export default {
   components: {
-    CountsSnippetChart
+    CountsSnippetChart,
   },
   props: {
     dashId: Number,

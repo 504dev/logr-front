@@ -1,25 +1,23 @@
+import Vue from 'vue'
+import { createStore } from 'vuex'
+import { jwtDecode } from 'jwt-decode'
 import _find from 'lodash/find'
 import _findIndex from 'lodash/findIndex'
 import _filter from 'lodash/filter'
 import _omit from 'lodash/omit'
 import axios from 'axios'
 import ls from 'store2'
-import Vue from 'vue'
-import Vuex from 'vuex'
 import _first from 'lodash/first.js'
 import _get from 'lodash/get.js'
-import { jwtDecode } from 'jwt-decode'
 import Sock from '@/libs/sock'
 import { RoleDemo } from '@/constants/roles'
-import ACTIONS from './action-types.js'
-import MUTATIONS from './mutations-types.js'
-import demoStore from './demo'
-
-Vue.use(Vuex)
+import ACTIONS from '@/store/action-types.js'
+import MUTATIONS from '@/store/mutations-types.js'
+import demoStore from '@/store/demo'
 
 console.log(import.meta.env)
 
-const store = new Vuex.Store({
+export const store = createStore({
   state: {
     user: null,
     dashboards: null,
@@ -326,5 +324,3 @@ function api(path, options = {}, useAuth = true) {
     ...options
   })
 }
-
-export default store

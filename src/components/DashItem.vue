@@ -42,34 +42,39 @@
       </div>
       <div class="tools">
         <span @click="onKeys(dash)">
-          <font-awesome-icon class="icon" icon="key" title="keys" />
+          <FontAwesomeIcon class="icon" icon="key" title="keys" />
         </span>
         <span @click="onShare(dash)" title="add member">
-          <font-awesome-icon class="icon" icon="plus-square" />
+          <FontAwesomeIcon class="icon" icon="plus-square" title="add member" />
         </span>
         <span @click="onEdit(dash)">
-          <font-awesome-icon class="icon" icon="edit" title="edit" />
+          <FontAwesomeIcon class="icon" icon="edit" title="edit" />
         </span>
         <span @click="onDelete(dash)">
-          <font-awesome-icon class="icon" icon="trash-alt" title="remove" />
+          <FontAwesomeIcon class="icon" icon="trash-alt" title="remove" />
         </span>
       </div>
     </div>
-    <share-modal :dash="dash" :name="`share-${dash.id}`" />
-    <keys-modal :dash="dash" :name="`keys-${dash.id}`" />
+    <ModalsContainer />
+    <KeysModal :dash="dash" :modal-id="`keys-${dash.id}`" />
+    <MembersModal :dash="dash" :modal-id="`members-${dash.id}`" />
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
 import ACTIONS from '@/store/action-types'
-import ShareModal from './ShareModal.vue'
-import KeysModal from './KeysModal.vue'
-import LogsPreview from './LogsPreview.vue'
+import { ModalsContainer, useVfm } from 'vue-final-modal'
+import MembersModal from '@/components/MembersModal.vue'
+import KeysModal from '@/components/KeysModal.vue'
+import LogsPreview from '@/components/LogsPreview.vue'
+
+const vfm = useVfm()
 
 export default {
   components: {
-    ShareModal,
+    ModalsContainer,
+    MembersModal,
     KeysModal,
     LogsPreview,
   },
@@ -107,10 +112,10 @@ export default {
   },
   methods: {
     onShare(dash) {
-      this.$modal.show(`share-${dash.id}`)
+      vfm.open(`members-${dash.id}`)
     },
     onKeys(dash) {
-      this.$modal.show(`keys-${dash.id}`)
+      vfm.open(`keys-${dash.id}`)
     },
     async onEdit(dash) {
       const name = prompt('Edit dash name:', dash.name)

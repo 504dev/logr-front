@@ -3,7 +3,7 @@
     <template v-slot:goto>
       <router-link :to="`/dashboard/${dash.id}/logs`" class="goto-logs">
         <span>go to logs</span>
-        <div><logs-preview n="6"/></div>
+        <div><logs-preview :n="6"/></div>
       </router-link>
     </template>
 
@@ -77,7 +77,7 @@
 
     <template v-slot:customs>
       <a href="#" @click.prevent="switchOrient"
-        ><font-awesome-icon :icon="['far', 'window-maximize']" :rotation="orient ? '270' : null"
+        ><FontAwesomeIcon :icon="['far', 'window-maximize']" :rotation="orient ? '270' : null"
       /></a>
     </template>
 
@@ -267,7 +267,7 @@ export default {
         if ($el) {
           $el.scrollIntoView({
             behavior: 'smooth'
-          });
+          })
           document.querySelector('.block').classList.remove('active')
           $el.classList.add('active')
         }

@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import LogItemMsg from './LogItemMsg.vue'
+import LogItemMsg from '@/components/LogItemMsg.vue'
 
 export default {
   components: {

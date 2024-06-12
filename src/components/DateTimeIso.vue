@@ -9,11 +9,12 @@
       @change="onChange"
       maxlength="19"
     />
-    <span class="icon" @click="onClear" v-if="pattern"><font-awesome-icon icon="times-circle"/></span>
+    <span class="icon" @click="onClear" v-if="pattern"><FontAwesomeIcon icon="times-circle"/></span>
   </div>
 </template>
 
 <script>
+
 export default {
   props: {
     value: Array

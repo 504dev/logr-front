@@ -60,10 +60,6 @@
           id="filter-pid"
           maxlength="6"
           v-if="false"
-        /><range-date-time-picker
-          id="filter-timestamp"
-          v-model="filters.timestamp"
-          v-if="false"
         /><input-x
           id="filter-regexp"
           ref="date-time-regexp"
@@ -77,24 +73,24 @@
           id="filter-limit"
           :class="{ selected: filters.limit }"
         /><button class="pause" :class="{ 'pause-on': paused }" @mouseup.prevent="onPause">
-          <font-awesome-icon icon="pause" /> {{ paused ? 'paused' : 'pause' }}
+          <FontAwesomeIcon icon="pause" /> {{ paused ? 'paused' : 'pause' }}
         </button>
       </form>
     </template>
 
     <template v-slot:customs>
       <a href="#" @click.prevent="switchOrient"
-        ><font-awesome-icon :icon="['far', 'window-maximize']" :rotation="orient ? '270' : null"/></a
+        ><FontAwesomeIcon :icon="['far', 'window-maximize']" :rotation="orient ? '270' : null"/></a
       ><a href="#" @click.prevent="switchDirection"
-        ><font-awesome-icon :icon="['fas', direction ? 'sort-amount-up-alt' : 'sort-amount-down']"/></a
-      ><a href="#" @click.prevent="switchMode"><font-awesome-icon :icon="[theme ? 'fas' : 'far', 'moon']"/></a>
+        ><FontAwesomeIcon :icon="['fas', direction ? 'sort-amount-up-alt' : 'sort-amount-down']"/></a
+      ><a href="#" @click.prevent="switchMode"><FontAwesomeIcon :icon="[theme ? 'fas' : 'far', 'moon']"/></a>
     </template>
 
     <template v-slot:content>
       <div class="block block-live" :class="{ reverse: !!direction }">
         <template v-for="(log, key) in logs.live">
-          <div v-if="log.hr" :key="key" class="separator" :class="{ 'separator-pause': log.timer }">
-            <span><font-awesome-icon icon="pause" /> {{ log.text }}</span>
+          <div v-if="log.hr" :key="key + '-hr'" class="separator" :class="{ 'separator-pause': log.timer }">
+            <span><FontAwesomeIcon icon="pause" /> {{ log.text }}</span>
           </div>
           <log-item v-else :value="log" :filters="filters" :key="key" @tag="onTag" @hover="onHover" />
         </template>
@@ -120,7 +116,7 @@
       <button class="more" @click="onMore" v-else>
         fetch more
         <spinner v-if="deepLoading" />
-        <font-awesome-icon icon="chevron-circle-down" v-else />
+        <FontAwesomeIcon icon="chevron-circle-down" v-else />
       </button>
     </template>
   </wrapper>
@@ -139,7 +135,6 @@ import store from 'store2'
 import ACTIONS from '@/store/action-types'
 import MUTATIONS from '@/store/mutations-types'
 import LogItem from '@/components/LogItem.vue'
-import RangeDateTimePicker from '@/components/RangeDateTimePicker.vue'
 import Wrapper from '@/components/WrapperTable.vue'
 import InputX from '@/components/InputX.vue'
 import Spinner from '@/components/Spinner.vue'
@@ -151,9 +146,8 @@ export default {
   components: {
     Wrapper,
     LogItem,
-    RangeDateTimePicker,
     InputX,
-    Spinner
+    Spinner,
   },
   async created() {
     await Promise.all([

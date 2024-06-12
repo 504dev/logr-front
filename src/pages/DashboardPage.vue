@@ -17,15 +17,13 @@
         <span class="username">{{ jwtPayload.username }}</span>
         <span>|</span>
         <a href="#" @click.prevent="$store.dispatch(ACTIONS.LOGOUT)">
-          <font-awesome-icon icon="sign-out-alt" />
+          <FontAwesomeIcon icon="sign-out-alt" />
         </a>
       </span>
     </div>
     <div v-if="user.role !== RoleViewer">
       <h1>Own</h1>
-      <template v-for="dash in dashgroups.own">
-        <dash-item :dash="dash" :key="dash.id" />
-      </template>
+      <dash-item v-for="dash in dashgroups.own" :dash="dash" :key="dash.id" />
       <div
         title="Add dashboard"
         class="ghost"
@@ -36,9 +34,7 @@
     <div>
       <h1>Shared</h1>
       <span v-if="dashgroups.shared.length === 0"></span>
-      <template v-else v-for="dash in dashgroups.shared">
-        <dash-item :dash="dash" :key="dash.id" />
-      </template>
+      <dash-item v-else v-for="dash in dashgroups.shared" :dash="dash" :key="dash.id" />
     </div>
     <div class="watermark">logr</div>
   </div>

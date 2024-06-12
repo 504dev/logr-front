@@ -1,6 +1,4 @@
-import Vue from 'vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck'
 import { faCopy } from '@fortawesome/free-solid-svg-icons/faCopy'
 import { faCog } from '@fortawesome/free-solid-svg-icons/faCog'
@@ -58,5 +56,3 @@ library.add(farMoon)
 library.add(farWindowMaximize)
 
 library.add(fabGithub)
-
-Vue.component('font-awesome-icon', FontAwesomeIcon)

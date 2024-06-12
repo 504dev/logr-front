@@ -1,18 +1,24 @@
 <template>
-  <modal v-bind="$attrs" width="640" height="340">
+  <VueFinalModal
+    v-bind="$attrs"
+    overlay-transition="vfm-fade"
+    content-transition="vfm-fade"
+  >
     <div class="modal-body">
       <p class="title">{{ dash.name }}</p>
       <code-examples :keys="dash.keys[0]" v-if="dash.keys" class="codes" />
     </div>
-  </modal>
+  </VueFinalModal>
 </template>
 
 <script>
-import CodeExamples from './CodeExamples.vue'
+import CodeExamples from '@/components/CodeExamples.vue'
+import { VueFinalModal } from 'vue-final-modal';
 
 export default {
   components: {
-    CodeExamples
+    CodeExamples,
+    VueFinalModal,
   },
   props: {
     dash: Object

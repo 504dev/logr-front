@@ -20,7 +20,7 @@
 
 <script>
 import ansicolor from 'ansicolor'
-import CounterWidget from './CounterWidget.vue'
+import CounterWidget from '@/components/CounterWidget.vue'
 
 export default {
   components: { CounterWidget },

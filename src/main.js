@@ -1,21 +1,17 @@
-import Vue from 'vue'
-import App from './App.vue'
-import router from './router'
-import store from './store'
-import './icons'
-import VModal from 'vue-js-modal'
-import { Datetime } from 'vue-datetime'
-import 'vue-datetime/dist/vue-datetime.css'
-Vue.use(Datetime)
-Vue.use(VModal)
+import { createApp } from 'vue'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { createVfm } from 'vue-final-modal'
+import { router } from '@/router'
+import { store } from '@/store'
+import App from '@/App.vue'
+import '@/icons'
+import 'vue-final-modal/style.css'
 
-Vue.config.productionTip = false
+const app = createApp(App)
 
-/* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  router,
-  store,
-  components: { App },
-  template: '<App/>'
-})
+app.component('FontAwesomeIcon', FontAwesomeIcon)
+app.use(router)
+app.use(store)
+app.use(createVfm())
+
+app.mount('#app')

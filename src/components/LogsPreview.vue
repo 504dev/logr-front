@@ -11,7 +11,7 @@
 <script>
 import _sortBy from 'lodash/sortBy';
 import _sumBy from 'lodash/sumBy';
-import LogItem from './LogItem.vue';
+import LogItem from '@/components/LogItem.vue';
 
 export default {
   components: {

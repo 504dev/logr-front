@@ -1,5 +1,5 @@
 <template>
-  <font-awesome-icon icon="cog" class="rotating" v-bind="$attrs"/>
+  <FontAwesomeIcon icon="cog" class="rotating" v-bind="$attrs"/>
 </template>
 
 <style scoped lang="scss">

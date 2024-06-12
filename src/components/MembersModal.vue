@@ -1,9 +1,15 @@
 <template>
-  <modal v-bind="$attrs" width="480" height="400" @opened="focus">
+  <VueFinalModal
+    v-bind="$attrs"
+    overlay-transition="vfm-fade"
+    content-transition="vfm-fade"
+    @opened="focus"
+  >
     <div class="modal-body">
       <p class="title">{{ dash.name }}</p>
       <form @submit.prevent="addMember()">
         <input
+          ref="search"
           type="text"
           :value="search"
           @input="debounceSearch"
@@ -30,29 +36,33 @@
               :key="member.user_id"
               class="avatar"
             />
-            <font-awesome-icon
+            <FontAwesomeIcon
               icon="times-circle"
               :title="member.user.login_at ? 'remove membership' : 'remove invition'"
             />
           </span>
-          <font-awesome-icon icon="envelope-open-text" title="invited" class="invition" />
+          <FontAwesomeIcon icon="envelope-open-text" title="invited" class="invition" />
           {{ member.user.username }}
         </div>
       </div>
     </div>
-  </modal>
+  </VueFinalModal>
 </template>
 
 <script>
-import _sortBy from 'lodash/sortBy'
-import _debounce from 'lodash/debounce'
 import axios from 'axios'
 import { mapState } from 'vuex'
+import { VueFinalModal } from 'vue-final-modal'
+import _sortBy from 'lodash/sortBy'
+import _debounce from 'lodash/debounce'
 import ACTIONS from '@/store/action-types'
 
 export default {
   props: {
     dash: Object
+  },
+  components: {
+    VueFinalModal,
   },
   data() {
     return {
@@ -79,8 +89,8 @@ export default {
     }
   },
   methods: {
-    focus(e) {
-      e.ref.querySelector('input').focus()
+    focus() {
+      this.$refs.search.focus()
     },
     debounceSearch: _debounce(async function(e) {
       this.search = e.target.value

@@ -4,7 +4,7 @@
     <div class="title">
       <span class="logr">logr</span>
       <a href="https://github.com/504dev/logr" class="github">
-        <font-awesome-icon :icon="['fab', 'github']" />
+        <FontAwesomeIcon :icon="['fab', 'github']" />
       </a>
     </div>
 

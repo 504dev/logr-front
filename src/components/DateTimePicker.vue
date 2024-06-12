@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="container">
-      <span class="icon date" @click="openDatePicker"><font-awesome-icon icon="calendar"/></span
+      <span class="icon date" @click="openDatePicker"><FontAwesomeIcon icon="calendar"/></span
       ><input
         ref="idate"
         type="text"
@@ -10,7 +10,7 @@
         :value="input.date"
         @change="onDateInput"
         maxlength="10"
-      /><span class="icon time" @click="openTimePicker"><font-awesome-icon icon="clock"/></span
+      /><span class="icon time" @click="openTimePicker"><FontAwesomeIcon icon="clock"/></span
       ><input
         ref="itime"
         type="text"

@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite'
 import { fileURLToPath, URL } from 'node:url'
-import vue from '@vitejs/plugin-vue2'
+import vue from '@vitejs/plugin-vue'
 import eslint from 'vite-plugin-eslint'
 
 export default defineConfig({
@@ -17,7 +17,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
-      vue: 'vue/dist/vue.min.js'
+      vue: 'vue/dist/vue.cjs.js'
     }
   },
   build: {

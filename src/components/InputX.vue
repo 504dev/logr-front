@@ -1,7 +1,7 @@
 <template>
   <span class="wrapper" :class="{ x2 }">
     <input type="text" :placeholder="placeholder" :value="value" @input="e => $emit('input', e.target.value.trim())" />
-    <span class="icon" @click="onClear" v-if="value"><font-awesome-icon icon="times-circle"/></span>
+    <span class="icon" @click="onClear" v-if="value"><FontAwesomeIcon icon="times-circle"/></span>
   </span>
 </template>
 
