@@ -138,109 +138,6 @@ export default {
 
 <style lang="scss">
 table.wrapper {
-  a {
-    color: #111;
-  }
-  .customs {
-    a {
-      margin-right: 4px;
-    }
-  }
-  &.left-orient {
-    .kinds {
-      padding-bottom: 16px;
-      //padding-right: 16px;
-      padding-left: 2px;
-
-      .kindblock {
-        margin-top: 10px;
-        vertical-align: top;
-        text-align: left;
-
-        .kindname {
-          a {
-            font-weight: bold;
-            text-decoration: none;
-          }
-        }
-
-        .keynames {
-          vertical-align: top;
-          text-align: left;
-
-          a {
-            text-decoration: none;
-            white-space: nowrap;
-
-            &:hover {
-              text-decoration: underline;
-            }
-          }
-        }
-      }
-    }
-    .filters {
-      select,
-      input {
-        margin-bottom: 10px;
-      }
-      #filter-message,
-      #filter-regexp {
-        display: block;
-      }
-    }
-  }
-
-  &.head-orient {
-    .kinds {
-      /*text-align: center;*/
-      /*margin-left: 26px;*/
-      .kindblock {
-        display: inline-block;
-        margin: 8px 15px;
-        margin-left: 5px;
-
-        .kindname {
-          a {
-            font-weight: bold;
-            text-decoration: none;
-            &:hover {
-              text-decoration: underline;
-            }
-          }
-        }
-
-        .keynames {
-          display: none;
-        }
-      }
-    }
-
-    .filters {
-      padding-top: 7px;
-      line-height: 35px;
-
-      select,
-      input {
-        max-width: 180px;
-        margin-right: 8px;
-      }
-
-      #filter-agg {
-        float: inherit;
-      }
-
-      #filter-message,
-      #filter-regexp {
-        margin-right: 8px;
-      }
-    }
-  }
-}
-</style>
-
-<style scoped lang="scss">
-table {
   position: absolute;
   top: 0;
   left: 0;
@@ -252,16 +149,39 @@ table {
   padding: 0;
   border-spacing: 0;
 
-  &.night {
-    background-color: #000;
-    color: white;
+  a {
+    color: #111;
   }
 
-  &.reverse {
-    .content {
-      display: flex;
-      flex-direction: column-reverse;
+  .customs {
+    a {
+      margin-right: 4px;
     }
+  }
+
+  .avatar {
+    position: absolute;
+    top: 13px;
+    left: 10px;
+    width: 24px;
+    height: 24px;
+    border-radius: 24px;
+    border: solid 1px black;
+    z-index: 999;
+
+    &:hover {
+      box-shadow: 0 0 0 2px #9e9 !important;
+    }
+  }
+
+  select.dashboard {
+    margin-top: 2px;
+    border: none;
+    background: none;
+    color: #111;
+    font-weight: bold;
+    font-size: 16px;
+    padding-left: 32px;
   }
 
   td {
@@ -316,16 +236,6 @@ table {
       overflow: scroll;
       font-size: 14px;
     }
-  }
-
-  select.dashboard {
-    margin-top: 2px;
-    border: none;
-    background: none;
-    color: #111;
-    font-weight: bold;
-    font-size: 16px;
-    padding-left: 32px;
   }
 
   .arrow {
@@ -407,18 +317,15 @@ table {
     }
   }
 
-  .avatar {
-    position: absolute;
-    top: 13px;
-    left: 10px;
-    width: 24px;
-    height: 24px;
-    border-radius: 24px;
-    border: solid 1px black;
-    z-index: 999;
+  &.night {
+    background-color: #000;
+    color: white;
+  }
 
-    &:hover {
-      box-shadow: 0 0 0 2px #9e9 !important;
+  &.reverse {
+    .content {
+      display: flex;
+      flex-direction: column-reverse;
     }
   }
 
@@ -447,6 +354,49 @@ table {
       padding-left: 24px;
       margin-bottom: 7px;
     }
+
+    .kinds {
+      padding-bottom: 16px;
+      //padding-right: 16px;
+      padding-left: 2px;
+
+      .kindblock {
+        margin-top: 10px;
+        vertical-align: top;
+        text-align: left;
+
+        .kindname {
+          a {
+            font-weight: bold;
+            text-decoration: none;
+          }
+        }
+
+        .keynames {
+          vertical-align: top;
+          text-align: left;
+
+          a {
+            text-decoration: none;
+            white-space: nowrap;
+
+            &:hover {
+              text-decoration: underline;
+            }
+          }
+        }
+      }
+    }
+    .filters {
+      select,
+      input {
+        margin-bottom: 10px;
+      }
+      #filter-message,
+      #filter-regexp {
+        display: block;
+      }
+    }
   }
 
   &.head-orient {
@@ -463,6 +413,50 @@ table {
       right: 14px;
       //top: 49px;
       top: 43px;
+    }
+
+    .kinds {
+      /*text-align: center;*/
+      /*margin-left: 26px;*/
+      .kindblock {
+        display: inline-block;
+        margin: 8px 15px;
+        margin-left: 5px;
+
+        .kindname {
+          a {
+            font-weight: bold;
+            text-decoration: none;
+            &:hover {
+              text-decoration: underline;
+            }
+          }
+        }
+
+        .keynames {
+          display: none;
+        }
+      }
+    }
+
+    .filters {
+      padding-top: 7px;
+      line-height: 35px;
+
+      select,
+      input {
+        max-width: 180px;
+        margin-right: 8px;
+      }
+
+      #filter-agg {
+        float: inherit;
+      }
+
+      #filter-message,
+      #filter-regexp {
+        margin-right: 8px;
+      }
     }
   }
 
