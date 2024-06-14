@@ -28,8 +28,8 @@ export default {
 
 <style lang="scss" scoped>
 .modal-body {
+  //padding: 10px;
   position: relative;
-  padding: 10px;
   text-align: right;
   .title {
     font-weight: bold;

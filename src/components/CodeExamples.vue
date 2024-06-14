@@ -3,18 +3,21 @@
     <select v-model="mutValue" class="selected" @change="onChange">
       <option :value="opt" v-for="opt in options" :key="opt">{{ opt }}</option>
     </select>
-    <prism class="keys" language="javascript">{{ code[mutValue] }}</prism>
+    <copy-to-clipboard :text="code[mutValue]" class="copy" />
+    <prism class="keys" language="javascript" :key="mutValue">{{ code[mutValue] }}</prism>
   </div>
 </template>
 
 <script>
 import 'prismjs'
 import 'prismjs/themes/prism.css'
+import CopyToClipboard from '@/components/CopyToClipboard.vue'
 import Prism from 'vue-prism-component'
 
 export default {
   components: {
-    Prism
+    Prism,
+    CopyToClipboard,
   },
   props: {
     keys: Object,
@@ -96,6 +99,7 @@ $logr->info('Hello, Logr!');`
 
 <style lang="scss" scoped>
 .codes {
+  position: relative;
   /*outline: dashed 1px red;*/
   select {
     /*float: right;*/
@@ -112,6 +116,11 @@ $logr->info('Hello, Logr!');`
     height: 265px;
     margin: 0;
     outline: solid 1px #e4e2e0;
+  }
+  .copy {
+    position: absolute;
+    top: 50px;
+    right: 10px;
   }
 }
 </style>

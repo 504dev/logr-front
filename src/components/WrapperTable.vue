@@ -1,5 +1,6 @@
 <template>
   <table
+    class="wrapper"
     :class="{
       fullscreen,
       'left-orient': !orient,
@@ -12,7 +13,7 @@
         <router-link to="/dashboards"
           ><img class="avatar" :src="`https://avatars.githubusercontent.com/u/${user.github_id}`"
         /></router-link>
-        <select :value="dashId" class="dashname" @change="onDashChange">
+        <select :value="dashId" class="dashboard" @change="onDashChange">
           <optgroup label="Own" v-if="dashgroups.own.length">
             <option v-for="dashboard in dashgroups.own" :value="dashboard.id" :key="dashboard.id"
               >{{ dashboard.name }}
@@ -43,7 +44,7 @@
         <router-link to="/dashboards"
           ><img class="avatar" :src="`https://avatars.githubusercontent.com/u/${user.github_id}`"
         /></router-link>
-        <select :value="dashId" class="dashname" @change="onDashChange">
+        <select :value="dashId" class="dashboard" @change="onDashChange">
           <optgroup label="Own" v-if="dashgroups.own.length">
             <option v-for="dashboard in dashgroups.own" :value="dashboard.id" :key="dashboard.id"
               >{{ dashboard.name }}
@@ -135,6 +136,109 @@ export default {
 }
 </script>
 
+<style lang="scss">
+table.wrapper {
+  a {
+    color: #111;
+  }
+  .customs {
+    a {
+      margin-right: 4px;
+    }
+  }
+  &.left-orient {
+    .kinds {
+      padding-bottom: 16px;
+      //padding-right: 16px;
+      padding-left: 2px;
+
+      .kindblock {
+        margin-top: 10px;
+        vertical-align: top;
+        text-align: left;
+
+        .kindname {
+          a {
+            font-weight: bold;
+            text-decoration: none;
+          }
+        }
+
+        .keynames {
+          vertical-align: top;
+          text-align: left;
+
+          a {
+            text-decoration: none;
+            white-space: nowrap;
+
+            &:hover {
+              text-decoration: underline;
+            }
+          }
+        }
+      }
+    }
+    .filters {
+      select,
+      input {
+        margin-bottom: 10px;
+      }
+      #filter-message,
+      #filter-regexp {
+        display: block;
+      }
+    }
+  }
+
+  &.head-orient {
+    .kinds {
+      /*text-align: center;*/
+      /*margin-left: 26px;*/
+      .kindblock {
+        display: inline-block;
+        margin: 8px 15px;
+        margin-left: 5px;
+
+        .kindname {
+          a {
+            font-weight: bold;
+            text-decoration: none;
+            &:hover {
+              text-decoration: underline;
+            }
+          }
+        }
+
+        .keynames {
+          display: none;
+        }
+      }
+    }
+
+    .filters {
+      padding-top: 7px;
+      line-height: 35px;
+
+      select,
+      input {
+        max-width: 180px;
+        margin-right: 8px;
+      }
+
+      #filter-agg {
+        float: inherit;
+      }
+
+      #filter-message,
+      #filter-regexp {
+        margin-right: 8px;
+      }
+    }
+  }
+}
+</style>
+
 <style scoped lang="scss">
 table {
   position: absolute;
@@ -160,157 +264,61 @@ table {
     }
   }
 
-  tr {
-    td {
-      vertical-align: top;
-      position: relative;
-      margin: 0;
-      padding: 0;
+  td {
+    vertical-align: top;
+    position: relative;
+    margin: 0;
+    padding: 0;
 
-      .customs {
-        font-size: 16px;
-      }
-
-      .goto {
-        font-size: 13px;
-      }
-
-      &.lefter {
-        background-color: #e4e2e0;
-        width: 180px;
-        min-width: 180px;
-        padding: 10px;
-        padding-bottom: 110px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-        z-index: 800;
-
-        .customs {
-          display: inline-block;
-          position: absolute;
-          left: 0;
-          bottom: 0;
-          padding: 10px;
-          padding-bottom: 15px;
-          //padding-bottom: 32px;
-
-          a {
-            margin-right: 4px;
-          }
-        }
-
-        .goto {
-          position: absolute;
-          right: 0;
-          bottom: 0;
-          margin-right: 11px;
-          margin-bottom: 14px;
-          //margin-bottom: 1px;
-        }
-      }
-
-      &.header {
-        padding: 10px 90px 5px 10px;
-        height: 30px;
-        background-color: #e4e2e0;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-        z-index: 800;
-
-        .customs {
-          position: absolute;
-          right: 15px;
-          top: 15px;
-          display: flex;
-          flex-direction: row-reverse;
-
-          a {
-            margin-left: 4px;
-          }
-        }
-
-        .goto {
-          position: absolute;
-          right: 14px;
-          //top: 49px;
-          top: 43px;
-        }
-      }
-
-      .content {
-        font-family: Courier, monospace;
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        box-sizing: border-box;
-        width: 100%;
-        margin: 0;
-        padding: 5px 10px;
-        overflow: scroll;
-        font-size: 14px;
-      }
+    &.lefter {
+      background-color: #e4e2e0;
+      width: 180px;
+      min-width: 180px;
+      padding: 10px;
+      padding-bottom: 110px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      z-index: 800;
     }
-  }
 
-  &.left-orient {
-    #filter-logname {
-      display: block;
+    &.header {
+      padding: 10px 90px 5px 10px;
+      height: 30px;
+      background-color: #e4e2e0;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      z-index: 800;
+    }
+
+    .customs {
+      font-size: 16px;
+    }
+
+    .goto {
+      font-size: 13px;
     }
 
     .kinds {
-      padding-bottom: 16px;
-      //padding-right: 16px;
-      padding-left: 2px;
       box-sizing: border-box;
+      //font-family: Courier, monospace;
+      font-size: 13px;
+      overflow-x: scroll;
+      max-width: 360px;
     }
 
-    .filters {
-      select,
-      input {
-        margin-bottom: 10px;
-      }
-
-      #filter-regexp {
-        width: 180px;
-        margin-bottom: 10px;
-      }
-
-      #filter-message {
-        width: 180px;
-        margin-bottom: 10px;
-      }
-    }
-
-    select.dashname {
-      text-align-last: center;
-      padding-left: 24px;
-      margin-bottom: 7px;
+    .content {
+      font-family: Courier, monospace;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      box-sizing: border-box;
+      width: 100%;
+      margin: 0;
+      padding: 5px 10px;
+      overflow: scroll;
+      font-size: 14px;
     }
   }
 
-  &.head-orient {
-    .filters {
-      padding-top: 7px;
-      line-height: 35px;
-
-      select,
-      input {
-        max-width: 180px;
-        margin-right: 8px;
-      }
-
-      #filter-agg {
-        float: inherit;
-      }
-
-      #filter-version,
-      #filter-limit,
-      #filter-message,
-      #filter-regexp {
-        margin-right: 8px;
-      }
-    }
-  }
-
-  select.dashname {
+  select.dashboard {
     margin-top: 2px;
     border: none;
     background: none;
@@ -399,10 +407,6 @@ table {
     }
   }
 
-  a {
-    color: #111;
-  }
-
   .avatar {
     position: absolute;
     top: 13px;
@@ -418,6 +422,50 @@ table {
     }
   }
 
+  &.left-orient {
+    .customs {
+      display: inline-block;
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      padding: 10px;
+      padding-bottom: 15px;
+      //padding-bottom: 32px;
+    }
+
+    .goto {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      margin-right: 11px;
+      margin-bottom: 14px;
+      //margin-bottom: 1px;
+    }
+
+    select.dashboard {
+      text-align-last: center;
+      padding-left: 24px;
+      margin-bottom: 7px;
+    }
+  }
+
+  &.head-orient {
+    .customs {
+      position: absolute;
+      right: 15px;
+      top: 15px;
+      display: flex;
+      flex-direction: row-reverse;
+    }
+
+    .goto {
+      position: absolute;
+      right: 14px;
+      //top: 49px;
+      top: 43px;
+    }
+  }
+
   &.fullscreen {
     .content {
       padding-left: 34px;
@@ -428,62 +476,6 @@ table {
     }
     &.night .avatar {
       box-shadow: 0 0 0 1px #000;
-    }
-  }
-
-  .kinds {
-    //font-family: Courier, monospace;
-    font-size: 13px;
-    overflow-x: scroll;
-    max-width: 360px;
-
-    .kindblock {
-      margin-top: 10px;
-      vertical-align: top;
-      text-align: left;
-
-      .kindname {
-        a {
-          font-weight: bold;
-          text-decoration: none;
-        }
-      }
-
-      .keynames {
-        vertical-align: top;
-        text-align: left;
-
-        a {
-          text-decoration: none;
-          white-space: nowrap;
-
-          &:hover {
-            text-decoration: underline;
-          }
-        }
-      }
-    }
-  }
-
-  &.head-orient {
-    .kinds {
-      /*text-align: center;*/
-      /*margin-left: 26px;*/
-      .kindblock {
-        display: inline-block;
-        margin: 8px 15px;
-        margin-left: 5px;
-
-        .kindname {
-          a:hover {
-            text-decoration: underline;
-          }
-        }
-
-        .keynames {
-          display: none;
-        }
-      }
     }
   }
 }

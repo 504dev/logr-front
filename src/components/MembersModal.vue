@@ -14,7 +14,7 @@
           :value="search"
           @input="debounceSearch"
           class="search selected"
-          placeholder="type username"
+          placeholder="Enter username"
         /><img v-if="!disabled" :src="`${match.avatar_url}?size=64`" /><button
         class="add selected"
         :disabled="disabled"
@@ -129,7 +129,7 @@ export default {
 
 <style lang="scss" scoped>
 .modal-body {
-  padding: 10px;
+  //padding: 10px;
   .title {
     font-weight: bold;
   }
@@ -199,7 +199,7 @@ export default {
     margin-top: 20px;
     overflow: hidden;
     input.search {
-      width: 330px;
+      width: 360px;
       max-width: none;
       padding-right: 25px;
     }
@@ -212,7 +212,7 @@ export default {
       /*box-shadow: 0 0 0 1px black;*/
     }
     button.add {
-      width: 120px;
+      width: 170px;
       /*margin-left: 8px;*/
       float: right;
       background-color: #080;

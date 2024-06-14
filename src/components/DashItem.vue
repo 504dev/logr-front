@@ -56,8 +56,8 @@
       </div>
     </div>
     <ModalsContainer />
-    <KeysModal :dash="dash" :modal-id="`keys-${dash.id}`" />
-    <MembersModal :dash="dash" :modal-id="`members-${dash.id}`" />
+    <KeysModal :dash="dash" :modal-id="`keys-${dash.id}`" class="confirm-modal" content-class="confirm-modal-content" />
+    <MembersModal :dash="dash" :modal-id="`members-${dash.id}`" class="confirm-modal" content-class="confirm-modal-content"/>
   </div>
 </template>
 
@@ -140,10 +140,20 @@ export default {
 </script>
 
 <style lang="scss">
-.vm--modal {
-  border: solid 1px #333;
-  border-radius: 4px !important;
-  background: #fafafafa;
+.confirm-modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.confirm-modal-content {
+  min-height: 200px;
+  width: 540px;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  background: #f4f2f0;
+  border-radius: 0.25rem;
 }
 </style>
 <style lang="scss" scoped>
@@ -152,7 +162,6 @@ export default {
   position: relative;
   margin: 20px 20px 0 0;
 }
-
 .dashboard {
   box-sizing: border-box;
   display: inline-block;
