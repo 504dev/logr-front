@@ -123,6 +123,7 @@
 </template>
 
 <script>
+import { reactive } from 'vue'
 import _get from 'lodash/get'
 import _map from 'lodash/map'
 import _last from 'lodash/last'
@@ -362,14 +363,14 @@ export default {
       await this.updateLocation()
     },
     forcePause() {
-      const hr = {
+      const hr = reactive({
         hr: true,
         timestamp: Date.now(),
         text: '00:00',
         timer: setInterval(() => {
           hr.text = new Date(Date.now() - hr.timestamp).toISOString().slice(14, 19) //21)
         }, 100)
-      }
+      })
       this.pausedLine = hr
       this.buffer.data.push(hr)
       this.flushLive()

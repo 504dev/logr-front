@@ -1,28 +1,41 @@
 <template>
   <span class="wrapper" :class="{ x2 }">
-    <input type="text" :placeholder="placeholder" :value="value" @input="e => $emit('input', e.target.value.trim())" />
-    <span class="icon" @click="onClear" v-if="value"><FontAwesomeIcon icon="times-circle"/></span>
+    <input
+      type="text"
+      :placeholder="placeholder"
+      :value="modelValue"
+      @input="onInput"
+    />
+    <span class="icon" @click="onClear" v-if="modelValue">
+      <FontAwesomeIcon icon="times-circle"/>
+    </span>
   </span>
 </template>
 
 <script>
-export default {
+import { defineComponent } from 'vue'
+
+export default defineComponent({
   props: {
-    value: String,
+    modelValue: String,
     placeholder: String,
     x2: { type: Boolean, default: false }
   },
+  emits: ['update:modelValue'],
   methods: {
+    onInput(e) {
+      this.$emit('update:modelValue', e.target.value.trim())
+    },
     onClear() {
-      if (this.value) {
-        this.$emit('input', '')
+      if (this.modelValue) {
+        this.$emit('update:modelValue', '')
         const target = this.$el.querySelector('input')
-        this.$el.dispatchEvent(new Event('change', { target, bubbles: true }))
+        target.dispatchEvent(new Event('change', { bubbles: true }))
         target.focus()
       }
     }
   }
-}
+})
 </script>
 <style scoped lang="scss">
 span.wrapper {

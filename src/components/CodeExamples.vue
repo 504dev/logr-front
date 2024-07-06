@@ -1,20 +1,21 @@
 <template>
   <div class="codes">
-    <select v-model="mutValue" class="selected" @change="onChange">
+    <select v-model="selectedOption" class="selected" @change="onChange">
       <option :value="opt" v-for="opt in options" :key="opt">{{ opt }}</option>
     </select>
-    <copy-to-clipboard :text="code[mutValue]" class="copy" />
-    <prism class="keys" language="javascript" :key="mutValue">{{ code[mutValue] }}</prism>
+    <copy-to-clipboard :text="code[selectedOption]" class="copy" />
+    <prism class="keys" language="javascript" :key="selectedOption">{{ code[selectedOption] }}</prism>
   </div>
 </template>
 
 <script>
+import { defineComponent, computed, ref } from 'vue'
 import 'prismjs'
 import 'prismjs/themes/prism.css'
 import CopyToClipboard from '@/components/CopyToClipboard.vue'
 import Prism from 'vue-prism-component'
 
-export default {
+export default defineComponent({
   components: {
     Prism,
     CopyToClipboard,
@@ -22,29 +23,26 @@ export default {
   props: {
     keys: Object,
     options: { type: Array, default: () => ['yml', 'javascript', 'golang', 'python', 'php'] },
-    value: { type: String, default: 'javascript' }
+    modelValue: { type: String, default: 'javascript' }
   },
-  data() {
-    const mutValue = this.value
-    return {
-      mutValue
+  emits: ['update:modelValue'],
+  setup(props, { emit }) {
+    const selectedOption = ref(props.modelValue)
+
+    const onChange = (e) => {
+      emit('update:modelValue', e.target.value)
     }
-  },
-  methods: {
-    onChange(e) {
-      this.$emit('input', e.target.value)
-    }
-  },
-  computed: {
-    code() {
-      const { public_key, private_key } = this.keys
-      const yml = `\
+
+    const code = computed(() => {
+      const { public_key, private_key } = props.keys
+      return {
+        yml: `\
 logr:
   udp: "${location.hostname}:7776"
   public_key: "${public_key}"
   private_key: "${private_key}"
-`
-      const javascript = `\
+`,
+        javascript: `\
 const { Logr } = require('logr-node-client');
 
 const conf = new Logr({
@@ -55,8 +53,8 @@ const conf = new Logr({
 
 const logr = conf.newLogger('hello.log');
 
-logr.info('Hello, Logr!');`
-      const golang = `\
+logr.info('Hello, Logr!');`,
+        golang: `\
 import logrc "github.com/504dev/logr-go-client"
 
 func main() {
@@ -68,8 +66,8 @@ func main() {
     logr, _ := conf.NewLogger("hello.log")
 
     logr.Info("Hello, Logr!")
-}`
-      const python = `\
+}`,
+        python: `\
 from logrpy import Logr
 
 conf = Logr(
@@ -80,8 +78,8 @@ conf = Logr(
 
 logr = conf.getlogger('hello.log')
 
-logr.info('Hello, Logr!')`
-      const php = `\
+logr.info('Hello, Logr!')`,
+        php: `\
 $conf = new Logr(
     '${location.hostname}:7776',
     '${public_key}',
@@ -91,10 +89,16 @@ $conf = new Logr(
 $logr = $conf->getLogger('hello.log');
 
 $logr->info('Hello, Logr!');`
-      return { yml, javascript, golang, python, php }
+      }
+    })
+
+    return {
+      selectedOption,
+      onChange,
+      code
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>
