@@ -17,6 +17,10 @@ export default class Sock {
       this.socket.onopen = resolve
       this.socket.onerror = reject
       this.socket.onmessage = this._handleMessage.bind(this)
+      this.socket.onclose = e => {
+        console.log('Socket is closed. Reconnect will be attempted in 1 second.', e.reason);
+        setTimeout(() => this.connect(), 1000);
+      };
     })
   }
   _handleMessage (event) {
