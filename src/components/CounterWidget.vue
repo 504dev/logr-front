@@ -90,7 +90,7 @@ export default {
       this.$router.push({
         path: './counts',
         query: { logname: this.logname },
-        hash: this.kind + ':' + this.keyname
+        hash: '#' + this.kind + ':' + this.keyname
       })
     },
     hideChart() {

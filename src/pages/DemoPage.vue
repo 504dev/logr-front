@@ -112,11 +112,13 @@ body {
 }
 
 .title {
-  font-size: 64px;
-  line-height: 120px;
+  //display: inline-block;
+  margin-right: 16px;
+  font-size: 48px;
+  line-height: 96px;
   .logr {
     font-family: Logr;
-    font-size: 96px;
+    font-size: 64px;
   }
   .github {
     color: #551a8b;
