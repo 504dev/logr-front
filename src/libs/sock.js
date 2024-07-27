@@ -25,7 +25,7 @@ export default class Sock {
         }
         this.retries++
         const delaySeconds = this.retries**2 + (Math.random() * this.retries)
-        console.error('Socket is closed. Reconnect will be attempted in %s second.', Math.round(delaySeconds), e.reason)
+        console.log('Socket is closed. Reconnect will be attempted in %s second.', Math.round(delaySeconds), e)
 
         setTimeout(() => this.connect(), delaySeconds * 1000)
       };
