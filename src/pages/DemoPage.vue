@@ -169,6 +169,7 @@ body {
 }
 .examples {
   h2 {
+    font-family: monospace;
     text-align: center;
     margin-bottom: -28px;
   }

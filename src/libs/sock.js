@@ -6,6 +6,7 @@ export default class Sock {
     this.jwt = jwt
     this.socket = null
     this.handlers = {}
+    this.retries = 0
   }
   connect (paused) {
     return new Promise((resolve, reject) => {
@@ -18,8 +19,15 @@ export default class Sock {
       this.socket.onerror = reject
       this.socket.onmessage = this._handleMessage.bind(this)
       this.socket.onclose = e => {
-        console.log('Socket is closed. Reconnect will be attempted in 1 second.', e.reason);
-        setTimeout(() => this.connect(), 1000);
+        if (this.retries > 5) {
+          console.error('Socket closed too many times.');
+          return
+        }
+        this.retries++
+        const delaySeconds = this.retries**2 + (Math.random() * this.retries)
+        console.error('Socket is closed. Reconnect will be attempted in %s second.', Math.round(delaySeconds), e.reason)
+
+        setTimeout(() => this.connect(), delaySeconds * 1000)
       };
     })
   }
