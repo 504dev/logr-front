@@ -20,7 +20,7 @@ export default class Sock {
       this.socket.onerror = reject
       this.socket.onmessage = this._handleMessage.bind(this)
       this.socket.onclose = e => {
-        if (this.retries > 5) {
+        if (this.retries > 10) {
           console.error('Socket closed too many times.');
           return
         }
