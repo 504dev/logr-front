@@ -27,6 +27,7 @@
     "luxon": "1.28.1",
     "prismjs": "1.29.0",
     "store2": "^2.14.3",
+    "uuid": "^10.0.0",
     "vue": "^3.4.27",
     "vue-final-modal": "^4.5.4",
     "vue-prism-component": "^2.0.0",

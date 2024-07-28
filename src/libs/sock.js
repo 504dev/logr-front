@@ -1,7 +1,8 @@
+import { v7 as uuidv7 } from 'uuid'
 
 export default class Sock {
   constructor (url, jwt) {
-    this.id = Math.random().toString(36).substring(2, 15)
+    this.id = uuidv7() //Math.random().toString(36).substring(2, 15)
     this.url = url
     this.jwt = jwt
     this.socket = null
@@ -24,7 +25,7 @@ export default class Sock {
           return
         }
         this.retries++
-        const delaySeconds = this.retries**2 + (Math.random() * this.retries)
+        const delaySeconds = (this.retries - 1) + (Math.random() * this.retries)
         console.log('Socket is closed. Reconnect will be attempted in %s second.', Math.round(delaySeconds), e)
 
         setTimeout(() => this.connect(), delaySeconds * 1000)
