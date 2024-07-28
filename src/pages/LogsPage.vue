@@ -166,7 +166,7 @@ export default {
 
     await this.updateLogs()
   },
-  destroyed() {
+  unmounted() {
     this.sock.unsubscribe('/log', this.logHandler)
     if (this.pausedLine) {
       clearInterval(this.pausedLine.timer)

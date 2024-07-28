@@ -37,7 +37,7 @@ export default {
     this.timer = setInterval(() => this.loadDataOnViewport(), 100)
     this.loadDataOnViewport()
   },
-  destroyed() {
+  unmounted() {
     if (this.timer) {
       clearInterval(this.timer)
     }
