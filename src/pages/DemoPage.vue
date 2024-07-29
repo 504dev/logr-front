@@ -6,6 +6,9 @@
       <a href="https://github.com/504dev/logr" class="github">
         <FontAwesomeIcon :icon="['fab', 'github']" />
       </a>
+      <a href="https://hub.docker.com/r/kozhurkin/logr" class="dockerhub">
+        <FontAwesomeIcon :icon="['fab', 'docker']" />
+      </a>
     </div>
 
     <div class="docker">
@@ -120,16 +123,17 @@ body {
     font-family: Logr;
     font-size: 64px;
   }
-  .github {
+  .github,
+  .dockerhub {
     color: #551a8b;
   }
 }
 
 .docker {
-  font-size: 13px;
-  font-weight: bold;
   display: inline-block;
   position: relative;
+  font-size: 13px;
+  font-weight: bold;
   //outline: dashed 1px #000;
   //zoom: 0.75;
   > pre {
@@ -141,10 +145,11 @@ body {
     padding-right: 50px;
   }
   > svg {
+    font-size: 14px;
     position: absolute;
     padding: 12px;
     right: 8px;
-    top: 8px;
+    top: 7px;
   }
 }
 

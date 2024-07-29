@@ -26,6 +26,7 @@ import { faSortAmountDown } from '@fortawesome/free-solid-svg-icons/faSortAmount
 import { faMoon as farMoon } from '@fortawesome/free-regular-svg-icons/faMoon'
 import { faWindowMaximize as farWindowMaximize } from '@fortawesome/free-regular-svg-icons/faWindowMaximize'
 import { faGithub as fabGithub } from '@fortawesome/free-brands-svg-icons/faGithub'
+import { faDocker as fabDocker } from '@fortawesome/free-brands-svg-icons/faDocker'
 
 library.add(faCopy)
 library.add(faCheck)
@@ -56,3 +57,4 @@ library.add(farMoon)
 library.add(farWindowMaximize)
 
 library.add(fabGithub)
+library.add(fabDocker)
