@@ -127,10 +127,11 @@ export default {
     onFull() {
       this.$store.commit(MUTATIONS.SWITCH_FULL)
     },
-    onDashChange(e) {
+    async onDashChange(e) {
       const id = e.target.value
-      this.$router.push({ params: { ...this.$route.params, id } })
-      this.$router.go()
+
+      await this.$router.push({ params: { ...this.$route.params, id } })
+      await this.$router.go()
     }
   }
 }
