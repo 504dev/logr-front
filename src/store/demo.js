@@ -1,7 +1,6 @@
-import { createStore } from 'vuex'
 import ACTIONS from '@/store/action-types.js'
 
-export default createStore({
+export default{
   actions: {
     async [ACTIONS.MEMBER_ADD](_, { dash, member }) {
       dash.members.push({
@@ -29,4 +28,4 @@ export default createStore({
       })
     }
   }
-});
+};
