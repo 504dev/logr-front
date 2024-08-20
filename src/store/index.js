@@ -5,7 +5,6 @@ import _find from 'lodash/find'
 import _findIndex from 'lodash/findIndex'
 import _filter from 'lodash/filter'
 import _omit from 'lodash/omit'
-import axios from 'axios'
 import ls from 'store2'
 import _first from 'lodash/first.js'
 import _get from 'lodash/get.js'
@@ -180,7 +179,7 @@ export const store = createStore({
     },
     async [ACTIONS.LOAD_ME]({ state, dispatch }) {
       try {
-        const { data } = await api('/me')
+        const data = await api('/me')
         if (!data) {
           return dispatch(ACTIONS.LOGOUT)
         }
@@ -196,18 +195,16 @@ export const store = createStore({
       if (state.dashboards) {
         return
       }
-      const { data } = await api('/me/dashboards')
-      state.dashboards = data
+      state.dashboards = await api('/me/dashboards')
     },
     async [ACTIONS.LOAD_SHARED]({ state }) {
-      const { data } = await api('/me/dashboards/shared')
-      state.shared = data
+      state.shared = await api('/me/dashboards/shared')
     },
     async [ACTIONS.ADD_DASHBOARD]({ state }, name) {
       if (state.user.role === RoleDemo) {
         return demoStore.actions[ACTIONS.ADD_DASHBOARD](store, name)
       }
-      const { data } = await api('/me/dashboard', {
+      const data = await api('/me/dashboard', {
         method: 'POST',
         data: { name }
       })
@@ -217,7 +214,7 @@ export const store = createStore({
       if (state.user.role === RoleDemo) {
         return commit(MUTATIONS.EDIT_DASHBOARD, { id, name })
       }
-      const { data } = await api(`/me/dashboard/${id}`, {
+      const data = await api(`/me/dashboard/${id}`, {
         method: 'PUT',
         data: { name }
       })
@@ -234,7 +231,7 @@ export const store = createStore({
       if (state.user.role === RoleDemo) {
         return demoStore.actions[ACTIONS.MEMBER_ADD](store, { dash, member })
       }
-      const { data } = await api(`/me/dashboard/${dash.id}/member`, {
+      const data = await api(`/me/dashboard/${dash.id}/member`, {
         params: { username: member.login },
         method: 'POST'
       })
@@ -246,7 +243,7 @@ export const store = createStore({
         commit(MUTATIONS.MEMBER_REMOVE, id)
         return {}
       }
-      const { data } = await api(`/me/dashboard/${dash.id}/member`, {
+      const data = await api(`/me/dashboard/${dash.id}/member`, {
         params: { id },
         method: 'DELETE'
       })
@@ -254,18 +251,15 @@ export const store = createStore({
       return data
     },
     async [ACTIONS.LOAD_LOGS](_, params) {
-      const { data } = await api('/logs', { params })
-      return data
+      return api('/logs', { params })
     },
     async [ACTIONS.LOAD_COUNTS](_, params) {
-      const { data } = await api('/counts', { params })
-      return data
+      return api('/counts', { params })
     },
     async [ACTIONS.LOAD_COUNTS_SNIPPET](_, params) {
       const dashId = params.dash_id
       params = _omit(params, 'dash_id')
-      const { data } = await api(`/counts/${dashId}/snippet`, { params })
-      return data
+      return api(`/counts/${dashId}/snippet`, { params })
     },
     async [ACTIONS.PAUSE_LOGS]({ state }, paused) {
       return state.sock.pause(!!paused)
@@ -275,7 +269,7 @@ export const store = createStore({
       if (cached) {
         return cached
       }
-      const { data } = await api(`/logs/${dashId}/lognames`).catch(() => ({ data: [] }))
+      const data = await api(`/logs/${dashId}/lognames`).catch(() => [])
       state.lognames.logs[dashId] = data
       return data
     },
@@ -284,43 +278,54 @@ export const store = createStore({
       if (cached) {
         return cached
       }
-      const { data } = await api(`/counts/${dashId}/lognames`).catch(() => ({ data: [] }))
+      const data = await api(`/counts/${dashId}/lognames`).catch(() => [])
       state.lognames.counts[dashId] = data
       return data
     },
     async [ACTIONS.LOAD_LOGS_STATS](_, { dashId, logname }) {
-      const { data } = await api(`/logs/${dashId}/stats`, { params: { logname } })
-      return data
+      return api(`/logs/${dashId}/stats`, { params: { logname } })
     },
     async [ACTIONS.LOAD_COUNTS_STATS](_, { dashId, logname }) {
-      const { data } = await api(`/counts/${dashId}/stats`, { params: { logname } })
-      return data
+      return api(`/counts/${dashId}/stats`, { params: { logname } })
     },
     async [ACTIONS.LOAD_GLOBALS]({ state }) {
-      const { data } = await api('/globals', {}, false)
+      const data = await api('/globals', {}, false)
       console.log(data)
       state.globals = data
       return data
     },
     async [ACTIONS.LOAD_FREE_TOKEN]({ getters }) {
       const url = `${getters.restUrl}/api/free-token`
-      const { data } = await axios({ method: 'GET', url })
-      return data
+      const response = await fetch(url)
+      return response.json()
     }
   }
 })
 
-function api(path, options = {}, useAuth = true) {
+async function api(path, options = {}, useAuth = true) {
   const { state, getters, dispatch, commit } = store
+
   if (useAuth && Date.now() > getters.expiredAt) {
     commit(MUTATIONS.SET_REDIRECT, location.href)
     dispatch(ACTIONS.LOGOUT)
     return
   }
-  return axios({
-    method: 'GET',
-    url: `${getters.restUrl}/api${path}`,
+
+  const { params = {}, data, method = 'GET' } = options
+
+  let fetchUrl = `${getters.restUrl}/api${path}?${new URLSearchParams(params).toString()}`
+
+  const response = await fetch(fetchUrl, {
+    method,
     headers: useAuth ? { Authorization: `Bearer ${state.jwt}` } : {},
-    ...options
+    body: data ? JSON.stringify(data) : null,
   })
+
+  if (!response.ok) {
+    const error = new Error(`HTTP error! status: ${response.status}`)
+    error.response = response
+    throw error
+  }
+
+  return response.json()
 }

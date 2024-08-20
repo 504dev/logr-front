@@ -50,7 +50,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import { mapState } from 'vuex'
 import { VueFinalModal } from 'vue-final-modal'
 import _sortBy from 'lodash/sortBy'
@@ -94,8 +93,8 @@ export default {
     },
     debounceSearch: _debounce(async function(e) {
       this.search = e.target.value
-      const { data } = await axios(`https://api.github.com/users/${this.search}`).catch(() => ({ data: null }))
-      this.match = data
+      const response = await fetch(`https://api.github.com/users/${this.search}`)
+      this.match = response.ok ? await response.json() : null
     }, 500),
     async addMember() {
       try {

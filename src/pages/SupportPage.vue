@@ -25,7 +25,6 @@
 
 
 <script>
-import axios from 'axios'
 import { VueRecaptcha } from 'vue-recaptcha'
 
 export default {
@@ -48,7 +47,19 @@ export default {
     },
     async onVerify(recaptchaToken) {
       console.log({ recaptchaToken })
-      await axios.post('/support', { ...this.form, recaptchaToken })
+
+      const response = await fetch('/support', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ ...this.form, recaptchaToken })
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
       this.form = { name: '', email: '', message: '' }
       this.success = true
       setTimeout(() => this.success = false, 2_000)
